@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>[ Sweet R.A.B.B.I.T. Personality ] 你是哪一種兔子？｜社交能量測驗</title>
+<meta name="description" content="10題日常情境題，透過三個維度精準測出你的兔感人格：Insecurity 不安、Tenderness 溫柔、Bitterness 苦澀、Blankness 空白、Anxiety 焦慮、Rage 憤怒。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#fff3f6;
+    --bg2:#eef7ff;
+    --ink:#3c2a2f;
+    --ink-soft:#7a6469;
+    --card:#ffffff;
+    --pink:#ff8fab;
+    --pink-deep:#ff6b97;
+    --accent:#ffd166;
+    --radius:28px;
+    --shadow: 0 12px 30px rgba(255, 143, 171, .18);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Noto Sans TC', sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #ffe3ec 0%, transparent 60%),
+      radial-gradient(1000px 600px at 100% 0%, #e3f2ff 0%, transparent 55%),
+      linear-gradient(180deg, var(--bg1), var(--bg2));
+    min-height:100vh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:32px 16px 80px;
+  }
+  .app{
+    width:100%;
+    max-width:560px;
+  }
+  .brand{
+    text-align:center;
+    margin-bottom:18px;
+  }
+  .brand .logo{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:#fff;
+    padding:8px 16px;
+    border-radius:999px;
+    box-shadow:var(--shadow);
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    color:var(--pink-deep);
+    font-size:14px;
+    letter-spacing:.5px;
+  }
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:36px 28px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"🐇";
+    position:absolute;
+    font-size:120px;
+    opacity:.06;
+    right:-20px;
+    top:-30px;
+    transform:rotate(15deg);
+  }
+
+  /* ---------- START SCREEN ---------- */
+  #start h1{
+    font-family:'Baloo 2', sans-serif;
+    font-size:26px;
+    line-height:1.35;
+    margin:0 0 10px;
+    color:var(--pink-deep);
+  }
+  #start p.sub{
+    color:var(--ink-soft);
+    font-size:15px;
+    line-height:1.7;
+    margin:0 0 24px;
+  }
+  button.primary{
+    width:100%;
+    border:none;
+    background:linear-gradient(135deg, var(--pink), var(--pink-deep));
+    color:#fff;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:18px;
+    padding:16px;
+    border-radius:18px;
+    cursor:pointer;
+    box-shadow:0 10px 20px rgba(255,107,151,.35);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  button.primary:hover{transform:translateY(-2px); box-shadow:0 14px 26px rgba(255,107,151,.42);}
+  button.primary:active{transform:translateY(0px) scale(.98);}
+
+  .meta-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:14px;
+  }
+
+  /* ---------- QUIZ SCREEN ---------- */
+  #quiz{display:none;}
+  .progress-wrap{
+    background:#ffe4ea;
+    border-radius:999px;
+    height:10px;
+    overflow:hidden;
+    margin-bottom:8px;
+  }
+  .progress-bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--pink), var(--accent));
+    border-radius:999px;
+    transition:width .45s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-label{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-bottom:22px;
+    display:flex;
+    justify-content:space-between;
+  }
+  .q-text{
+    font-family:'Baloo 2', sans-serif;
+    font-size:20px;
+    line-height:1.5;
+    margin:0 0 22px;
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .opt{
+    text-align:left;
+    background:#fff9fa;
+    border:2px solid #ffe4ea;
+    border-radius:16px;
+    padding:14px 16px;
+    font-size:14.5px;
+    line-height:1.5;
+    color:var(--ink);
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .opt:hover{
+    border-color:var(--pink);
+    background:#fff0f4;
+    transform:translateX(2px);
+  }
+  .opt.chosen{
+    border-color:var(--pink-deep);
+    background:linear-gradient(135deg,#ffe9ef,#fff);
+    transform:scale(.99);
+  }
+  .q-anim-in{animation:qin .38s ease both;}
+  @keyframes qin{
+    from{opacity:0; transform:translateY(14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .fade-out{animation:fout .28s ease both;}
+  @keyframes fout{
+    from{opacity:1; transform:translateY(0);}
+    to{opacity:0; transform:translateY(-10px);}
+  }
+
+  /* ---------- RESULT SCREEN ---------- */
+  #result{display:none; text-align:center;}
+  .r-emoji{
+    font-size:64px;
+    display:block;
+    margin-bottom:6px;
+    animation:pop .5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes pop{
+    0%{transform:scale(.4); opacity:0;}
+    100%{transform:scale(1); opacity:1;}
+  }
+  .r-kicker{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+  }
+  .r-name{
+    font-family:'Baloo 2', sans-serif;
+    font-size:32px;
+    margin:0 0 6px;
+    color:var(--pink-deep);
+  }
+  .r-tagline{
+    font-size:14.5px;
+    color:var(--ink-soft);
+    margin:0 0 20px;
+    line-height:1.6;
+  }
+  .stat-block{
+    background:#fff6f8;
+    border-radius:18px;
+    padding:14px 18px;
+    margin-bottom:18px;
+    text-align:left;
+  }
+  .stat-label{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+    font-weight:700;
+  }
+  .stars{font-size:20px; letter-spacing:2px;}
+
+  /* ---- MBTI-like spectrum bars ---- */
+  .spectrum-block{
+    text-align:left;
+    background:#fff;
+    border:1px solid #ffe4ea;
+    border-radius:18px;
+    padding:16px 18px;
+    margin-bottom:18px;
+  }
+  .spectrum-title{
+    font-size:12px;
+    font-weight:700;
+    color:var(--ink-soft);
+    margin-bottom:12px;
+  }
+  .axis{margin-bottom:12px;}
+  .axis:last-child{margin-bottom:0;}
+  .axis-labels{
+    display:flex;
+    justify-content:space-between;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+  }
+  .axis-labels b{color:var(--ink); font-weight:700;}
+  .axis-bar{
+    position:relative;
+    height:8px;
+    background:#ffe4ea;
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .axis-bar-fill{
+    position:absolute;
+    top:0; left:0; bottom:0;
+    background:linear-gradient(90deg, var(--pink), var(--pink-deep));
+    border-radius:999px;
+    transition:width .6s cubic-bezier(.4,0,.2,1);
+  }
+
+  .lines{
+    text-align:left;
+    background:#fff;
+    border:1px solid #ffe4ea;
+    border-radius:18px;
+    padding:18px 20px;
+    margin-bottom:18px;
+  }
+  .lines p{
+    margin:0 0 10px;
+    font-size:14.5px;
+    line-height:1.7;
+  }
+  .lines p:last-child{margin-bottom:0;}
+  .pov{
+    background:linear-gradient(135deg,#fff3d6,#fff9ec);
+    border-radius:16px;
+    padding:14px 18px;
+    font-size:13.5px;
+    color:#8a6a2c;
+    margin-bottom:20px;
+    text-align:left;
+  }
+  .pair-row{
+    display:flex;
+    gap:12px;
+    margin-bottom:24px;
+  }
+  .pair-card{
+    flex:1;
+    background:#fff;
+    border:1px solid #ffe4ea;
+    border-radius:16px;
+    padding:12px;
+  }
+  .pair-card .k{font-size:11px; color:var(--ink-soft); margin-bottom:4px;}
+  .pair-card .v{font-family:'Baloo 2', sans-serif; font-size:15px;}
+  .btn-row{display:flex; gap:10px;}
+  button.secondary{
+    flex:1;
+    border:2px solid #ffd8e2;
+    background:#fff;
+    color:var(--pink-deep);
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    padding:14px;
+    border-radius:16px;
+    cursor:pointer;
+  }
+  button.download{
+    flex:1.4;
+    border:none;
+    background:linear-gradient(135deg, var(--pink), var(--pink-deep));
+    color:#fff;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    padding:14px;
+    border-radius:16px;
+    cursor:pointer;
+    box-shadow:0 8px 16px rgba(255,107,151,.3);
+  }
+  .hint{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin-top:14px;
+  }
+  #shareCanvas{display:none;}
+
+  footer{
+    text-align:center;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin-top:24px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="brand">
+    <span class="logo">🐰 Sweet Rabbit Man</span>
+  </div>
+
+  <div class="card" id="start">
+    <h1>[ Sweet R.A.B.B.I.T. Personality ]<br>你是哪一種兔子？社交能量測驗</h1>
+    <p class="sub">10 道日常情境題，從「表達方式 × 能量強度 × 關注焦點」三個維度計分，找出你內在的兔子人格——不是標籤，是一面你可能沒仔細看過的鏡子 🐇</p>
+
+    <button class="primary" id="startBtn">開始測驗 →</button>
+    <div class="meta-row">
+      <span>⏱ 約 2 分鐘</span>
+      <span>🐰 6 種兔感人格</span>
+    </div>
+  </div>
+
+  <div class="card" id="quiz">
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="progress-label"><span id="qIndexLabel">Q1 / 12</span><span id="qPercentLabel">8%</span></div>
+    <p class="q-text" id="qText"></p>
+    <div class="options" id="optionsWrap"></div>
+  </div>
+
+  <div class="card" id="result">
+    <span class="r-kicker">你的兔型人格是</span>
+    <span class="r-emoji" id="rEmoji"></span>
+    <h2 class="r-name" id="rName"></h2>
+    <p class="r-tagline" id="rTagline"></p>
+
+    <div class="stat-block">
+      <div class="stat-label" id="rStatLabel"></div>
+      <div class="stars" id="rStars"></div>
+    </div>
+
+    <div class="spectrum-block">
+      <div class="spectrum-title">🧭 你的人格光譜（依三維度加權計分）</div>
+      <div class="axis">
+        <div class="axis-labels"><span>內藏 Internalize</span><b id="axLabelEx"></b><span>外顯 Express</span></div>
+        <div class="axis-bar"><div class="axis-bar-fill" id="axBarEx"></div></div>
+      </div>
+      <div class="axis">
+        <div class="axis-labels"><span>低頻 Calm</span><b id="axLabelIn"></b><span>高頻 Intense</span></div>
+        <div class="axis-bar"><div class="axis-bar-fill" id="axBarIn"></div></div>
+      </div>
+      <div class="axis">
+        <div class="axis-labels"><span>focus 自己 Self</span><b id="axLabelFo"></b><span>focus 他人 Other</span></div>
+        <div class="axis-bar"><div class="axis-bar-fill" id="axBarFo"></div></div>
+      </div>
+    </div>
+
+    <div class="lines" id="rLines"></div>
+
+    <div class="pov" id="rPov"></div>
+
+    <div class="pair-row">
+      <div class="pair-card">
+        <div class="k">🤝 夥伴人格</div>
+        <div class="v" id="rCompanion"></div>
+      </div>
+      <div class="pair-card">
+        <div class="k">⚡ 衝突人格</div>
+        <div class="v" id="rRival"></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="secondary" id="restartBtn">重新測驗</button>
+      <button class="download" id="downloadBtn">產生分享圖 ⬇</button>
+    </div>
+    <div class="hint">分享圖會自動下載到你的裝置，存起來就能發 IG 限動囉</div>
+  </div>
+
+  <footer>Sweet Rabbit Man · [ Sweet R.A.B.B.I.T. Personality ] v2.0（自架版）</footer>
+</div>
+
+<canvas id="shareCanvas" width="1080" height="1350"></canvas>
+
+<script>
+/* =========================================================
+   DATA — 6 型人格（沿用原本的 R.A.B.B.I.T. 概念與文案，僅做微調）
+   ========================================================= */
+const TYPES = {
+  insecurity: {
+    name:'Insecurity', emoji:'💭', color:'#c98fef',
+    tagline:'什麼都想問清楚，其實只是想被肯定的兔子',
+    statLabel:'不安指數',
+    lines:[
+      '你常常懷疑自己是不是太煩、太敏感、太多了。',
+      '你不是不知道自己做得很好，',
+      '你只是想聽別人說一句「你真的不錯」。',
+      '你想讓每件事更好，卻老是覺得自己拖後腿，',
+      '你過度思考，是因為你太在乎。'
+    ],
+    pov:'「如果我變得更好一點……你會多喜歡我一點嗎？哪怕只是一點。」',
+    companion:{name:'Sorry Loop', emoji:'🩵'}, rival:'bitterness'
+  },
+  tenderness: {
+    name:'Tenderness', emoji:'🌷', color:'#7fc8f8',
+    tagline:'會為大家準備水、卻忘了自己也渴的兔子',
+    statLabel:'溫柔指數',
+    lines:[
+      '你總是先照顧別人，再問自己還剩多少。',
+      '你不是沒底線，而是你還不習慣拒絕。',
+      '你能理解所有人，所以你最常原諒。',
+      '你心很軟，',
+      '但你不想讓人知道，你也需要被擁抱。'
+    ],
+    pov:'「我說我沒事，因為我不想再解釋了。反正沒人真的在聽，沒關係的～」',
+    companion:{name:'Static Smile', emoji:'🐛'}, rival:'bitterness'
+  },
+  bitterness: {
+    name:'Bitterness', emoji:'😏', color:'#e05252',
+    tagline:'笑起來很好看，但話裡帶一點刺的兔子',
+    statLabel:'苦澀指數',
+    lines:[
+      '你知道世界不完美，所以不再期待什麼。',
+      '你習慣觀察、懂得社交，',
+      '表面平靜，內心很嘈雜。',
+      '你不是壞，只是精疲力盡，',
+      '你用微笑包裝失望，讓人搞不清楚你是真的 OK，還是已經放棄回應了。'
+    ],
+    pov:'「我沒事啊～只是覺得說話浪費力氣，聽話浪費生命。你講，但我不保證會聽。」',
+    companion:{name:'Static Smile', emoji:'🐛'}, rival:'tenderness'
+  },
+  blankness: {
+    name:'Blankness', emoji:'💤', color:'#ffb84d',
+    tagline:'無預警掉線、不回訊息也不是討厭誰的兔子',
+    statLabel:'空白指數',
+    lines:[
+      '你不是沒情緒，你只是太累，不想解釋。',
+      '你不會主動開話題，也不想應付那些「假關心」。',
+      '你像飛航模式一樣，不是壞掉，是關機自保。',
+      '你沒冷淡，',
+      '只是你只會留能量給真正的人。'
+    ],
+    pov:'「對，我斷線了。不是因為你怎麼了，是我腦子突然短路，＄％＆％＊＆」',
+    companion:{name:'Dual Burnout', emoji:'🤍'}, rival:'rage'
+  },
+  anxiety: {
+    name:'Anxiety', emoji:'💓', color:'#ff6bcb',
+    tagline:'心跳過快但又不敢說出口的兔子',
+    statLabel:'焦慮指數',
+    lines:[
+      '你總是在小心處理自己的存在感，',
+      '對每個字句都像拆炸彈。',
+      '你不是脆弱，你只是活得很用力。',
+      '你太怕被誤會，所以總是先怪自己，',
+      '你不喜歡麻煩別人，卻又渴望有人真的聽進你說的話。'
+    ],
+    pov:'「我很吵嗎？對不起……你不用回，我真的沒關係……還是你回一下？」',
+    companion:{name:'Sorry Loop', emoji:'🩵'}, rival:'rage'
+  },
+  rage: {
+    name:'Rage', emoji:'🌋', color:'#ff5252',
+    tagline:'火山型兔子，爆發前先笑一笑',
+    statLabel:'憤怒指數',
+    lines:[
+      '你情緒濃烈，壓抑也強烈，',
+      '明明沒說什麼，別人卻總說你很有氣場。',
+      '你對虛假特別敏感，對被忽略更是反感。',
+      '你不怕對抗，但太常自己消化，',
+      '你的溫柔，其實是用來包住刀子的。'
+    ],
+    pov:'「我沒有生氣，只是還在想要不要讓你知道我生氣了 :)」',
+    companion:{name:'Tender Bomb', emoji:'💛'}, rival:'blankness'
+  }
+};
+
+const ORDER = ['insecurity','tenderness','bitterness','blankness','anxiety','rage'];
+
+/* =========================================================
+   三維計分模型（像 MBTI 一樣：由多題累積出三個維度的傾向，
+   再由三個維度的組合對應到最終人格，而不是單純比誰被選最多次）
+
+   維度 1：表達方式  Ex = 外顯 Express／In = 內藏 Internalize
+   維度 2：能量強度  Hi = 高頻緊繃／Lo = 低頻平靜
+   維度 3：關注焦點  Se = 聚焦自己／Ot = 聚焦他人
+
+   6 型人格 = 三維度組合中最具代表性的 6 種（其餘 2 種較少見組合
+   會透過「最接近的已知組合」自動歸類，確保每次都能得到明確結果）：
+
+     Insecurity  = In · Hi · Se   （內藏＋高頻＋聚焦自己）
+     Anxiety     = In · Hi · Ot   （內藏＋高頻＋聚焦他人）
+     Blankness   = In · Lo · Se   （內藏＋低頻＋聚焦自己）
+     Bitterness  = In · Lo · Ot   （內藏＋低頻＋聚焦他人）
+     Rage        = Ex · Hi · Se   （外顯＋高頻＋聚焦自己）
+     Tenderness  = Ex · Hi · Ot   （外顯＋高頻＋聚焦他人）
+   ========================================================= */
+const AXIS_CODE = {
+  insecurity: {ex:'In', in:'Hi', fo:'Se'},
+  anxiety:    {ex:'In', in:'Hi', fo:'Ot'},
+  blankness:  {ex:'In', in:'Lo', fo:'Se'},
+  bitterness: {ex:'In', in:'Lo', fo:'Ot'},
+  rage:       {ex:'Ex', in:'Hi', fo:'Se'},
+  tenderness: {ex:'Ex', in:'Hi', fo:'Ot'}
+};
+
+// 三個字母組成的代碼 -> 對應人格（僅收錄 6 個有意義的組合）
+const CODE_TO_TYPE = {
+  'In-Hi-Se':'insecurity',
+  'In-Hi-Ot':'anxiety',
+  'In-Lo-Se':'blankness',
+  'In-Lo-Ot':'bitterness',
+  'Ex-Hi-Se':'rage',
+  'Ex-Hi-Ot':'tenderness'
+};
+
+// 每題原始選項固定對應：insecurity, tenderness, bitterness, blankness, anxiety, rage
+// 實際顯示時會被隨機打亂順序（見下方 shuffle），避免有心人一眼看穿「第幾個選項＝哪個人格」
+// 所有選項統一寫成「當下心裡真正冒出來的想法」，而不是外在行為描述，讀起來更真實、更好選
+const RAW_QUESTIONS = [
+  {q:'🍚 家庭聚餐時長輩突然問起你最近過得怎樣，你心裡想的是：', opts:[
+    '「該怎麼講才不會讓他們覺得我過得不好……」',
+    '「隨便啦，先讓長輩開心比較重要」',
+    '「講了他們也記不住，隨便應付一下就好」',
+    '「喔，隨口回答就好，沒什麼好講的」',
+    '「是不是講太多了，會不會讓人覺得我在抱怨」',
+    '「又要交代近況，很煩耶」'
+  ]},
+  {q:'💬 群組突然安靜下來，沒人回你訊息，你心裡想的是：', opts:[
+    '「是不是我剛剛說錯什麼了……」',
+    '「大家應該只是在忙，晚點回也沒關係」',
+    '「反正本來就沒人在意我說什麼」',
+    '「喔，那就這樣吧，沒差」',
+    '「完了，是不是我講的話很奇怪，要不要補一句」',
+    '「已讀不回是怎樣，很沒禮貌欸」'
+  ]},
+  {q:'🎁 朋友生日你精心準備禮物，對方反應卻很冷淡，你心裡想的是：', opts:[
+    '「是不是我送錯了，他其實不喜歡吧」',
+    '「沒關係，他可能只是心情不好，心意有到就好」',
+    '「早知道就不用這麼用心了」',
+    '「喔，那就這樣，反正禮物送出去了」',
+    '「他該不會覺得我很奇怪吧，怎麼辦」',
+    '「這什麼反應，虧我還特地挑這麼久」'
+  ]},
+  {q:'📅 原本約好的計畫被臨時取消，你心裡想的是：', opts:[
+    '「是不是我不夠重要，才會被隨便取消」',
+    '「沒關係，改天再約就好，他應該也很無奈」',
+    '「果然，反正這種事本來就常發生」',
+    '「喔，那正好，我也懶得出門」',
+    '「是不是我之前說了什麼，讓他不想赴約」',
+    '「講好的事說取消就取消，很不尊重人欸」'
+  ]},
+  {q:'🗣️ 有人在你面前開了一個不太好笑的玩笑，你心裡想的是：', opts:[
+    '「要不要笑一下，不然氣氛會不會很尷尬」',
+    '「幫忙接個話好了，不然場面會冷掉」',
+    '「這也能講出來，真的沒什麼品味」',
+    '「喔，聽過就算了，沒什麼感覺」',
+    '「該怎麼回應才不會顯得掃興」',
+    '「一點都不好笑，很想翻白眼」'
+  ]},
+  {q:'📩 傳出去的訊息已讀超過一天沒回，你心裡想的是：', opts:[
+    '「是不是我講錯話，讓對方不高興了」',
+    '「他應該在忙，再等等看沒關係」',
+    '「行啊，那我也不急著理他」',
+    '「喔，好像有傳過這則訊息，忘了」',
+    '「該不會是我哪句話冒犯到他了吧」',
+    '「已讀這麼久不回，是想怎樣」'
+  ]},
+  {q:'🍽️ 聚餐時大家在聊你完全沒興趣的話題，你心裡想的是：', opts:[
+    '「要不要講點話，不然會不會顯得我很邊緣」',
+    '「先聽大家聊，順便幫忙倒水夾菜就好」',
+    '「這話題有什麼好聊的，真的很無聊」',
+    '「喔，那我先放空一下好了」',
+    '「是不是該說點什麼，才不會顯得失禮」',
+    '「這個話題要聊多久，很想潑冷水」'
+  ]},
+  {q:'🍜 你興沖沖推薦朋友一家餐廳，結果對方說不好吃，你心裡想的是：', opts:[
+    '「是不是我的品味真的有問題」',
+    '「可能只是剛好不合他胃口，沒關係」',
+    '「你是有多懂吃，講得好像很厲害」',
+    '「喔，好吧，那就這樣」',
+    '「早知道就不要推薦了，是不是害他浪費錢」',
+    '「虧我還特地介紹，講這什麼態度」'
+  ]},
+  {q:'🎤 KTV 播到你點的歌，麥克風傳到你手上，大家都在等你開口，你心裡想的是：', opts:[
+    '「等一下唱走音，大家會不會覺得我很好笑」',
+    '「先唱一首炒熱氣氛，大家開心比較重要」',
+    '「排這什麼歌單，隨便唱一唱應付過去」',
+    '「喔，輪到我了，那就照著螢幕唱吧，沒什麼特別感覺」',
+    '「副歌那段音會不會飆不上去，好緊張」',
+    '「很煩耶，幹嘛每次都要人先開口，自己怎麼不先點」'
+  ]},
+  {q:'👋 一場聚會結束互道再見時，你心裡真正的想法是：', opts:[
+    '「剛剛表現得夠好嗎，會不會讓人覺得無聊」',
+    '「今天很開心，真心期待下次再見」',
+    '「說是下次見，反正大家講講而已」',
+    '「終於結束了，只想趕快回家」',
+    '「剛剛是不是有哪裡失禮，要不要傳訊息道歉」',
+    '「今天不太合，下次應該不會再約了」'
+  ]}
+];
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+// 把每題選項轉成 {text, type} 明確標記型別，並在載入時「洗牌一次」固定下來，
+// 之後每次作答都是同一個順序，不會每次重玩就重新打亂；
+// 但因為每題的順序都不是單純的「第1個永遠是不安、第2個永遠是溫柔…」，
+// 還是能避免被一眼看穿型別對應規則
+const QUESTIONS = RAW_QUESTIONS.map(item=>({
+  q: item.q,
+  opts: shuffle(item.opts.map((text,i)=>({text, type: ORDER[i]})))
+}));
+
+/* ===================== STATE ===================== */
+let current = 0;
+const typeCount = {}; // 每個人格被直接選中的原始次數（用於顯示強度%）
+ORDER.forEach(id=>typeCount[id]=0);
+const axisCount = {
+  ex:{Ex:0, In:0},
+  in:{Hi:0, Lo:0},
+  fo:{Se:0, Ot:0}
+};
+
+/* ===================== INIT ===================== */
+document.getElementById('startBtn').addEventListener('click', ()=>{
+  document.getElementById('start').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderQuestion();
+});
+
+document.getElementById('restartBtn').addEventListener('click', ()=>{
+  current = 0;
+  ORDER.forEach(id=>typeCount[id]=0);
+  axisCount.ex.Ex=0; axisCount.ex.In=0;
+  axisCount.in.Hi=0; axisCount.in.Lo=0;
+  axisCount.fo.Se=0; axisCount.fo.Ot=0;
+  document.getElementById('result').style.display='none';
+  document.getElementById('start').style.display='block';
+});
+
+function renderQuestion(){
+  const qData = QUESTIONS[current];
+  const qText = document.getElementById('qText');
+  const wrap = document.getElementById('optionsWrap');
+
+  document.getElementById('qIndexLabel').textContent = `Q${current+1} / ${QUESTIONS.length}`;
+  document.getElementById('qPercentLabel').textContent = Math.round((current)/QUESTIONS.length*100)+'%';
+  document.getElementById('progressBar').style.width = (current/QUESTIONS.length*100)+'%';
+
+  qText.textContent = qData.q;
+  wrap.innerHTML = '';
+  qData.opts.forEach((opt, i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'opt q-anim-in';
+    btn.style.animationDelay = (i*0.04)+'s';
+    btn.textContent = opt.text;
+    btn.addEventListener('click', ()=> choose(opt.type, btn));
+    wrap.appendChild(btn);
+  });
+}
+
+function choose(typeId, btn){
+  document.querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none');
+  btn.classList.add('chosen');
+
+  typeCount[typeId] += 1;
+  const code = AXIS_CODE[typeId];
+  axisCount.ex[code.ex] += 1;
+  axisCount.in[code.in] += 1;
+  axisCount.fo[code.fo] += 1;
+
+  const card = document.getElementById('quiz');
+  setTimeout(()=>{
+    current++;
+    if(current < QUESTIONS.length){
+      card.classList.add('fade-out');
+      setTimeout(()=>{
+        card.classList.remove('fade-out');
+        renderQuestion();
+      }, 260);
+    } else {
+      document.getElementById('progressBar').style.width='100%';
+      document.getElementById('qPercentLabel').textContent='100%';
+      setTimeout(showResult, 350);
+    }
+  }, 260);
+}
+
+/* 依三個維度的多數票決定最終人格代碼；
+   若組合落在較少見的 2 種（Ex-Lo-Se / Ex-Lo-Ot），
+   就翻轉「票數最接近打平」的那個維度，自動歸類到最接近的已知人格 */
+function resolveType(){
+  const total = QUESTIONS.length;
+
+  const marginEx = axisCount.ex.Ex - axisCount.ex.In;
+  const marginIn = axisCount.in.Hi - axisCount.in.Lo;
+  const marginFo = axisCount.fo.Se - axisCount.fo.Ot;
+
+  let poleEx = marginEx >= 0 ? 'Ex' : 'In';
+  let poleIn = marginIn >= 0 ? 'Hi' : 'Lo';
+  let poleFo = marginFo >= 0 ? 'Se' : 'Ot';
+
+  let code = `${poleEx}-${poleIn}-${poleFo}`;
+
+  if(!CODE_TO_TYPE[code]){
+    // 找出三個維度中票數差距最小（最接近打平）的那一個，翻轉它
+    const margins = [
+      {axis:'ex', abs:Math.abs(marginEx)},
+      {axis:'in', abs:Math.abs(marginIn)},
+      {axis:'fo', abs:Math.abs(marginFo)}
+    ].sort((a,b)=>a.abs-b.abs);
+
+    for(const m of margins){
+      let tryEx = poleEx, tryIn = poleIn, tryFo = poleFo;
+      if(m.axis==='ex') tryEx = poleEx==='Ex' ? 'In':'Ex';
+      if(m.axis==='in') tryIn = poleIn==='Hi' ? 'Lo':'Hi';
+      if(m.axis==='fo') tryFo = poleFo==='Se' ? 'Ot':'Se';
+      const tryCode = `${tryEx}-${tryIn}-${tryFo}`;
+      if(CODE_TO_TYPE[tryCode]){ code = tryCode; poleEx=tryEx; poleIn=tryIn; poleFo=tryFo; break; }
+    }
+  }
+
+  let winnerId = CODE_TO_TYPE[code] || ORDER[0];
+
+  // 安全防呆：如果三維度算出來的人格其實一次都沒被選過（極端全平手才會發生），
+  // 改用「原始被選次數最多」的人格，確保結果一定是使用者實際傾向的類型
+  if(typeCount[winnerId] === 0){
+    let best = ORDER[0], bestCount = -1;
+    ORDER.forEach(id=>{ if(typeCount[id] > bestCount){ bestCount = typeCount[id]; best = id; } });
+    winnerId = best;
+  }
+
+  return {
+    winnerId,
+    axisPct:{
+      ex: Math.round(axisCount.ex.Ex/total*100),   // 越高越「外顯」
+      in: Math.round(axisCount.in.Hi/total*100),   // 越高越「高頻緊繃」
+      fo: Math.round(axisCount.fo.Se/total*100)    // 越高越「聚焦自己」
+    }
+  };
+}
+
+function showResult(){
+  const {winnerId, axisPct} = resolveType();
+
+  const rawScore = typeCount[winnerId];
+  const pct = Math.round(rawScore / QUESTIONS.length * 100);
+  const starCount = Math.max(1, Math.min(5, Math.round(pct/20) + 1));
+
+  const t = TYPES[winnerId];
+  document.getElementById('rEmoji').textContent = t.emoji;
+  document.getElementById('rName').textContent = t.name;
+  document.getElementById('rTagline').textContent = t.tagline;
+  document.getElementById('rStatLabel').textContent = `${t.statLabel}（符合度 ${pct}%，${QUESTIONS.length} 題中選了 ${rawScore} 次）`;
+  document.getElementById('rStars').textContent = '★'.repeat(starCount) + '☆'.repeat(5-starCount);
+  document.getElementById('rLines').innerHTML = t.lines.map(l=>`<p>${l}</p>`).join('');
+  document.getElementById('rPov').textContent = t.pov;
+  document.getElementById('rCompanion').textContent = `${t.companion.emoji} ${t.companion.name}`;
+  const rivalT = TYPES[t.rival];
+  document.getElementById('rRival').textContent = `${rivalT.emoji} ${rivalT.name}`;
+
+  document.getElementById('axBarEx').style.width = axisPct.ex+'%';
+  document.getElementById('axBarIn').style.width = axisPct.in+'%';
+  document.getElementById('axBarFo').style.width = axisPct.fo+'%';
+  document.getElementById('axLabelEx').textContent = axisPct.ex>=50 ? `外顯 ${axisPct.ex}%` : `內藏 ${100-axisPct.ex}%`;
+  document.getElementById('axLabelIn').textContent = axisPct.in>=50 ? `高頻 ${axisPct.in}%` : `低頻 ${100-axisPct.in}%`;
+  document.getElementById('axLabelFo').textContent = axisPct.fo>=50 ? `自己 ${axisPct.fo}%` : `他人 ${100-axisPct.fo}%`;
+
+  window._lastResult = {winnerId, pct, starCount};
+
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('result').style.display='block';
+}
+
+/* ===================== SHARE IMAGE (Canvas) ===================== */
+document.getElementById('downloadBtn').addEventListener('click', ()=>{
+  const r = window._lastResult;
+  if(!r) return;
+  drawShareCard(r.winnerId, r.pct, r.starCount);
+});
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight){
+  const chars = text.split('');
+  let line = '';
+  let curY = y;
+  for(let n=0;n<chars.length;n++){
+    const test = line + chars[n];
+    if(ctx.measureText(test).width > maxWidth && line !== ''){
+      ctx.fillText(line, x, curY);
+      line = chars[n];
+      curY += lineHeight;
+    } else {
+      line = test;
+    }
+  }
+  ctx.fillText(line, x, curY);
+  return curY + lineHeight;
+}
+
+function drawShareCard(id, pct, starCount){
+  const t = TYPES[id];
+  const canvas = document.getElementById('shareCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // background
+  const grad = ctx.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0,'#fff3f6');
+  grad.addColorStop(1,'#eef7ff');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,W,H);
+
+  // decorative circle
+  ctx.fillStyle = t.color + '22';
+  ctx.beginPath();
+  ctx.arc(W-80, 120, 220, 0, Math.PI*2);
+  ctx.fill();
+
+  // brand
+  ctx.fillStyle = '#ff6b97';
+  ctx.font = '700 34px "Baloo 2", sans-serif';
+  ctx.textAlign='left';
+  ctx.fillText('🐰 Sweet Rabbit Man', 70, 100);
+  ctx.fillStyle = '#7a6469';
+  ctx.font = '400 26px "Noto Sans TC", sans-serif';
+  ctx.fillText('[ Sweet R.A.B.B.I.T. Personality ]', 70, 140);
+
+  // card
+  ctx.fillStyle = '#ffffff';
+  roundRect(ctx, 60, 190, W-120, H-380, 40);
+  ctx.fill();
+
+  // emoji big
+  ctx.font = '160px "Noto Sans TC", sans-serif';
+  ctx.textAlign='center';
+  ctx.fillText(t.emoji, W/2, 420);
+
+  // name
+  ctx.fillStyle = '#ff6b97';
+  ctx.font = '800 64px "Baloo 2", sans-serif';
+  ctx.fillText(t.name, W/2, 500);
+
+  // tagline
+  ctx.fillStyle = '#7a6469';
+  ctx.font = '400 28px "Noto Sans TC", sans-serif';
+  ctx.textAlign='left';
+  wrapText(ctx, t.tagline, 110, 560, W-220, 40);
+
+  // stat block
+  ctx.fillStyle = '#fff6f8';
+  roundRect(ctx, 110, 610, W-220, 90, 20);
+  ctx.fill();
+  ctx.fillStyle = '#7a6469';
+  ctx.font = '700 24px "Noto Sans TC", sans-serif';
+  ctx.fillText(`${t.statLabel}（符合度 ${pct}%）`, 140, 650);
+  ctx.font = '34px sans-serif';
+  ctx.fillStyle = '#ffb84d';
+  ctx.fillText('★'.repeat(starCount)+'☆'.repeat(5-starCount), 140, 690);
+
+  // lines
+  ctx.fillStyle = '#3c2a2f';
+  ctx.font = '400 28px "Noto Sans TC", sans-serif';
+  let y = 760;
+  t.lines.forEach(line=>{
+    y = wrapText(ctx, '· '+line, 110, y, W-220, 40) + 6;
+  });
+
+  // pov
+  ctx.fillStyle = '#8a6a2c';
+  ctx.font = 'italic 400 26px "Noto Sans TC", sans-serif';
+  wrapText(ctx, t.pov, 110, y+30, W-220, 36);
+
+  // footer
+  ctx.fillStyle = '#b79aa0';
+  ctx.font = '400 22px "Noto Sans TC", sans-serif';
+  ctx.textAlign='center';
+  ctx.fillText('自架版｜sweetrabbitman.com（示意）', W/2, H-60);
+
+  // download
+  const link = document.createElement('a');
+  link.download = `我是${t.name}-兔型人格測驗.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+</script>
+</body>
+</html>
