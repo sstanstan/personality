@@ -205,6 +205,16 @@
     margin:0 0 6px;
     color:var(--pink-deep);
   }
+  .r-combo-note{
+    font-family:'Baloo 2', sans-serif;
+    font-size:13px;
+    color:var(--pink-deep);
+    background:#fff0f4;
+    display:inline-block;
+    padding:4px 12px;
+    border-radius:999px;
+    margin:0 0 10px;
+  }
   .r-tagline{
     font-size:14.5px;
     color:var(--ink-soft);
@@ -370,9 +380,10 @@
   </div>
 
   <div class="card" id="result">
-    <span class="r-kicker">你的兔型人格是</span>
+    <span class="r-kicker" id="rKicker">你的兔型人格是</span>
     <span class="r-emoji" id="rEmoji"></span>
     <h2 class="r-name" id="rName"></h2>
+    <p class="r-combo-note" id="rComboNote" style="display:none;"></p>
     <p class="r-tagline" id="rTagline"></p>
 
     <div class="stat-block">
@@ -515,6 +526,103 @@ const TYPES = {
 };
 
 const ORDER = ['insecurity','tenderness','bitterness','blankness','anxiety','rage'];
+
+/* =========================================================
+   隱藏人格（COMBO）— 當兩個人格的原始得分「非常接近」時觸發，
+   取代單一人格結果。目前只定義 6 型人格相鄰的 5 種組合
+   （不是全部 15 種排列組合都有，只有這 5 組有專屬設計）：
+
+     Insecurity + Anxiety   = Sorry Loop
+     Bitterness + Tenderness= Static Smile
+     Bitterness + Blankness = Dual Burnout
+     Rage + Tenderness      = Tender Bomb
+     Anxiety + Blankness    = Glitchcore
+   ========================================================= */
+const COMBOS = {
+  sorryloop: {
+    name:'Sorry Loop', emoji:'🩵', color:'#7fdbe8',
+    parents:['insecurity','anxiety'],
+    tagline:'想做對每件事，卻先道歉的兔子',
+    statLabel:'抱歉循環指數',
+    lines:[
+      '你把「抱歉」當成安全詞，先道歉才敢繼續說話。',
+      '你不是真的做錯了什麼，只是太怕造成麻煩。',
+      '你反覆確認自己有沒有講錯話、會不會又讓人生氣。',
+      '你既想被喜歡，又害怕自己的存在本身就是打擾，',
+      '你的溫柔，常常是說給自己聽的安慰。'
+    ],
+    pov:'「對不起，我是不是……又讓你失望了？我真的不是故意的……」',
+    companion:'insecurity', rival:'rage'
+  },
+  staticsmile: {
+    name:'Static Smile', emoji:'🐛', color:'#4fd88a',
+    parents:['bitterness','tenderness'],
+    tagline:'笑著原諒，但心裡已經寫完一篇批評文的兔子',
+    statLabel:'假面微笑指數',
+    lines:[
+      '你表面上很好相處，其實心裡的帳算得很清楚。',
+      '你會笑著說沒關係，但那句沒關係常常是最後一次機會。',
+      '你把溫柔留給值得的人，把觀察留給還在測試的人。',
+      '你不輕易翻臉，因為翻臉之前你已經想過所有後果，',
+      '你安靜，不代表你沒有立場。'
+    ],
+    pov:'「我沒在忍你，我在觀察你多會演。等我出手，你會懷念我沉默的樣子。」',
+    companion:'bitterness', rival:'rage'
+  },
+  dualburnout: {
+    name:'Dual Burnout', emoji:'🤍', color:'#b9b9b9',
+    parents:['bitterness','blankness'],
+    tagline:'笑過、哭過、但現在只想關機的兔子',
+    statLabel:'雙重倦怠指數',
+    lines:[
+      '你不是變冷漠，是心裡的電量真的見底了。',
+      '你懶得社交，不是討厭誰，是連笑都覺得費力。',
+      '你曾經很努力在乎過，現在只想被放過。',
+      '你不想解釋自己的狀態，因為解釋本身也很累，',
+      '你需要的不是安慰，是一段沒人打擾的空白。'
+    ],
+    pov:'「我不是不在乎，我只是沒力氣熱絡，拜託先讓我躺一下 (._.;)」',
+    companion:'blankness', rival:'tenderness'
+  },
+  tenderbomb: {
+    name:'Tender Bomb', emoji:'💛', color:'#ffe066',
+    parents:['rage','tenderness'],
+    tagline:'笑著遞茶、心裡同時想爆炸的兔子',
+    statLabel:'溫柔炸彈指數',
+    lines:[
+      '你把憤怒包裝成貼心，因為你怕情緒一出來會嚇到人。',
+      '你很會照顧別人的感受，卻常常忘記自己也在燃燒。',
+      '你笑著說沒事，其實心裡已經演練過好幾種爆炸的方式。',
+      '你不是控制不住脾氣，是你太清楚脾氣一發不可收拾，',
+      '你的溫柔跟憤怒，其實是同一種在乎的兩種樣子。'
+    ],
+    pov:'「我表現得很溫柔，因為我懂自己一生氣，場面會變得太難看，連我都不想看 ==」',
+    companion:'rage', rival:'blankness'
+  },
+  glitchcore: {
+    name:'Glitchcore', emoji:'🌀', color:'#4fa8ff',
+    parents:['anxiety','blankness'],
+    tagline:'一邊當機、一邊努力重開的兔子',
+    statLabel:'當機指數',
+    lines:[
+      '你明明很想好好回應，腦袋卻突然一片空白。',
+      '心跳跳得很快，嘴巴卻卡住說不出話。',
+      '你不是不在乎，是同時當機又想努力撐住場面。',
+      '你會偷偷深呼吸，假裝自己只是在想事情，',
+      '你只是需要一點時間，讓自己重新開機。'
+    ],
+    pov:'「等我一下……我系統當機了，正在努力重新開機。」',
+    companion:'anxiety', rival:'rage'
+  }
+};
+
+// 把 parents 轉成查表用的 key（兩個人格 id 排序後用 - 連接），
+// 方便用「目前分數最高的兩個人格」直接查出對應的隱藏人格
+const COMBO_LOOKUP = {};
+Object.keys(COMBOS).forEach(cid=>{
+  const key = COMBOS[cid].parents.slice().sort().join('-');
+  COMBO_LOOKUP[key] = cid;
+});
 
 /* =========================================================
    三維計分模型（像 MBTI 一樣：由多題累積出三個維度的傾向，
@@ -776,24 +884,55 @@ function resolveType(){
     winnerId = best;
   }
 
-  return {
-    winnerId,
-    axisPct:{
-      ex: Math.round(axisCount.ex.Ex/total*100),   // 越高越「外顯」
-      in: Math.round(axisCount.in.Hi/total*100),   // 越高越「高頻緊繃」
-      fo: Math.round(axisCount.fo.Se/total*100)    // 越高越「聚焦自己」
-    }
+  const axisPct = {
+    ex: Math.round(axisCount.ex.Ex/total*100),   // 越高越「外顯」
+    in: Math.round(axisCount.in.Hi/total*100),   // 越高越「高頻緊繃」
+    fo: Math.round(axisCount.fo.Se/total*100)    // 越高越「聚焦自己」
   };
+
+  // ---- 隱藏人格偵測：找出原始得分最高的兩個人格，
+  // 若兩者分數非常接近（差距 <=1）且都有一定次數，
+  // 且剛好是 COMBOS 裡定義的相鄰配對，就觸發隱藏人格 ----
+  const sortedIds = ORDER.slice().sort((a,b)=>typeCount[b]-typeCount[a]);
+  const top1 = sortedIds[0], top2 = sortedIds[1];
+  const c1 = typeCount[top1], c2 = typeCount[top2];
+  let comboId = null;
+  if(c1 >= 2 && c2 >= 2 && (c1 - c2) <= 1){
+    const pairKey = [top1, top2].sort().join('-');
+    comboId = COMBO_LOOKUP[pairKey] || null;
+  }
+
+  return { winnerId, axisPct, comboId, top1, top2 };
 }
 
 function showResult(){
-  const {winnerId, axisPct} = resolveType();
+  const {winnerId, axisPct, comboId, top1, top2} = resolveType();
 
+  document.getElementById('axBarEx').style.width = axisPct.ex+'%';
+  document.getElementById('axBarIn').style.width = axisPct.in+'%';
+  document.getElementById('axBarFo').style.width = axisPct.fo+'%';
+  document.getElementById('axLabelEx').textContent = axisPct.ex>=50 ? `外顯 ${axisPct.ex}%` : `內藏 ${100-axisPct.ex}%`;
+  document.getElementById('axLabelIn').textContent = axisPct.in>=50 ? `高頻 ${axisPct.in}%` : `低頻 ${100-axisPct.in}%`;
+  document.getElementById('axLabelFo').textContent = axisPct.fo>=50 ? `自己 ${axisPct.fo}%` : `他人 ${100-axisPct.fo}%`;
+
+  if(comboId){
+    renderComboResult(comboId, top1, top2);
+  } else {
+    renderSingleResult(winnerId);
+  }
+
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('result').style.display='block';
+}
+
+function renderSingleResult(winnerId){
   const rawScore = typeCount[winnerId];
   const pct = Math.round(rawScore / QUESTIONS.length * 100);
   const starCount = Math.max(1, Math.min(5, Math.round(pct/20) + 1));
 
   const t = TYPES[winnerId];
+  document.getElementById('rKicker').textContent = '你的兔型人格是';
+  document.getElementById('rComboNote').style.display = 'none';
   document.getElementById('rEmoji').textContent = t.emoji;
   document.getElementById('rName').textContent = t.name;
   document.getElementById('rTagline').textContent = t.tagline;
@@ -805,24 +944,41 @@ function showResult(){
   const rivalT = TYPES[t.rival];
   document.getElementById('rRival').textContent = `${rivalT.emoji} ${rivalT.name}`;
 
-  document.getElementById('axBarEx').style.width = axisPct.ex+'%';
-  document.getElementById('axBarIn').style.width = axisPct.in+'%';
-  document.getElementById('axBarFo').style.width = axisPct.fo+'%';
-  document.getElementById('axLabelEx').textContent = axisPct.ex>=50 ? `外顯 ${axisPct.ex}%` : `內藏 ${100-axisPct.ex}%`;
-  document.getElementById('axLabelIn').textContent = axisPct.in>=50 ? `高頻 ${axisPct.in}%` : `低頻 ${100-axisPct.in}%`;
-  document.getElementById('axLabelFo').textContent = axisPct.fo>=50 ? `自己 ${axisPct.fo}%` : `他人 ${100-axisPct.fo}%`;
+  window._lastResult = {kind:'type', id:winnerId, pct, starCount};
+}
 
-  window._lastResult = {winnerId, pct, starCount};
+function renderComboResult(comboId, top1, top2){
+  const c = COMBOS[comboId];
+  const rawScore = typeCount[top1] + typeCount[top2];
+  const pct = Math.round(rawScore / QUESTIONS.length * 100);
+  const starCount = Math.max(1, Math.min(5, Math.round(pct/20) + 1));
 
-  document.getElementById('quiz').style.display='none';
-  document.getElementById('result').style.display='block';
+  const p1 = TYPES[c.parents[0]], p2 = TYPES[c.parents[1]];
+
+  document.getElementById('rKicker').textContent = '✨ 你觸發了隱藏人格';
+  const note = document.getElementById('rComboNote');
+  note.textContent = `( ${p1.name} + ${p2.name} )`;
+  note.style.display = 'inline-block';
+  document.getElementById('rEmoji').textContent = c.emoji;
+  document.getElementById('rName').textContent = c.name;
+  document.getElementById('rTagline').textContent = c.tagline;
+  document.getElementById('rStatLabel').textContent = `${c.statLabel}（符合度 ${pct}%，${QUESTIONS.length} 題中共選了 ${rawScore} 次）`;
+  document.getElementById('rStars').textContent = '★'.repeat(starCount) + '☆'.repeat(5-starCount);
+  document.getElementById('rLines').innerHTML = c.lines.map(l=>`<p>${l}</p>`).join('');
+  document.getElementById('rPov').textContent = c.pov;
+  const companionT = TYPES[c.companion];
+  document.getElementById('rCompanion').textContent = `${companionT.emoji} ${companionT.name}`;
+  const rivalT = TYPES[c.rival];
+  document.getElementById('rRival').textContent = `${rivalT.emoji} ${rivalT.name}`;
+
+  window._lastResult = {kind:'combo', id:comboId, pct, starCount};
 }
 
 /* ===================== SHARE IMAGE (Canvas) ===================== */
 document.getElementById('downloadBtn').addEventListener('click', ()=>{
   const r = window._lastResult;
   if(!r) return;
-  drawShareCard(r.winnerId, r.pct, r.starCount);
+  drawShareCard(r.kind, r.id, r.pct, r.starCount);
 });
 
 function roundRect(ctx,x,y,w,h,r){
@@ -853,8 +1009,12 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight){
   return curY + lineHeight;
 }
 
-function drawShareCard(id, pct, starCount){
-  const t = TYPES[id];
+function drawShareCard(kind, id, pct, starCount){
+  const isCombo = kind === 'combo';
+  const t = isCombo ? COMBOS[id] : TYPES[id];
+  const comboSubtitle = isCombo
+    ? `( ${TYPES[t.parents[0]].name} + ${TYPES[t.parents[1]].name} )`
+    : null;
   const canvas = document.getElementById('shareCanvas');
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
@@ -891,32 +1051,49 @@ function drawShareCard(id, pct, starCount){
   ctx.textAlign='center';
   ctx.fillText(t.emoji, W/2, 420);
 
+  // combo badge (only for hidden combo results)
+  if(isCombo){
+    ctx.fillStyle = '#ff6b97';
+    ctx.font = '700 26px "Noto Sans TC", sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText('✨ 隱藏人格', W/2, 250);
+  }
+
   // name
   ctx.fillStyle = '#ff6b97';
   ctx.font = '800 64px "Baloo 2", sans-serif';
+  ctx.textAlign='center';
   ctx.fillText(t.name, W/2, 500);
+
+  // combo subtitle (parents)
+  const yOffset = isCombo ? 30 : 0;
+  if(isCombo){
+    ctx.fillStyle = '#7a6469';
+    ctx.font = '400 24px "Baloo 2", sans-serif';
+    ctx.fillText(comboSubtitle, W/2, 530);
+  }
 
   // tagline
   ctx.fillStyle = '#7a6469';
   ctx.font = '400 28px "Noto Sans TC", sans-serif';
   ctx.textAlign='left';
-  wrapText(ctx, t.tagline, 110, 560, W-220, 40);
+  wrapText(ctx, t.tagline, 110, 560+yOffset, W-220, 40);
 
   // stat block
   ctx.fillStyle = '#fff6f8';
-  roundRect(ctx, 110, 610, W-220, 90, 20);
+  roundRect(ctx, 110, 610+yOffset, W-220, 90, 20);
   ctx.fill();
   ctx.fillStyle = '#7a6469';
   ctx.font = '700 24px "Noto Sans TC", sans-serif';
-  ctx.fillText(`${t.statLabel}（符合度 ${pct}%）`, 140, 650);
+  ctx.fillText(`${t.statLabel}（符合度 ${pct}%）`, 140, 650+yOffset);
   ctx.font = '34px sans-serif';
   ctx.fillStyle = '#ffb84d';
-  ctx.fillText('★'.repeat(starCount)+'☆'.repeat(5-starCount), 140, 690);
+  ctx.fillText('★'.repeat(starCount)+'☆'.repeat(5-starCount), 140, 690+yOffset);
 
   // lines
   ctx.fillStyle = '#3c2a2f';
   ctx.font = '400 28px "Noto Sans TC", sans-serif';
-  let y = 760;
+  let y = 760+yOffset;
   t.lines.forEach(line=>{
     y = wrapText(ctx, '· '+line, 110, y, W-220, 40) + 6;
   });
