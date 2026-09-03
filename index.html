@@ -3,748 +3,864 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-<title>[ Sweet R.A.B.B.I.T. Personality ] 你是哪一種兔子？｜社交能量測驗</title>
-<meta name="description" content="10題日常情境題，透過三個維度精準測出你的兔感人格：Insecurity 不安、Tenderness 溫柔、Bitterness 苦澀、Blankness 空白、Anxiety 焦慮、Rage 憤怒。">
+<title>[ Sweet R.A.B.B.I.T. Personality ] 你是哪一隻兔子？｜7 個生活場景測驗</title>
+<meta name="description" content="7 個生活裡的小場景，測出你正在循環的那個小情緒——11 種兔感人格：Insecurity、Tenderness、Bitterness、Blankness、Anxiety、Rage，還有 5 種隱藏人格。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg1:#fff3f6;
-    --bg2:#eef7ff;
-    --ink:#3c2a2f;
-    --ink-soft:#7a6469;
-    --card:#ffffff;
-    --pink:#ff8fab;
-    --pink-deep:#ff6b97;
-    --accent:#ffd166;
-    --radius:28px;
-    --shadow: 0 12px 30px rgba(255, 143, 171, .18);
+    --paper:#EDEBE4;
+    --ink:#151312;
+    --line:#151312;
+    --card:#F6F4EE;
+    --accent:#9B6BEA;
+    --accent-soft:#9B6BEA33;
   }
-  *{box-sizing:border-box;}
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
   body{
-    font-family:'Noto Sans TC', sans-serif;
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(21,19,18,0.07) 1px, transparent 0);
+    background-size: 16px 16px;
     color:var(--ink);
-    background:
-      radial-gradient(1200px 600px at 10% -10%, #ffe3ec 0%, transparent 60%),
-      radial-gradient(1000px 600px at 100% 0%, #e3f2ff 0%, transparent 55%),
-      linear-gradient(180deg, var(--bg1), var(--bg2));
+    font-family:'Noto Sans TC', sans-serif;
     min-height:100vh;
     display:flex;
-    align-items:flex-start;
     justify-content:center;
-    padding:32px 16px 80px;
+    padding: 24px 14px 60px;
   }
   .app{
     width:100%;
-    max-width:560px;
+    max-width:460px;
   }
-  .brand{
-    text-align:center;
-    margin-bottom:18px;
+  .display{
+    font-family:'Baloo 2', 'Noto Sans TC', sans-serif;
   }
-  .brand .logo{
+
+  /* ---------- shared wobble card ---------- */
+  .wobble-card{
+    position:relative;
+    background:var(--card);
+    border:3px solid var(--line);
+    border-radius: 22px 26px 20px 28px / 26px 20px 28px 22px;
+    box-shadow: 5px 6px 0 var(--line);
+  }
+
+  /* ---------- top eyebrow pill ---------- */
+  .eyebrow{
     display:inline-flex;
     align-items:center;
-    gap:8px;
+    gap:6px;
     background:#fff;
-    padding:8px 16px;
+    border:2.5px solid var(--line);
     border-radius:999px;
-    box-shadow:var(--shadow);
+    padding:6px 16px;
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:0.02em;
+    box-shadow: 3px 3px 0 var(--line);
+  }
+  .screen{ display:none; }
+  .screen.active{ display:block; animation: rise 0.35s ease; }
+  @keyframes rise{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ---------- INTRO ---------- */
+  .intro-wrap{ text-align:center; padding-top:10px; }
+  .intro-title{
+    font-size: 44px;
+    font-weight:800;
+    line-height:1.05;
+    margin: 18px 0 6px;
+    color:#9B6BEA;
+    -webkit-text-stroke: 2px var(--ink);
+    text-shadow: 3px 3px 0 var(--ink);
+  }
+  .intro-sub{
+    font-size:15.5px;
+    font-weight:500;
+    line-height:1.6;
+    margin: 10px auto 26px;
+    max-width: 340px;
+  }
+  .intro-meta{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:26px;
+  }
+  .chip{
+    font-size:11.5px;
+    font-weight:700;
+    background:#fff;
+    border:2px solid var(--line);
+    border-radius:999px;
+    padding:5px 12px;
+  }
+  .swatch-row{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin: 22px 0 30px;
+    flex-wrap:wrap;
+  }
+  .swatch{
+    width:30px;height:30px;border-radius:50%;
+    border:2.5px solid var(--line);
+  }
+  .btn{
     font-family:'Baloo 2', sans-serif;
     font-weight:700;
-    color:var(--pink-deep);
-    font-size:14px;
-    letter-spacing:.5px;
-  }
-  .card{
-    background:var(--card);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    padding:36px 28px;
-    position:relative;
-    overflow:hidden;
-  }
-  .card::before{
-    content:"🐇";
-    position:absolute;
-    font-size:120px;
-    opacity:.06;
-    right:-20px;
-    top:-30px;
-    transform:rotate(15deg);
-  }
-
-  /* ---------- START SCREEN ---------- */
-  #start h1{
-    font-family:'Baloo 2', sans-serif;
-    font-size:26px;
-    line-height:1.35;
-    margin:0 0 10px;
-    color:var(--pink-deep);
-  }
-  #start p.sub{
-    color:var(--ink-soft);
-    font-size:15px;
-    line-height:1.7;
-    margin:0 0 24px;
-  }
-  button.primary{
-    width:100%;
-    border:none;
-    background:linear-gradient(135deg, var(--pink), var(--pink-deep));
-    color:#fff;
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700;
-    font-size:18px;
-    padding:16px;
-    border-radius:18px;
-    cursor:pointer;
-    box-shadow:0 10px 20px rgba(255,107,151,.35);
-    transition:transform .15s ease, box-shadow .15s ease;
-  }
-  button.primary:hover{transform:translateY(-2px); box-shadow:0 14px 26px rgba(255,107,151,.42);}
-  button.primary:active{transform:translateY(0px) scale(.98);}
-
-  .meta-row{
-    display:flex;
-    justify-content:space-between;
-    font-size:12px;
-    color:var(--ink-soft);
-    margin-top:14px;
-  }
-
-  /* ---------- QUIZ SCREEN ---------- */
-  #quiz{display:none;}
-  .progress-wrap{
-    background:#ffe4ea;
-    border-radius:999px;
-    height:10px;
-    overflow:hidden;
-    margin-bottom:8px;
-  }
-  .progress-bar{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg, var(--pink), var(--accent));
-    border-radius:999px;
-    transition:width .45s cubic-bezier(.4,0,.2,1);
-  }
-  .progress-label{
-    font-size:12px;
-    color:var(--ink-soft);
-    margin-bottom:22px;
-    display:flex;
-    justify-content:space-between;
-  }
-  .q-text{
-    font-family:'Baloo 2', sans-serif;
-    font-size:20px;
-    line-height:1.5;
-    margin:0 0 22px;
-  }
-  .options{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
-  .opt{
-    text-align:left;
-    background:#fff9fa;
-    border:2px solid #ffe4ea;
-    border-radius:16px;
-    padding:14px 16px;
-    font-size:14.5px;
-    line-height:1.5;
+    font-size:17px;
+    letter-spacing:0.01em;
     color:var(--ink);
+    background:#FFE14D;
+    border:3px solid var(--line);
+    border-radius: 999px;
+    padding: 15px 34px;
     cursor:pointer;
-    transition:all .15s ease;
+    box-shadow: 4px 5px 0 var(--line);
+    transition: transform .12s ease, box-shadow .12s ease;
   }
-  .opt:hover{
-    border-color:var(--pink);
-    background:#fff0f4;
-    transform:translateX(2px);
-  }
-  .opt.chosen{
-    border-color:var(--pink-deep);
-    background:linear-gradient(135deg,#ffe9ef,#fff);
-    transform:scale(.99);
-  }
-  .q-anim-in{animation:qin .38s ease both;}
-  @keyframes qin{
-    from{opacity:0; transform:translateY(14px);}
-    to{opacity:1; transform:translateY(0);}
-  }
-  .fade-out{animation:fout .28s ease both;}
-  @keyframes fout{
-    from{opacity:1; transform:translateY(0);}
-    to{opacity:0; transform:translateY(-10px);}
-  }
+  .btn:active{ transform: translate(3px,4px); box-shadow: 1px 1px 0 var(--line); }
+  .btn.ghost{ background:#fff; }
+  .btn.small{ font-size:14px; padding:11px 22px; }
+  .btn-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 
-  /* ---------- RESULT SCREEN ---------- */
-  #result{display:none; text-align:center;}
-  .r-emoji{
-    font-size:64px;
-    display:block;
-    margin-bottom:6px;
-    animation:pop .5s cubic-bezier(.34,1.56,.64,1) both;
-  }
-  @keyframes pop{
-    0%{transform:scale(.4); opacity:0;}
-    100%{transform:scale(1); opacity:1;}
-  }
-  .r-kicker{
-    font-size:13px;
-    color:var(--ink-soft);
-    margin-bottom:4px;
-  }
-  .r-name{
-    font-family:'Baloo 2', sans-serif;
-    font-size:32px;
-    margin:0 0 6px;
-    color:var(--pink-deep);
-  }
-  .r-combo-note{
-    font-family:'Baloo 2', sans-serif;
-    font-size:13px;
-    color:var(--pink-deep);
-    background:#fff0f4;
-    display:inline-block;
-    padding:4px 12px;
-    border-radius:999px;
-    margin:0 0 10px;
-  }
-  .r-tagline{
-    font-size:14.5px;
-    color:var(--ink-soft);
-    margin:0 0 20px;
+  .disclaimer{
+    margin-top:20px;
+    font-size:11.5px;
+    color:#6b6863;
     line-height:1.6;
   }
-  .stat-block{
-    background:#fff6f8;
-    border-radius:18px;
-    padding:14px 18px;
-    margin-bottom:18px;
-    text-align:left;
-  }
-  .stat-label{
-    font-size:12px;
-    color:var(--ink-soft);
-    margin-bottom:6px;
-    font-weight:700;
-  }
-  .stars{font-size:20px; letter-spacing:2px;}
 
-  /* ---- MBTI-like spectrum bars ---- */
-  .spectrum-block{
+  /* ---------- QUIZ ---------- */
+  .progress-row{ display:flex; align-items:center; gap:10px; margin-bottom:20px;}
+  .progress-track{
+    flex:1; height:10px; background:#fff; border:2px solid var(--line); border-radius:999px; overflow:hidden;
+  }
+  .progress-fill{ height:100%; background:#9B6BEA; width:0%; transition:width .3s ease; }
+  .progress-label{ font-size:12px; font-weight:700; white-space:nowrap; }
+
+  .q-card{ padding: 26px 22px 22px; margin-bottom:18px; }
+  .q-index{ font-size:12px; font-weight:700; color:#9B6BEA; margin-bottom:6px;}
+  .q-text{ font-size:19px; font-weight:700; line-height:1.5; }
+
+  .options{ display:flex; flex-direction:column; gap:10px; }
+  .option{
     text-align:left;
+    font-family:'Noto Sans TC', sans-serif;
+    font-size:14.5px;
+    font-weight:500;
+    line-height:1.5;
     background:#fff;
-    border:1px solid #ffe4ea;
-    border-radius:18px;
-    padding:16px 18px;
-    margin-bottom:18px;
+    border:2.5px solid var(--line);
+    border-radius:14px;
+    padding:13px 16px;
+    cursor:pointer;
+    box-shadow: 3px 3px 0 var(--line);
+    transition: transform .1s ease, box-shadow .1s ease, background .15s ease;
   }
-  .spectrum-title{
-    font-size:12px;
+  .option:hover{ background:#FFF6D6; }
+  .option:active{ transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--line); }
+  .option.chosen{ background:#FFF6D6; pointer-events:none; }
+
+  .back-link{
+    display:inline-block;
+    margin-top:6px;
+    font-size:12.5px;
     font-weight:700;
-    color:var(--ink-soft);
-    margin-bottom:12px;
+    color:#6b6863;
+    cursor:pointer;
+    text-decoration:underline;
   }
-  .axis{margin-bottom:12px;}
-  .axis:last-child{margin-bottom:0;}
-  .axis-labels{
-    display:flex;
-    justify-content:space-between;
-    font-size:11.5px;
-    color:var(--ink-soft);
-    margin-bottom:4px;
+
+  /* ---------- RESULT ---------- */
+  #screen-result{ text-align:left; }
+
+  /* ---- 3D tilt trading card (uses real illustrated card artwork) ---- */
+  .tilt-outer{
+    perspective:1200px;
+    margin-bottom:8px;
   }
-  .axis-labels b{color:var(--ink); font-weight:700;}
-  .axis-bar{
+  .tilt-card{
     position:relative;
-    height:8px;
-    background:#ffe4ea;
-    border-radius:999px;
+    border-radius:22px;
     overflow:hidden;
+    box-shadow:0 20px 40px rgba(0,0,0,.25);
+    transform-style:preserve-3d;
+    transform:rotateX(0deg) rotateY(0deg) scale(1);
+    transition:transform .5s cubic-bezier(.22,1,.36,1), box-shadow .3s ease;
+    will-change:transform;
+    cursor:grab;
+    touch-action:pan-y;
+    border:3px solid var(--line);
   }
-  .axis-bar-fill{
+  .tilt-card.dragging{
+    transition:none;
+    cursor:grabbing;
+    box-shadow:0 28px 54px rgba(0,0,0,.3);
+  }
+  .tilt-img{
+    display:block;
+    width:100%;
+    height:auto;
+    -webkit-user-drag:none;
+    user-select:none;
+    pointer-events:none;
+  }
+  .tilt-rainbow{
     position:absolute;
-    top:0; left:0; bottom:0;
-    background:linear-gradient(90deg, var(--pink), var(--pink-deep));
-    border-radius:999px;
-    transition:width .6s cubic-bezier(.4,0,.2,1);
+    inset:-20%;
+    background:repeating-linear-gradient(115deg,#ff6b97 0%,#ffd166 12%,#8ff0c0 24%,#7fc8f8 36%,#c98fef 48%,#ff6b97 60%);
+    background-size:220% 220%;
+    background-position:var(--px,50%) var(--py,50%);
+    mix-blend-mode:color-dodge;
+    opacity:0;
+    transition:opacity .35s ease;
+    pointer-events:none;
+    filter:saturate(1.1);
+    -webkit-mask-image:var(--fx-mask, none);
+    mask-image:var(--fx-mask, none);
+    -webkit-mask-size:cover;
+    mask-size:cover;
   }
+  .tilt-card.dragging .tilt-rainbow{ opacity:.28; }
 
-  .lines{
-    text-align:left;
-    background:#fff;
-    border:1px solid #ffe4ea;
-    border-radius:18px;
-    padding:18px 20px;
-    margin-bottom:18px;
+  .tilt-rainbow-edge{
+    position:absolute;
+    inset:0;
+    padding:10px;
+    background:repeating-linear-gradient(115deg,#ff6b97 0%,#ffd166 12%,#8ff0c0 24%,#7fc8f8 36%,#c98fef 48%,#ff6b97 60%);
+    background-size:220% 220%;
+    background-position:var(--px,50%) var(--py,50%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+    mix-blend-mode:color-dodge;
+    opacity:0;
+    transition:opacity .35s ease;
+    pointer-events:none;
+    filter:saturate(1.3);
   }
-  .lines p{
-    margin:0 0 10px;
-    font-size:14.5px;
-    line-height:1.7;
+  .tilt-card.dragging .tilt-rainbow-edge{ opacity:.85; }
+
+  .tilt-sparkle{
+    position:absolute;
+    inset:0;
+    background-image:
+      radial-gradient(circle at 18% 26%, rgba(255,255,255,.95) 0%, transparent 1.6%),
+      radial-gradient(circle at 68% 58%, rgba(255,255,255,.9) 0%, transparent 1.3%),
+      radial-gradient(circle at 38% 78%, rgba(255,255,255,.95) 0%, transparent 1.1%),
+      radial-gradient(circle at 84% 22%, rgba(255,255,255,.85) 0%, transparent 1.4%),
+      radial-gradient(circle at 55% 42%, rgba(255,255,255,.9) 0%, transparent 1%),
+      radial-gradient(circle at 12% 62%, rgba(255,255,255,.8) 0%, transparent 1.2%),
+      radial-gradient(circle at 92% 82%, rgba(255,255,255,.85) 0%, transparent 1.3%);
+    background-size:200% 200%;
+    background-position:var(--px,50%) var(--py,50%);
+    mix-blend-mode:overlay;
+    opacity:0;
+    transition:opacity .35s ease;
+    pointer-events:none;
+    clip-path:inset(29% 44% 27% 3%);
   }
-  .lines p:last-child{margin-bottom:0;}
-  .pov{
-    background:linear-gradient(135deg,#fff3d6,#fff9ec);
-    border-radius:16px;
-    padding:14px 18px;
-    font-size:13.5px;
-    color:#8a6a2c;
-    margin-bottom:20px;
-    text-align:left;
+  .tilt-card.dragging .tilt-sparkle{ opacity:.6; }
+
+  .tilt-shine{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(115deg, transparent 35%, rgba(255,225,245,.35) 45%, rgba(255,255,255,.5) 50%, rgba(210,240,255,.35) 55%, transparent 65%);
+    mix-blend-mode:overlay;
+    opacity:0;
+    transition:opacity .3s ease;
+    pointer-events:none;
   }
-  .pair-row{
-    display:flex;
-    gap:12px;
-    margin-bottom:24px;
-  }
-  .pair-card{
-    flex:1;
-    background:#fff;
-    border:1px solid #ffe4ea;
-    border-radius:16px;
-    padding:12px;
-  }
-  .pair-card .k{font-size:11px; color:var(--ink-soft); margin-bottom:4px;}
-  .pair-card .v{font-family:'Baloo 2', sans-serif; font-size:15px;}
-  .btn-row{display:flex; gap:10px;}
-  button.secondary{
-    flex:1;
-    border:2px solid #ffd8e2;
-    background:#fff;
-    color:var(--pink-deep);
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700;
-    font-size:14.5px;
-    padding:14px;
-    border-radius:16px;
-    cursor:pointer;
-  }
-  button.download{
-    flex:1.4;
-    border:none;
-    background:linear-gradient(135deg, var(--pink), var(--pink-deep));
+  .tilt-card:hover .tilt-shine,
+  .tilt-card.dragging .tilt-shine{ opacity:.7; }
+  .tilt-id{
+    position:absolute;
+    top:14px;
+    right:16px;
+    z-index:2;
+    font-family:monospace;
+    font-size:11px;
     color:#fff;
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700;
-    font-size:14.5px;
-    padding:14px;
-    border-radius:16px;
-    cursor:pointer;
-    box-shadow:0 8px 16px rgba(255,107,151,.3);
+    background:rgba(0,0,0,.45);
+    padding:3px 10px;
+    border-radius:999px;
+    letter-spacing:.5px;
   }
-  .hint{
-    font-size:11.5px;
-    color:var(--ink-soft);
-    margin-top:14px;
-  }
-  #shareCanvas{display:none;}
-
-  footer{
+  .tilt-hint{
     text-align:center;
     font-size:11.5px;
-    color:var(--ink-soft);
-    margin-top:24px;
+    color:#6b6863;
+    margin:0 0 16px;
   }
+
+  .view-banner{
+    background:#151312; color:#F6F4EE;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding: 11px 16px;
+    border-radius: 16px;
+    margin-bottom:12px;
+    font-size:12.5px;
+    font-weight:700;
+  }
+  .view-banner button{
+    font-family:'Baloo 2',sans-serif;
+    font-size:12px; font-weight:700;
+    background:#F6F4EE; color:#151312;
+    border:none; border-radius:999px; padding:7px 13px; cursor:pointer;
+    flex-shrink:0;
+  }
+
+  .result-card{ overflow:hidden; }
+  .result-head{
+    padding: 20px 22px 14px;
+    text-align:center;
+  }
+  .result-title{
+    font-size:42px;
+    font-weight:800;
+    line-height:1;
+    margin: 4px 0 2px;
+  }
+  .result-formula{ font-size:12.5px; font-weight:700; opacity:0.75; margin-bottom:8px;}
+  .result-tagline{
+    font-size:14.5px;
+    font-weight:700;
+    text-decoration: underline;
+    text-underline-offset:4px;
+    max-width:320px;
+    margin:0 auto 4px;
+  }
+
+  .rarity-badge{
+    display:inline-block;
+    font-size:12px;
+    font-weight:700;
+    background:#151312;
+    color:#F6F4EE;
+    padding:5px 13px;
+    border-radius:999px;
+    margin: 4px 0 10px;
+  }
+
+  .stat-panel{ border-top:3px solid var(--line); }
+  .stat-label{
+    font-size:12.5px;
+    font-weight:800;
+    text-align:center;
+    padding:9px 4px;
+    border-bottom:3px solid var(--line);
+    letter-spacing:0.04em;
+  }
+  .stars{ text-align:center; padding:10px 4px; font-size:18px; border-bottom:3px solid var(--line); letter-spacing:2px;}
+  .pov-label{ font-size:12.5px; font-weight:800; text-align:center; padding:8px 4px; letter-spacing:0.04em; }
+  .pov-text{ font-size:13px; line-height:1.7; font-weight:500; padding: 2px 18px 16px; text-align:center; }
+
+  .rel-row{
+    display:grid; grid-template-columns:1fr 1fr;
+    border-top:3px solid var(--line);
+  }
+  .rel-cell{ padding:12px 10px; text-align:center; }
+  .rel-cell:first-child{ border-right:3px solid var(--line); }
+  .rel-h{ font-size:11.5px; font-weight:800; margin-bottom:8px; letter-spacing:0.03em; }
+  .rel-name-btn{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    width:100%;
+    background:none; border:none; padding:4px; cursor:pointer;
+    font-family:inherit;
+  }
+  .rel-name{
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    font-family:'Baloo 2',sans-serif;
+    font-weight:700; font-size:14.5px;
+  }
+  .rel-hint{
+    font-size:10px; font-weight:600; color:#8a877f;
+    text-decoration:underline; text-underline-offset:2px;
+  }
+  .dot{ width:20px;height:20px;border-radius:50%; border:2px solid var(--line); flex-shrink:0;}
+
+  .dist-panel{ border-top:3px solid var(--line); padding: 16px 20px 18px; }
+  .dist-title{ font-size:12px; font-weight:800; letter-spacing:0.04em; margin-bottom:12px; }
+  .dist-row{ display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+  .dist-name{ width:64px; font-size:11px; font-weight:700; flex-shrink:0; }
+  .dist-track{ flex:1; height:12px; background:#fff; border:2px solid var(--line); border-radius:999px; overflow:hidden; }
+  .dist-fill{ height:100%; border-radius:999px; transition: width .5s ease; }
+  .dist-count{ width:16px; font-size:11px; font-weight:700; text-align:right; flex-shrink:0; }
+
+  .no-data-note{
+    border-top:3px solid var(--line);
+    padding: 16px 20px;
+    text-align:center;
+    font-size:12.5px;
+    color:#6b6863;
+    line-height:1.7;
+  }
+
+  .profile-panel{ border-top:3px solid var(--line); padding: 6px 20px 4px; }
+  .profile-item{ padding: 14px 0; border-bottom:1.5px dashed #cfccc3; }
+  .profile-item:last-child{ border-bottom:none; }
+  .profile-h{ display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:800; margin-bottom:6px; }
+  .profile-text{ font-size:13px; line-height:1.75; font-weight:500; margin:0; color:#2c2a28; }
+
+  .afterdark{
+    border-top:3px solid var(--line);
+    background: #1c1a19;
+    color:#F0EEE7;
+    padding: 18px 20px 20px;
+  }
+  .afterdark-label{ font-size:11.5px; font-weight:700; letter-spacing:0.04em; opacity:0.7; margin-bottom:8px; }
+  .afterdark-text{ font-size:13.5px; line-height:1.85; font-weight:500; margin:0; }
+
+  .pullquote-panel{ border-top:3px solid var(--line); padding: 22px 24px 20px; text-align:center; position:relative; }
+  .pullquote-mark{ font-family:'Baloo 2', sans-serif; font-size:44px; line-height:0.4; color: var(--accent, #9B6BEA); margin-bottom:6px; }
+  .pullquote-text{ font-family:'Baloo 2', sans-serif; font-weight:700; font-size:19px; line-height:1.45; margin: 4px 0 8px; }
+  .pullquote-sign{ font-size:11px; font-weight:500; color:#6b6863; }
+
+  .footer-brand{
+    text-align:center; padding: 14px 10px 16px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700; font-size:13px; letter-spacing:0.03em;
+  }
+  .footer-brand span{ display:block; font-family:'Noto Sans TC',sans-serif; font-weight:500; font-size:10px; opacity:0.6; margin-top:2px;}
+
+  .cta-card{ margin-top:16px; padding:20px; text-align:center; }
+  .cta-eyebrow{ font-size:11px; font-weight:800; color:#6b6863; letter-spacing:0.05em; margin-bottom:8px;}
+  .cta-title{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:19px; line-height:1.4; margin-bottom:6px;}
+  .cta-sub{ font-size:13px; line-height:1.7; margin-bottom:16px; color:#3a3835;}
+  .cta-tag{
+    font-family:'Baloo 2', sans-serif;
+    font-size:13.5px; font-weight:700;
+    background:#151312; color:#F6F4EE;
+    display:inline-block; padding:8px 16px; border-radius:999px; margin-bottom:16px;
+  }
+
+  .actions{ margin-top:18px; }
+  #shareCanvas{ display:none; }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <div class="brand">
-    <span class="logo">🐰 Sweet Rabbit Man</span>
-  </div>
+  <!-- ================= INTRO ================= -->
+  <section class="screen active" id="screen-intro">
+    <div class="intro-wrap">
+      <div class="eyebrow">🐇 Sweet R.A.B.B.I.T. Personality</div>
+      <h1 class="intro-title display">你是<br>哪一隻兔子？</h1>
+      <p class="intro-sub">7 個生活裡的小場景，測出你正在循環的那個小情緒 —— 還有牠的夥伴、牠的死對頭。</p>
 
-  <div class="card" id="start">
-    <h1>[ Sweet R.A.B.B.I.T. Personality ]<br>你是哪一種兔子？社交能量測驗</h1>
-    <p class="sub">10 道日常情境題，從「表達方式 × 能量強度 × 關注焦點」三個維度計分，找出你內在的兔子人格——不是標籤，是一面你可能沒仔細看過的鏡子 🐇</p>
+      <div class="swatch-row" id="swatch-row"></div>
 
-    <button class="primary" id="startBtn">開始測驗 →</button>
-    <div class="meta-row">
-      <span>⏱ 約 2 分鐘</span>
-      <span>🐰 6 種兔感人格</span>
+      <div class="intro-meta">
+        <div class="chip">7 題・約 40 秒</div>
+        <div class="chip">11 種人格</div>
+        <div class="chip">SRM Feels</div>
+      </div>
+
+      <button class="btn display" id="startBtn">開始測驗</button>
+      <p class="disclaimer">測驗結果純屬娛樂與自我觀察，不是心理診斷。</p>
     </div>
-  </div>
+  </section>
 
-  <div class="card" id="quiz">
-    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
-    <div class="progress-label"><span id="qIndexLabel">Q1 / 12</span><span id="qPercentLabel">8%</span></div>
-    <p class="q-text" id="qText"></p>
+  <!-- ================= QUIZ ================= -->
+  <section class="screen" id="screen-quiz">
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">1 / 7</div>
+    </div>
+    <div class="wobble-card q-card">
+      <div class="q-index" id="qIndex">Q1</div>
+      <div class="q-text" id="qText"></div>
+    </div>
     <div class="options" id="optionsWrap"></div>
-  </div>
-
-  <div class="card" id="result">
-    <span class="r-kicker" id="rKicker">你的兔型人格是</span>
-    <span class="r-emoji" id="rEmoji"></span>
-    <h2 class="r-name" id="rName"></h2>
-    <p class="r-combo-note" id="rComboNote" style="display:none;"></p>
-    <p class="r-tagline" id="rTagline"></p>
-
-    <div class="stat-block">
-      <div class="stat-label" id="rStatLabel"></div>
-      <div class="stars" id="rStars"></div>
+    <div style="text-align:center;">
+      <span class="back-link" id="backLink">上一題</span>
     </div>
+  </section>
 
-    <div class="spectrum-block">
-      <div class="spectrum-title">🧭 你的人格光譜（依三維度加權計分）</div>
-      <div class="axis">
-        <div class="axis-labels"><span>內藏 Internalize</span><b id="axLabelEx"></b><span>外顯 Express</span></div>
-        <div class="axis-bar"><div class="axis-bar-fill" id="axBarEx"></div></div>
-      </div>
-      <div class="axis">
-        <div class="axis-labels"><span>低頻 Calm</span><b id="axLabelIn"></b><span>高頻 Intense</span></div>
-        <div class="axis-bar"><div class="axis-bar-fill" id="axBarIn"></div></div>
-      </div>
-      <div class="axis">
-        <div class="axis-labels"><span>focus 自己 Self</span><b id="axLabelFo"></b><span>focus 他人 Other</span></div>
-        <div class="axis-bar"><div class="axis-bar-fill" id="axBarFo"></div></div>
+  <!-- ================= RESULT ================= -->
+  <section class="screen" id="screen-result">
+
+    <div class="tilt-outer" id="tiltOuter">
+      <div class="tilt-card" id="tiltCard">
+        <span class="tilt-id" id="tcardId"></span>
+        <img class="tilt-img" id="rCardImg" src="" alt="人格卡">
+        <div class="tilt-rainbow"></div>
+        <div class="tilt-rainbow-edge"></div>
+        <div class="tilt-sparkle"></div>
+        <div class="tilt-shine"></div>
       </div>
     </div>
+    <div class="tilt-hint">🖐 滑動 / 傾斜手機看看卡片閃光</div>
 
-    <div class="lines" id="rLines"></div>
+    <div class="view-banner" id="viewBanner" style="display:none;">
+      <span id="viewBannerText"></span>
+      <button id="backToMineBtn">← 回到我的結果</button>
+    </div>
 
-    <div class="pov" id="rPov"></div>
-
-    <div class="pair-row">
-      <div class="pair-card">
-        <div class="k">🤝 夥伴人格</div>
-        <div class="v" id="rCompanion"></div>
+    <div class="wobble-card result-card" id="resultCard">
+      <div class="result-head">
+        <div class="eyebrow" style="margin-bottom:6px;">Sweet R.A.B.B.I.T. Personality</div>
+        <div class="result-title display" id="resultTitle"></div>
+        <div class="result-formula" id="resultFormula"></div>
+        <div class="rarity-badge display" id="rarityBadge"></div>
+        <div class="result-tagline" id="resultTagline"></div>
       </div>
-      <div class="pair-card">
-        <div class="k">⚡ 衝突人格</div>
-        <div class="v" id="rRival"></div>
+
+      <div class="stat-panel">
+        <div class="stat-label" id="statLabel"></div>
+        <div class="stars" id="stars"></div>
+        <div class="pov-label">POV</div>
+        <div class="pov-text" id="povText"></div>
+      </div>
+
+      <div class="rel-row">
+        <div class="rel-cell">
+          <div class="rel-h">夥伴人格</div>
+          <button class="rel-name-btn" id="companionBtn">
+            <span class="rel-name"><span class="dot" id="companionDot"></span><span id="companionName"></span></span>
+            <span class="rel-hint">看看這隻兔子 →</span>
+          </button>
+        </div>
+        <div class="rel-cell">
+          <div class="rel-h">衝突人格</div>
+          <button class="rel-name-btn" id="conflictBtn">
+            <span class="rel-name"><span class="dot" id="conflictDot"></span><span id="conflictName"></span></span>
+            <span class="rel-hint">看看這隻兔子 →</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="dist-panel" id="distPanel">
+        <div class="dist-title">🐇 你的情緒分佈</div>
+        <div id="distRows"></div>
+      </div>
+      <div class="no-data-note" id="noDataNote" style="display:none;">
+        這是 <b id="noDataName"></b> 的角色檔案，沒有專屬於你的分佈數據 —— 想看自己的分佈，去做一次測驗吧。
+      </div>
+
+      <div class="profile-panel">
+        <div class="profile-item">
+          <div class="profile-h">🧠 性格傾向</div>
+          <p class="profile-text" id="profilePersonality"></p>
+        </div>
+        <div class="profile-item">
+          <div class="profile-h">🧭 價值觀</div>
+          <p class="profile-text" id="profileValues"></p>
+        </div>
+        <div class="profile-item">
+          <div class="profile-h">💌 戀愛觀</div>
+          <p class="profile-text" id="profileLove"></p>
+        </div>
+      </div>
+
+      <div class="afterdark" id="afterdarkPanel">
+        <div class="afterdark-label">🌙 深夜限定・只有你看得到</div>
+        <p class="afterdark-text" id="afterdarkText"></p>
+      </div>
+
+      <div class="pullquote-panel" id="pullquotePanel">
+        <div class="pullquote-mark">"</div>
+        <p class="pullquote-text" id="pullquoteText"></p>
+        <div class="pullquote-sign">— 截圖這句，證明你也是這型</div>
+      </div>
+
+      <div class="footer-brand">
+        SWEETRABBITMAN.COM
+        <span>SRM.TOY PRESENT</span>
       </div>
     </div>
 
-    <div class="btn-row">
-      <button class="secondary" id="restartBtn">重新測驗</button>
-      <button class="download" id="downloadBtn">產生分享圖 ⬇</button>
-    </div>
-    <div class="hint">分享圖會自動下載到你的裝置，存起來就能發 IG 限動囉</div>
-  </div>
+    <!-- CTA -->
+    <div class="wobble-card cta-card" id="ctaCard"></div>
 
-  <footer>Sweet Rabbit Man · [ Sweet R.A.B.B.I.T. Personality ] v2.0（自架版）</footer>
+    <div class="actions btn-row">
+      <button class="btn small display" id="shareBtn">分享結果</button>
+      <button class="btn small ghost display" id="retakeBtn">重新測驗</button>
+    </div>
+  </section>
+
 </div>
 
-<canvas id="shareCanvas" width="1080" height="1350"></canvas>
+<canvas id="shareCanvas" width="1000" height="1500"></canvas>
 
 <script>
 /* =========================================================
-   DATA — 6 型人格（沿用原本的 R.A.B.B.I.T. 概念與文案，僅做微調）
+   DATA — 6 個基礎人格 + 5 個隱藏人格（合併人格＋文案）
    ========================================================= */
-const TYPES = {
-  insecurity: {
-    name:'Insecurity', emoji:'💭', color:'#c98fef',
-    tagline:'什麼都想問清楚，其實只是想被肯定的兔子',
-    statLabel:'不安指數',
-    lines:[
-      '你常常懷疑自己是不是太煩、太敏感、太多了。',
-      '你不是不知道自己做得很好，',
-      '你只是想聽別人說一句「你真的不錯」。',
-      '你想讓每件事更好，卻老是覺得自己拖後腿，',
-      '你過度思考，是因為你太在乎。'
-    ],
-    pov:'「如果我變得更好一點……你會多喜歡我一點嗎？哪怕只是一點。」',
-    companion:{name:'Sorry Loop', emoji:'🩵'}, rival:'bitterness'
-  },
-  tenderness: {
-    name:'Tenderness', emoji:'🌷', color:'#7fc8f8',
-    tagline:'會為大家準備水、卻忘了自己也渴的兔子',
-    statLabel:'溫柔指數',
-    lines:[
-      '你總是先照顧別人，再問自己還剩多少。',
-      '你不是沒底線，而是你還不習慣拒絕。',
-      '你能理解所有人，所以你最常原諒。',
-      '你心很軟，',
-      '但你不想讓人知道，你也需要被擁抱。'
-    ],
-    pov:'「我說我沒事，因為我不想再解釋了。反正沒人真的在聽，沒關係的～」',
-    companion:{name:'Static Smile', emoji:'🐛'}, rival:'bitterness'
-  },
-  bitterness: {
-    name:'Bitterness', emoji:'😏', color:'#e05252',
-    tagline:'笑起來很好看，但話裡帶一點刺的兔子',
-    statLabel:'苦澀指數',
-    lines:[
-      '你知道世界不完美，所以不再期待什麼。',
-      '你習慣觀察、懂得社交，',
-      '表面平靜，內心很嘈雜。',
-      '你不是壞，只是精疲力盡，',
-      '你用微笑包裝失望，讓人搞不清楚你是真的 OK，還是已經放棄回應了。'
-    ],
-    pov:'「我沒事啊～只是覺得說話浪費力氣，聽話浪費生命。你講，但我不保證會聽。」',
-    companion:{name:'Static Smile', emoji:'🐛'}, rival:'tenderness'
-  },
-  blankness: {
-    name:'Blankness', emoji:'💤', color:'#ffb84d',
-    tagline:'無預警掉線、不回訊息也不是討厭誰的兔子',
-    statLabel:'空白指數',
-    lines:[
-      '你不是沒情緒，你只是太累，不想解釋。',
-      '你不會主動開話題，也不想應付那些「假關心」。',
-      '你像飛航模式一樣，不是壞掉，是關機自保。',
-      '你沒冷淡，',
-      '只是你只會留能量給真正的人。'
-    ],
-    pov:'「對，我斷線了。不是因為你怎麼了，是我腦子突然短路，＄％＆％＊＆」',
-    companion:{name:'Dual Burnout', emoji:'🤍'}, rival:'rage'
-  },
-  anxiety: {
-    name:'Anxiety', emoji:'💓', color:'#ff6bcb',
-    tagline:'心跳過快但又不敢說出口的兔子',
-    statLabel:'焦慮指數',
-    lines:[
-      '你總是在小心處理自己的存在感，',
-      '對每個字句都像拆炸彈。',
-      '你不是脆弱，你只是活得很用力。',
-      '你太怕被誤會，所以總是先怪自己，',
-      '你不喜歡麻煩別人，卻又渴望有人真的聽進你說的話。'
-    ],
-    pov:'「我很吵嗎？對不起……你不用回，我真的沒關係……還是你回一下？」',
-    companion:{name:'Sorry Loop', emoji:'🩵'}, rival:'rage'
-  },
-  rage: {
-    name:'Rage', emoji:'🌋', color:'#ff5252',
-    tagline:'火山型兔子，爆發前先笑一笑',
-    statLabel:'憤怒指數',
-    lines:[
-      '你情緒濃烈，壓抑也強烈，',
-      '明明沒說什麼，別人卻總說你很有氣場。',
-      '你對虛假特別敏感，對被忽略更是反感。',
-      '你不怕對抗，但太常自己消化，',
-      '你的溫柔，其實是用來包住刀子的。'
-    ],
-    pov:'「我沒有生氣，只是還在想要不要讓你知道我生氣了 :)」',
-    companion:{name:'Tender Bomb', emoji:'💛'}, rival:'blankness'
-  }
+const LETTERS = {
+  A: { id:'anxiety',    name:'Anxiety',    color:'#E14FD0' },
+  B: { id:'tenderness', name:'Tenderness', color:'#6E93B7' },
+  C: { id:'bitterness', name:'Bitterness', color:'#D5433B' },
+  D: { id:'blankness',  name:'Blankness',  color:'#EF9B2E' },
+  E: { id:'insecurity', name:'Insecurity', color:'#9B6BEA' },
+  F: { id:'rage',       name:'Rage',       color:'#F04A2A' },
 };
 
 const ORDER = ['insecurity','tenderness','bitterness','blankness','anxiety','rage'];
+const COMBO_IDS = ['sorryloop','staticsmile','dualburnout','tenderbomb','glitchcore'];
 
-/* =========================================================
-   隱藏人格（COMBO）— 當兩個人格的原始得分「非常接近」時觸發，
-   取代單一人格結果。目前只定義 6 型人格相鄰的 5 種組合
-   （不是全部 15 種排列組合都有，只有這 5 組有專屬設計）：
-
-     Insecurity + Anxiety   = Sorry Loop
-     Bitterness + Tenderness= Static Smile
-     Bitterness + Blankness = Dual Burnout
-     Rage + Tenderness      = Tender Bomb
-     Anxiety + Blankness    = Glitchcore
-   ========================================================= */
-const COMBOS = {
-  sorryloop: {
-    name:'Sorry Loop', emoji:'🩵', color:'#7fdbe8',
-    parents:['insecurity','anxiety'],
-    tagline:'想做對每件事，卻先道歉的兔子',
-    statLabel:'抱歉循環指數',
-    lines:[
-      '你把「抱歉」當成安全詞，先道歉才敢繼續說話。',
-      '你不是真的做錯了什麼，只是太怕造成麻煩。',
-      '你反覆確認自己有沒有講錯話、會不會又讓人生氣。',
-      '你既想被喜歡，又害怕自己的存在本身就是打擾，',
-      '你的溫柔，常常是說給自己聽的安慰。'
-    ],
-    pov:'「對不起，我是不是……又讓你失望了？我真的不是故意的……」',
-    companion:'insecurity', rival:'rage'
-  },
-  staticsmile: {
-    name:'Static Smile', emoji:'🐛', color:'#4fd88a',
-    parents:['bitterness','tenderness'],
-    tagline:'笑著原諒，但心裡已經寫完一篇批評文的兔子',
-    statLabel:'假面微笑指數',
-    lines:[
-      '你表面上很好相處，其實心裡的帳算得很清楚。',
-      '你會笑著說沒關係，但那句沒關係常常是最後一次機會。',
-      '你把溫柔留給值得的人，把觀察留給還在測試的人。',
-      '你不輕易翻臉，因為翻臉之前你已經想過所有後果，',
-      '你安靜，不代表你沒有立場。'
-    ],
-    pov:'「我沒在忍你，我在觀察你多會演。等我出手，你會懷念我沉默的樣子。」',
-    companion:'bitterness', rival:'rage'
-  },
-  dualburnout: {
-    name:'Dual Burnout', emoji:'🤍', color:'#b9b9b9',
-    parents:['bitterness','blankness'],
-    tagline:'笑過、哭過、但現在只想關機的兔子',
-    statLabel:'雙重倦怠指數',
-    lines:[
-      '你不是變冷漠，是心裡的電量真的見底了。',
-      '你懶得社交，不是討厭誰，是連笑都覺得費力。',
-      '你曾經很努力在乎過，現在只想被放過。',
-      '你不想解釋自己的狀態，因為解釋本身也很累，',
-      '你需要的不是安慰，是一段沒人打擾的空白。'
-    ],
-    pov:'「我不是不在乎，我只是沒力氣熱絡，拜託先讓我躺一下 (._.;)」',
-    companion:'blankness', rival:'tenderness'
-  },
-  tenderbomb: {
-    name:'Tender Bomb', emoji:'💛', color:'#ffe066',
-    parents:['rage','tenderness'],
-    tagline:'笑著遞茶、心裡同時想爆炸的兔子',
-    statLabel:'溫柔炸彈指數',
-    lines:[
-      '你把憤怒包裝成貼心，因為你怕情緒一出來會嚇到人。',
-      '你很會照顧別人的感受，卻常常忘記自己也在燃燒。',
-      '你笑著說沒事，其實心裡已經演練過好幾種爆炸的方式。',
-      '你不是控制不住脾氣，是你太清楚脾氣一發不可收拾，',
-      '你的溫柔跟憤怒，其實是同一種在乎的兩種樣子。'
-    ],
-    pov:'「我表現得很溫柔，因為我懂自己一生氣，場面會變得太難看，連我都不想看 ==」',
-    companion:'rage', rival:'blankness'
-  },
-  glitchcore: {
-    name:'Glitchcore', emoji:'🌀', color:'#4fa8ff',
-    parents:['anxiety','blankness'],
-    tagline:'一邊當機、一邊努力重開的兔子',
-    statLabel:'當機指數',
-    lines:[
-      '你明明很想好好回應，腦袋卻突然一片空白。',
-      '心跳跳得很快，嘴巴卻卡住說不出話。',
-      '你不是不在乎，是同時當機又想努力撐住場面。',
-      '你會偷偷深呼吸，假裝自己只是在想事情，',
-      '你只是需要一點時間，讓自己重新開機。'
-    ],
-    pov:'「等我一下……我系統當機了，正在努力重新開機。」',
-    companion:'anxiety', rival:'rage'
-  }
+// 每個人格 / 隱藏人格對應的正式卡牌圖檔（images 資料夾，跟 index.html 放在一起上傳）
+const CARD_IMG = {
+  insecurity:'images/insecurity.jpg',
+  tenderness:'images/tenderness.jpg',
+  bitterness:'images/bitterness.jpg',
+  blankness:'images/blankness.jpg',
+  anxiety:'images/anxiety.jpg',
+  rage:'images/rage.jpg',
+  sorryloop:'images/sorryloop.jpg',
+  staticsmile:'images/staticsmile.jpg',
+  dualburnout:'images/dualburnout.jpg',
+  tenderbomb:'images/tenderbomb.jpg',
+  glitchcore:'images/glitchcore.jpg'
 };
 
-// 把 parents 轉成查表用的 key（兩個人格 id 排序後用 - 連接），
-// 方便用「目前分數最高的兩個人格」直接查出對應的隱藏人格
+// 彩虹光層專用的遮罩圖：白色＝有顏色的區域會發光，黑色＝棋盤格背景/純白區域不會發光
+const MASK_IMG = {
+  insecurity:'images/masks/insecurity-color-mask.png',
+  tenderness:'images/masks/tenderness-color-mask.png',
+  bitterness:'images/masks/bitterness-color-mask.png',
+  blankness:'images/masks/blankness-color-mask.png',
+  anxiety:'images/masks/anxiety-color-mask.png',
+  rage:'images/masks/rage-color-mask.png',
+  sorryloop:'images/masks/sorryloop-color-mask.png',
+  staticsmile:'images/masks/staticsmile-color-mask.png',
+  dualburnout:'images/masks/dualburnout-color-mask.png',
+  tenderbomb:'images/masks/tenderbomb-color-mask.png',
+  glitchcore:'images/masks/glitchcore-color-mask.png'
+};
+
+function applyFxMask(id){
+  const card = document.getElementById('tiltCard');
+  const maskPath = MASK_IMG[id];
+  if(maskPath){ card.style.setProperty('--fx-mask', `url(${maskPath})`); }
+  else{ card.style.removeProperty('--fx-mask'); }
+}
+
+const RESULTS = {
+  insecurity: {
+    title:'Insecurity', formula:'', color:'#9B6BEA',
+    tagline:'什麼都想問清楚，其實只是想被肯定的兔子',
+    statLabel:'不安指數', rarity:9,
+    pov:['如果我變得更好一點…','你會不會就多喜歡我一點？','哪怕，只是一點點也好'],
+    personality:'你很敏感，很會察言觀色，總是在觀察別人的反應有沒有變化。做決定前習慣先想「這樣會不會不好」，寧願多做一點，也不想留下被挑剔的空間。',
+    values:'你重視「被在乎」勝過「被稱讚」。比起厲害，你更想被記得——想確定自己在別人心裡是有位置的。',
+    loveStyle:'你談戀愛時容易沒安全感，會反覆確認對方是不是還喜歡你。不是不信任對方，是你很難相信「自己值得被穩定地愛著」。',
+    afterDark:'你很少直接說「我需要被肯定」，你都用「我是不是很煩」來問。其實你等的不是答案，是有人願意多花三秒鐘想一想再回你。',
+    pullQuote:'我不是想被稱讚，我只是想確定我還好。',
+    companion:'sorryloop', conflict:'bitterness',
+  },
+  glitchcore: {
+    title:'Glitchcore', formula:'(Anxiety + Blankness)', color:'#3B6FE0',
+    tagline:'一邊當機、一邊努力重開的兔子',
+    statLabel:'當機指數', rarity:5,
+    pov:['訊號有點不穩定','但我還在，真的','只是需要重新連線一下'],
+    personality:'你的腦袋常常同時開太多分頁，一緊張就容易斷線、找不到字。外表看起來冷靜，其實內心一直在重新整理。',
+    values:'你重視「被允許不完美」。你討厭一定要立刻反應、立刻正確的場合，你需要一點空間讓自己重新開機。',
+    loveStyle:'戀愛裡你需要對方懂得等你——你不是不回應，是需要一點時間處理情緒再開口。找到願意等你重新連線的人，你會很珍惜。',
+    afterDark:'你不是不想回應，你是同時想太多、又什麼都想不出來，卡在「該說什麼」跟「乾脆不要說」中間，最後兩個都沒做，只剩沉默在那裡閃爍。',
+    pullQuote:'當機不是壞掉，是還在讀取而已。',
+    companion:'dualburnout', conflict:'tenderbomb',
+    parents:['anxiety','blankness'],
+  },
+  tenderbomb: {
+    title:'Tender Bomb', formula:'(Rage + Tenderness)', color:'#F0C93E',
+    tagline:'笑著遞茶、心裡同時想爆炸的兔子',
+    statLabel:'溫柔炸彈指數', rarity:7,
+    pov:['我表現得很溫柔','因為我知道自己一生氣','場面會變得太難看','連我都不想看'],
+    personality:'你的情緒管理能力很好，好到大家都以為你天生脾氣好。其實你只是把憤怒練習成了溫柔，練得太熟練，連自己都快分不清楚。',
+    values:'你重視「和諧」，但不是討好式的和諧，是那種「我可以忍，但你最好別逼我」的底線式和諧。',
+    loveStyle:'你在關係裡很少吵架，但一旦爆發通常是很久的累積。伴侶需要學會的，是在你還在「泡茶」階段就先接住你，而不是等到炸掉。',
+    afterDark:'你把所有「其實我很不爽」都煮成一壺茶端出去，因為你覺得「算了」比「吵架」划算。但那些沒說出口的，不會消失，只會變得比較燙。',
+    pullQuote:'我沒有生氣，我只是把生氣泡成茶了。',
+    companion:'rage', conflict:'blankness',
+    parents:['rage','tenderness'],
+  },
+  sorryloop: {
+    title:'Sorry Loop', formula:'(Insecurity + Anxiety)', color:'#8FE0E0',
+    tagline:'想做對每件事，卻先道歉的兔子',
+    statLabel:'抱歉循環指數', rarity:11,
+    pov:['對不起','我是不是又讓你失望了？','我真的不是故意的……'],
+    personality:'你很願意為關係負責，甚至願意先扛下不一定是自己的錯。你把「先道歉」當成維持關係的安全帶，卻很少想到自己也需要被安慰。',
+    values:'你重視「不要讓對方失望」，勝過「說出自己真正的感受」。你把別人的情緒照顧得很好，自己的常常被排在最後面。',
+    loveStyle:'戀愛裡你容易過度檢討自己，吵架時先道歉的人常常是你，就算不完全是你的錯。你需要的伴侶是那種會說「這不是你的問題」的人。',
+    afterDark:'你的「對不起」常常說在事情發生之前，好像先道歉一次，等一下真的出錯的時候，傷害就會小一點。但那個提前預支的道歉，其實最累的是你自己。',
+    pullQuote:'我先說對不起，是想幫你先原諒我。',
+    companion:'insecurity', conflict:'rage',
+    parents:['insecurity','anxiety'],
+    hasCTA:true,
+  },
+  bitterness: {
+    title:'Bitterness', formula:'', color:'#D5433B',
+    tagline:'笑起來很好看，但話裡帶一點刺的兔子',
+    statLabel:'苦澀指數', rarity:8,
+    pov:['我沒事啊～','只是覺得說話很浪費力氣','你講，但我不保證會聽'],
+    personality:'你觀察力很強，很快就能看穿場面話跟真心話的差別。你不是討厭人，你只是對「假裝」這件事特別沒耐心。',
+    values:'你重視真實勝過禮貌，比起好聽的話，你更想聽到誠實的話——哪怕那句話不太中聽。',
+    loveStyle:'你在感情裡不輕易交心，因為你見過太多「說一套做一套」。一旦你願意對一個人放下防備，代表你真的觀察很久，也真的想留下來。',
+    afterDark:'你早就發現了，很多對話講到最後都只是在等對方講完。所以你乾脆先幫自己省力氣，用一句「沒事」把門關上——但你其實都有記住，只是不打算再說。',
+    pullQuote:'我沒有不高興，我只是懶得演給你看。',
+    companion:'staticsmile', conflict:'tenderness',
+  },
+  dualburnout: {
+    title:'Dual Burnout', formula:'(Bitterness + Blankness)', color:'#C9C7BE',
+    tagline:'笑過、哭過、但現在只想關機的兔子',
+    statLabel:'雙重倦怠指數', rarity:6,
+    pov:['我不是不在乎','我只是沒力氣熱絡','拜託先讓我躺一下','( ._.; )'],
+    personality:'你已經很努力撐了一段時間，久到「累」變成一種預設狀態。你不是變得冷漠，你只是把力氣都花在讓自己看起來正常。',
+    values:'你重視「被允許休息」——不需要先證明自己夠累、夠慘，才有資格停下來。',
+    loveStyle:'戀愛裡你需要的不是熱烈，是安靜的陪伴。一個能接受你偶爾「什麼都不想做」而不追問原因的人，會讓你特別放鬆。',
+    afterDark:'你已經很努力「正常」很久了，久到連休息都覺得要先跟人交代一聲。其實你不需要理由，累了就是累了，不用先證明自己值得休息。',
+    pullQuote:'先讓我躺平，五分鐘就好，我保證。',
+    companion:'blankness', conflict:'tenderness',
+    parents:['bitterness','blankness'],
+  },
+  anxiety: {
+    title:'Anxiety', formula:'', color:'#E14FD0',
+    tagline:'心跳過快但又不敢說出口的兔子',
+    statLabel:'焦慮指數', rarity:13,
+    pov:['我很吵嗎？','對不起，你不用回也沒關係','（其實我在等）'],
+    personality:'你很在意別人怎麼想，常常把「我沒事」掛在嘴邊，但心裡其實一直在跑小劇場。你敏感、細膩，也容易把小事想成大事。',
+    values:'你重視「被理解」勝過「被安慰」——你不需要對方馬上解決什麼，你只是希望有人願意聽你把心裡的os講完。',
+    loveStyle:'你談戀愛時容易患得患失，很怕自己太主動會顯得依賴，又很怕太克制會被誤會不在乎。你需要一個會主動確認你「還好嗎」的人。',
+    afterDark:'你很擅長把在意講成不在意，把「我希望你回我」包裝成「你不用回」。這樣就算對方真的沒回，你也可以說服自己「反正我也沒很在意」。',
+    pullQuote:'我說沒關係，但我在等你的已讀。',
+    companion:'sorryloop', conflict:'rage',
+  },
+  tenderness: {
+    title:'Tenderness', formula:'', color:'#6E93B7',
+    tagline:'會為大家準備水、但忘了自己也渴的兔子',
+    statLabel:'溫柔指數', rarity:10,
+    pov:['我說我沒事','因為我不想再解釋了','反正說了也沒人真的在聽'],
+    personality:'你天生會照顧人，總是先注意到誰的杯子空了、誰看起來心情不好。你的溫柔是真的，但常常忘了把同樣的溫柔留一份給自己。',
+    values:'你重視「讓大家都好」，有時候好到會忽略自己其實也不太好。',
+    loveStyle:'你在關係裡很會付出，但不太會開口要。伴侶需要主動問你「你呢？你想要什麼？」，因為你自己通常不會先說。',
+    afterDark:'你很習慣先確認別人夠不夠好，才輪到自己。久而久之你連「我也需要」這句話都講得很小聲，小聲到自己都快聽不見。',
+    pullQuote:'我幫大家倒好水了，我的呢，等一下再說。',
+    companion:'staticsmile', conflict:'bitterness',
+  },
+  blankness: {
+    title:'Blankness', formula:'', color:'#EF9B2E',
+    tagline:'無預警掉線、不回訊息也不是討厭誰的兔子',
+    statLabel:'空白指數', rarity:7,
+    pov:['對，我斷線了','不是因為你怎麼了','是我腦子突然當機'],
+    personality:'你不是冷漠，你只是電量消耗得比別人快。外界一多，你就需要斷線充電，這是你保護自己的方式，不是拒絕別人。',
+    values:'你重視「不被追問」的自由——你可以消失一下，但希望回來的時候，不用先解釋去了哪裡。',
+    loveStyle:'戀愛裡你需要空間，太緊密的黏著會讓你想逃。適合你的人懂得「你消失不代表不愛」，會給你回來的時間，而不是拼命追問。',
+    afterDark:'你消失的時候，其實不是在生氣，是腦袋的電量突然歸零，連打字這件小事都變得很費力。等電量回來，你會回來的，只是需要一點不被追問的時間。',
+    pullQuote:'我不是已讀不回，我是真的斷線了。',
+    companion:'dualburnout', conflict:'rage',
+  },
+  staticsmile: {
+    title:'Static Smile', formula:'(Bitterness + Tenderness)', color:'#3ECB6E',
+    tagline:'笑著原諒，但心裡已經寫完一篇批評文的兔子',
+    statLabel:'假面微笑指數', rarity:6,
+    pov:['我沒在忍你','我在觀察你多會演','等我出手，你會懷念我沉默的樣子'],
+    personality:'你情緒管理得極好，好到別人常常猜不透你真正在想什麼。你不是沒感覺，你只是習慣先觀察、後行動，等時機到了才會出手。',
+    values:'你重視「公平」，比起表面和平，你更在意事情有沒有被真正處理。你不會無限度地忍讓。',
+    loveStyle:'你在感情裡看起來很好相處，但其實心裡有一把尺，一直在衡量對方值不值得。一旦你決定認真，代表這個人已經通過了你很多輪觀察。',
+    afterDark:'你的笑容很穩，穩到沒人發現底下已經記了多少筆帳。你不是沒有情緒，你只是在等一個「值得」的時機再拿出來，而且你通常都準時。',
+    pullQuote:'我在笑，但那篇心得文已經寫完了。',
+    companion:'bitterness', conflict:'rage',
+    parents:['bitterness','tenderness'],
+  },
+  rage: {
+    title:'Rage', formula:'', color:'#F04A2A',
+    tagline:'火山型兔子，爆發前先笑一笑',
+    statLabel:'憤怒指數', rarity:9,
+    pov:['我沒有生氣','只是還在想要不要讓你知道','我生氣了 :)'],
+    personality:'你的情緒來得快，但也不是隨便就發火的人。真正惹你生氣的事情通常累積了一陣子，只是你都在笑著忍。',
+    values:'你重視「被尊重」，比起輸贏，你更在意對方有沒有把你當一回事。',
+    loveStyle:'你在感情裡直接、不喜歡猜心，吵架也希望攤開來講清楚。你需要的伴侶是能接住你直球的人，而不是被你的情緒嚇跑。',
+    afterDark:'你發火之前一定會先笑一下，那個笑容不是開心，是在做最後的心理準備。你不是隨便生氣的人，能讓你走到這一步的，通常都真的過分了。',
+    pullQuote:'我還在笑，代表你還有機會。',
+    companion:'tenderbomb', conflict:'blankness',
+  },
+};
+
+// 把 parents 轉成查表用的 key（兩個人格 id 排序後用 - 連接），方便用「目前分數最高的兩個人格」查出隱藏人格
 const COMBO_LOOKUP = {};
-Object.keys(COMBOS).forEach(cid=>{
-  const key = COMBOS[cid].parents.slice().sort().join('-');
+COMBO_IDS.forEach(cid=>{
+  const key = RESULTS[cid].parents.slice().sort().join('-');
   COMBO_LOOKUP[key] = cid;
 });
 
 /* =========================================================
-   三維計分模型（像 MBTI 一樣：由多題累積出三個維度的傾向，
-   再由三個維度的組合對應到最終人格，而不是單純比誰被選最多次）
-
-   維度 1：表達方式  Ex = 外顯 Express／In = 內藏 Internalize
-   維度 2：能量強度  Hi = 高頻緊繃／Lo = 低頻平靜
-   維度 3：關注焦點  Se = 聚焦自己／Ot = 聚焦他人
-
-   6 型人格 = 三維度組合中最具代表性的 6 種（其餘 2 種較少見組合
-   會透過「最接近的已知組合」自動歸類，確保每次都能得到明確結果）：
-
-     Insecurity  = In · Hi · Se   （內藏＋高頻＋聚焦自己）
-     Anxiety     = In · Hi · Ot   （內藏＋高頻＋聚焦他人）
-     Blankness   = In · Lo · Se   （內藏＋低頻＋聚焦自己）
-     Bitterness  = In · Lo · Ot   （內藏＋低頻＋聚焦他人）
-     Rage        = Ex · Hi · Se   （外顯＋高頻＋聚焦自己）
-     Tenderness  = Ex · Hi · Ot   （外顯＋高頻＋聚焦他人）
+   INTRO 色票
    ========================================================= */
-const AXIS_CODE = {
-  insecurity: {ex:'In', in:'Hi', fo:'Se'},
-  anxiety:    {ex:'In', in:'Hi', fo:'Ot'},
-  blankness:  {ex:'In', in:'Lo', fo:'Se'},
-  bitterness: {ex:'In', in:'Lo', fo:'Ot'},
-  rage:       {ex:'Ex', in:'Hi', fo:'Se'},
-  tenderness: {ex:'Ex', in:'Hi', fo:'Ot'}
-};
+const swatchRow = document.getElementById('swatch-row');
+Object.values(LETTERS).forEach(l=>{
+  const d = document.createElement('div');
+  d.className='swatch';
+  d.style.background = l.color;
+  swatchRow.appendChild(d);
+});
 
-// 三個字母組成的代碼 -> 對應人格（僅收錄 6 個有意義的組合）
-const CODE_TO_TYPE = {
-  'In-Hi-Se':'insecurity',
-  'In-Hi-Ot':'anxiety',
-  'In-Lo-Se':'blankness',
-  'In-Lo-Ot':'bitterness',
-  'Ex-Hi-Se':'rage',
-  'Ex-Hi-Ot':'tenderness'
-};
-
-// 每題原始選項固定對應：insecurity, tenderness, bitterness, blankness, anxiety, rage
-// 實際顯示時會被隨機打亂順序（見下方 shuffle），避免有心人一眼看穿「第幾個選項＝哪個人格」
-// 所有選項統一寫成「當下心裡真正冒出來的想法」，而不是外在行為描述，讀起來更真實、更好選
+/* =========================================================
+   題目文案（7 題・每題 6 個選項，對應 6 個基礎人格）
+   ========================================================= */
 const RAW_QUESTIONS = [
-  {q:'🍚 家庭聚餐時長輩突然問起你最近過得怎樣，你心裡想的是：', opts:[
-    '「該怎麼講才不會讓他們覺得我過得不好……」',
-    '「隨便啦，先讓長輩開心比較重要」',
-    '「講了他們也記不住，隨便應付一下就好」',
-    '「喔，隨口回答就好，沒什麼好講的」',
-    '「是不是講太多了，會不會讓人覺得我在抱怨」',
-    '「又要交代近況，很煩耶」'
+  { q:'被cue自我介紹的那三秒，你腦內os？', opts:[
+    ['深呼吸，不要抖，不要抖','anxiety'],
+    ['笑就對了，氣氛不能冷掉','tenderness'],
+    ['隨便講講，反正等一下就沒人記得','bitterness'],
+    ['講完了嗎……剛剛講了什麼','blankness'],
+    ['剛剛那句是不是很奇怪','insecurity'],
+    ['到底是誰發明這個環節的','rage'],
   ]},
-  {q:'💬 群組突然安靜下來，沒人回你訊息，你心裡想的是：', opts:[
-    '「是不是我剛剛說錯什麼了……」',
-    '「大家應該只是在忙，晚點回也沒關係」',
-    '「反正本來就沒人在意我說什麼」',
-    '「喔，那就這樣吧，沒差」',
-    '「完了，是不是我講的話很奇怪，要不要補一句」',
-    '「已讀不回是怎樣，很沒禮貌欸」'
+  { q:'聊天突然冷場三秒，你腦內os？', opts:[
+    ['完了，是不是我剛剛講錯話了','anxiety'],
+    ['快，隨便丟一個安全話題','tenderness'],
+    ['（默默拿起手機）','bitterness'],
+    ['（喝一口水，假裝在思考人生）','blankness'],
+    ['我要講點什麼，不然會很尷尬','insecurity'],
+    ['就這樣吧，冷就冷，也沒差','rage'],
   ]},
-  {q:'🎁 朋友生日你精心準備禮物，對方反應卻很冷淡，你心裡想的是：', opts:[
-    '「是不是我送錯了，他其實不喜歡吧」',
-    '「沒關係，他可能只是心情不好，心意有到就好」',
-    '「早知道就不用這麼用心了」',
-    '「喔，那就這樣，反正禮物送出去了」',
-    '「他該不會覺得我很奇怪吧，怎麼辦」',
-    '「這什麼反應，虧我還特地挑這麼久」'
+  { q:'群組突然跳出「等等要不要一起」，你的第一反應？', opts:[
+    ['等等是幾點？在哪？還有誰？','anxiety'],
+    ['大家都去的話，那我也去','tenderness'],
+    ['「看情況」（內心：應該不會很好玩）','bitterness'],
+    ['已讀，但腦袋還在放空','blankness'],
+    ['「好啊」，同時想著等一下要怎麼閃','insecurity'],
+    ['臨時約，是把我當很閒嗎','rage'],
   ]},
-  {q:'📅 原本約好的計畫被臨時取消，你心裡想的是：', opts:[
-    '「是不是我不夠重要，才會被隨便取消」',
-    '「沒關係，改天再約就好，他應該也很無奈」',
-    '「果然，反正這種事本來就常發生」',
-    '「喔，那正好，我也懶得出門」',
-    '「是不是我之前說了什麼，讓他不想赴約」',
-    '「講好的事說取消就取消，很不尊重人欸」'
+  { q:'對方傳訊息來，但你現在很忙或很累，你會？', opts:[
+    ['一邊忙一邊還是手滑點開秒回','anxiety'],
+    ['先忙完，回的時候補一句「剛剛在忙抱歉」','tenderness'],
+    ['看到了，但沒力氣回，先放著','bitterness'],
+    ['心裡想「等一下回」，結果就忘了','blankness'],
+    ['硬撐著回，還多打幾句怕顯得冷淡','insecurity'],
+    ['有事就打電話啊，傳訊息是要等到什麼時候','rage'],
   ]},
-  {q:'🗣️ 有人在你面前開了一個不太好笑的玩笑，你心裡想的是：', opts:[
-    '「要不要笑一下，不然氣氛會不會很尷尬」',
-    '「幫忙接個話好了，不然場面會冷掉」',
-    '「這也能講出來，真的沒什麼品味」',
-    '「喔，聽過就算了，沒什麼感覺」',
-    '「該怎麼回應才不會顯得掃興」',
-    '「一點都不好笑，很想翻白眼」'
+  { q:'你提的意見在會議上沒人接話，你會？', opts:[
+    ['心裡開始檢討是不是講得不夠好','anxiety'],
+    ['沒事沒事，繼續聽別人講就好','tenderness'],
+    ['果然，只聽得到某幾個人講話','bitterness'],
+    ['點頭，不然是要我再說一次嗎','blankness'],
+    ['啊我隨便講講的啦，別在意','insecurity'],
+    ['所以……有人有在聽嗎？','rage'],
   ]},
-  {q:'📩 傳出去的訊息已讀超過一天沒回，你心裡想的是：', opts:[
-    '「是不是我講錯話，讓對方不高興了」',
-    '「他應該在忙，再等等看沒關係」',
-    '「行啊，那我也不急著理他」',
-    '「喔，好像有傳過這則訊息，忘了」',
-    '「該不會是我哪句話冒犯到他了吧」',
-    '「已讀這麼久不回，是想怎樣」'
+  { q:'朋友都跑去外面了，只剩你一個人坐著，你會？', opts:[
+    ['開始想他們是不是在外面聊我','anxiety'],
+    ['順便幫忙看一下大家的包包跟飲料','tenderness'],
+    ['早知道就不要來了','bitterness'],
+    ['意外覺得一個人也不錯，放空一下','blankness'],
+    ['尷尬地滑手機，假裝很忙','insecurity'],
+    ['到底要多久，是要等到明天嗎','rage'],
   ]},
-  {q:'🍽️ 聚餐時大家在聊你完全沒興趣的話題，你心裡想的是：', opts:[
-    '「要不要講點話，不然會不會顯得我很邊緣」',
-    '「先聽大家聊，順便幫忙倒水夾菜就好」',
-    '「這話題有什麼好聊的，真的很無聊」',
-    '「喔，那我先放空一下好了」',
-    '「是不是該說點什麼，才不會顯得失禮」',
-    '「這個話題要聊多久，很想潑冷水」'
+  { q:'道別時說了「下次再約」，你心裡在想？', opts:[
+    ['已經默默在想，下次到底是什麼時候','anxiety'],
+    ['真心期待，還想提醒對方路上小心','tenderness'],
+    ['嗯，客套話而已','bitterness'],
+    ['想到再說，反正到時候看心情','blankness'],
+    ['有點怕，這句話會不會只是說說而已','insecurity'],
+    ['這次不好玩的話：沒有下次了，謝謝','rage'],
   ]},
-  {q:'🍜 你興沖沖推薦朋友一家餐廳，結果對方說不好吃，你心裡想的是：', opts:[
-    '「是不是我的品味真的有問題」',
-    '「可能只是剛好不合他胃口，沒關係」',
-    '「你是有多懂吃，講得好像很厲害」',
-    '「喔，好吧，那就這樣」',
-    '「早知道就不要推薦了，是不是害他浪費錢」',
-    '「虧我還特地介紹，講這什麼態度」'
-  ]},
-  {q:'🎤 KTV 播到你點的歌，麥克風傳到你手上，大家都在等你開口，你心裡想的是：', opts:[
-    '「等一下唱走音，大家會不會覺得我很好笑」',
-    '「先唱一首炒熱氣氛，大家開心比較重要」',
-    '「排這什麼歌單，隨便唱一唱應付過去」',
-    '「喔，輪到我了，那就照著螢幕唱吧，沒什麼特別感覺」',
-    '「副歌那段音會不會飆不上去，好緊張」',
-    '「很煩耶，幹嘛每次都要人先開口，自己怎麼不先點」'
-  ]},
-  {q:'👋 一場聚會結束互道再見時，你心裡真正的想法是：', opts:[
-    '「剛剛表現得夠好嗎，會不會讓人覺得無聊」',
-    '「今天很開心，真心期待下次再見」',
-    '「說是下次見，反正大家講講而已」',
-    '「終於結束了，只想趕快回家」',
-    '「剛剛是不是有哪裡失禮，要不要傳訊息道歉」',
-    '「今天不太合，下次應該不會再約了」'
-  ]}
 ];
 
 function shuffle(arr){
@@ -756,96 +872,159 @@ function shuffle(arr){
   return a;
 }
 
-// 把每題選項轉成 {text, type} 明確標記型別，並在載入時「洗牌一次」固定下來，
-// 之後每次作答都是同一個順序，不會每次重玩就重新打亂；
-// 但因為每題的順序都不是單純的「第1個永遠是不安、第2個永遠是溫柔…」，
-// 還是能避免被一眼看穿型別對應規則
+// 每題選項在載入時洗牌一次固定下來，避免一眼看穿「第幾個選項＝哪個人格」
 const QUESTIONS = RAW_QUESTIONS.map(item=>({
   q: item.q,
-  opts: shuffle(item.opts.map((text,i)=>({text, type: ORDER[i]})))
+  opts: shuffle(item.opts.map(([text,type])=>({text, type})))
 }));
+
+/* =========================================================
+   計分方式（維持原本三維度加權模型，不隨文案更動而改變）：
+
+   維度 1：表達方式  Ex = 外顯 Express／In = 內藏 Internalize
+   維度 2：能量強度  Hi = 高頻緊繃／Lo = 低頻平靜
+   維度 3：關注焦點  Se = 聚焦自己／Ot = 聚焦他人
+
+     Insecurity  = In · Hi · Se
+     Anxiety     = In · Hi · Ot
+     Blankness   = In · Lo · Se
+     Bitterness  = In · Lo · Ot
+     Rage        = Ex · Hi · Se
+     Tenderness  = Ex · Hi · Ot
+   ========================================================= */
+const AXIS_CODE = {
+  insecurity: {ex:'In', in:'Hi', fo:'Se'},
+  anxiety:    {ex:'In', in:'Hi', fo:'Ot'},
+  blankness:  {ex:'In', in:'Lo', fo:'Se'},
+  bitterness: {ex:'In', in:'Lo', fo:'Ot'},
+  rage:       {ex:'Ex', in:'Hi', fo:'Se'},
+  tenderness: {ex:'Ex', in:'Hi', fo:'Ot'}
+};
+const CODE_TO_TYPE = {
+  'In-Hi-Se':'insecurity',
+  'In-Hi-Ot':'anxiety',
+  'In-Lo-Se':'blankness',
+  'In-Lo-Ot':'bitterness',
+  'Ex-Hi-Se':'rage',
+  'Ex-Hi-Ot':'tenderness'
+};
 
 /* ===================== STATE ===================== */
 let current = 0;
-const typeCount = {}; // 每個人格被直接選中的原始次數（用於顯示強度%）
+const typeCount = {};
 ORDER.forEach(id=>typeCount[id]=0);
-const axisCount = {
-  ex:{Ex:0, In:0},
-  in:{Hi:0, Lo:0},
-  fo:{Se:0, Ot:0}
-};
+const axisCount = { ex:{Ex:0, In:0}, in:{Hi:0, Lo:0}, fo:{Se:0, Ot:0} };
+let history = [];
+let myResultId = null;
+let myStars = 5;
+let myCounts = null;
 
-/* ===================== INIT ===================== */
-document.getElementById('startBtn').addEventListener('click', ()=>{
-  document.getElementById('start').style.display = 'none';
-  document.getElementById('quiz').style.display = 'block';
-  renderQuestion();
-});
+/* ===================== NAV ===================== */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
 
-document.getElementById('restartBtn').addEventListener('click', ()=>{
+function resetQuiz(){
   current = 0;
   ORDER.forEach(id=>typeCount[id]=0);
   axisCount.ex.Ex=0; axisCount.ex.In=0;
   axisCount.in.Hi=0; axisCount.in.Lo=0;
   axisCount.fo.Se=0; axisCount.fo.Ot=0;
-  document.getElementById('result').style.display='none';
-  document.getElementById('start').style.display='block';
-});
-
-function renderQuestion(){
-  const qData = QUESTIONS[current];
-  const qText = document.getElementById('qText');
-  const wrap = document.getElementById('optionsWrap');
-
-  document.getElementById('qIndexLabel').textContent = `Q${current+1} / ${QUESTIONS.length}`;
-  document.getElementById('qPercentLabel').textContent = Math.round((current)/QUESTIONS.length*100)+'%';
-  document.getElementById('progressBar').style.width = (current/QUESTIONS.length*100)+'%';
-
-  qText.textContent = qData.q;
-  wrap.innerHTML = '';
-  qData.opts.forEach((opt, i)=>{
-    const btn = document.createElement('button');
-    btn.className = 'opt q-anim-in';
-    btn.style.animationDelay = (i*0.04)+'s';
-    btn.textContent = opt.text;
-    btn.addEventListener('click', ()=> choose(opt.type, btn));
-    wrap.appendChild(btn);
-  });
+  history = [];
 }
 
-function choose(typeId, btn){
-  document.querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none');
-  btn.classList.add('chosen');
+document.getElementById('startBtn').addEventListener('click', ()=>{
+  resetQuiz();
+  renderQuestion();
+  showScreen('screen-quiz');
+});
+document.getElementById('retakeBtn').addEventListener('click', ()=>{
+  resetQuiz();
+  renderQuestion();
+  showScreen('screen-quiz');
+});
+document.getElementById('backLink').addEventListener('click', ()=>{
+  if(current===0) return;
+  current--;
+  const last = history.pop();
+  if(last){
+    typeCount[last.type]--;
+    axisCount.ex[last.code.ex]--;
+    axisCount.in[last.code.in]--;
+    axisCount.fo[last.code.fo]--;
+  }
+  renderQuestion();
+});
+
+/* ===================== 測試卡捷徑 =====================
+   網址加上 ?preview=人格id 可以直接看某張結果卡，例如：
+   index.html?preview=insecurity 或 index.html?preview=sorryloop
+   全部可用 id：insecurity, tenderness, bitterness, blankness, anxiety, rage,
+                sorryloop, staticsmile, dualburnout, tenderbomb, glitchcore */
+(function checkPreviewShortcut(){
+  const previewId = new URLSearchParams(location.search).get('preview');
+  if(!previewId || !RESULTS[previewId]) return;
+
+  ORDER.forEach(id=>typeCount[id]=0);
+  if(RESULTS[previewId].parents){
+    const [p1,p2] = RESULTS[previewId].parents;
+    typeCount[p1] = 5; typeCount[p2] = 5;
+  } else {
+    typeCount[previewId] = 6;
+  }
+  const stars = computeStars(6);
+  myResultId = previewId; myStars = stars; myCounts = {...typeCount};
+  renderResult(previewId, stars, {...typeCount});
+  showScreen('screen-result');
+})();
+
+/* ===================== QUIZ RENDER ===================== */
+function renderQuestion(){
+  const total = QUESTIONS.length;
+  const item = QUESTIONS[current];
+  document.getElementById('qIndex').textContent = 'Q'+(current+1);
+  document.getElementById('qText').textContent = item.q;
+  document.getElementById('progressLabel').textContent = (current+1)+' / '+total;
+  document.getElementById('progressFill').style.width = ((current)/total*100)+'%';
+
+  const wrap = document.getElementById('optionsWrap');
+  wrap.innerHTML = '';
+  item.opts.forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = opt.text;
+    btn.addEventListener('click', ()=> selectOption(opt.type, btn));
+    wrap.appendChild(btn);
+  });
+
+  document.getElementById('backLink').style.visibility = current===0 ? 'hidden' : 'visible';
+}
+
+function selectOption(typeId, btn){
+  document.querySelectorAll('.option').forEach(o=>o.style.pointerEvents='none');
+  if(btn) btn.classList.add('chosen');
 
   typeCount[typeId] += 1;
   const code = AXIS_CODE[typeId];
   axisCount.ex[code.ex] += 1;
   axisCount.in[code.in] += 1;
   axisCount.fo[code.fo] += 1;
+  history.push({type:typeId, code});
 
-  const card = document.getElementById('quiz');
-  setTimeout(()=>{
-    current++;
-    if(current < QUESTIONS.length){
-      card.classList.add('fade-out');
-      setTimeout(()=>{
-        card.classList.remove('fade-out');
-        renderQuestion();
-      }, 260);
-    } else {
-      document.getElementById('progressBar').style.width='100%';
-      document.getElementById('qPercentLabel').textContent='100%';
-      setTimeout(showResult, 350);
-    }
-  }, 260);
+  current++;
+  if(current >= QUESTIONS.length){
+    document.getElementById('progressFill').style.width='100%';
+    setTimeout(showResult, 200);
+  } else {
+    renderQuestion();
+  }
 }
 
-/* 依三個維度的多數票決定最終人格代碼；
-   若組合落在較少見的 2 種（Ex-Lo-Se / Ex-Lo-Ot），
-   就翻轉「票數最接近打平」的那個維度，自動歸類到最接近的已知人格 */
+/* 依三個維度多數票決定人格代碼；若落在較少見的 2 種組合，翻轉「票數最接近打平」的維度，
+   自動歸類到最接近的已知人格 —— 這一段計分邏輯維持不變 */
 function resolveType(){
-  const total = QUESTIONS.length;
-
   const marginEx = axisCount.ex.Ex - axisCount.ex.In;
   const marginIn = axisCount.in.Hi - axisCount.in.Lo;
   const marginFo = axisCount.fo.Se - axisCount.fo.Ot;
@@ -853,17 +1032,14 @@ function resolveType(){
   let poleEx = marginEx >= 0 ? 'Ex' : 'In';
   let poleIn = marginIn >= 0 ? 'Hi' : 'Lo';
   let poleFo = marginFo >= 0 ? 'Se' : 'Ot';
-
   let code = `${poleEx}-${poleIn}-${poleFo}`;
 
   if(!CODE_TO_TYPE[code]){
-    // 找出三個維度中票數差距最小（最接近打平）的那一個，翻轉它
     const margins = [
       {axis:'ex', abs:Math.abs(marginEx)},
       {axis:'in', abs:Math.abs(marginIn)},
       {axis:'fo', abs:Math.abs(marginFo)}
     ].sort((a,b)=>a.abs-b.abs);
-
     for(const m of margins){
       let tryEx = poleEx, tryIn = poleIn, tryFo = poleFo;
       if(m.axis==='ex') tryEx = poleEx==='Ex' ? 'In':'Ex';
@@ -875,24 +1051,13 @@ function resolveType(){
   }
 
   let winnerId = CODE_TO_TYPE[code] || ORDER[0];
-
-  // 安全防呆：如果三維度算出來的人格其實一次都沒被選過（極端全平手才會發生），
-  // 改用「原始被選次數最多」的人格，確保結果一定是使用者實際傾向的類型
   if(typeCount[winnerId] === 0){
     let best = ORDER[0], bestCount = -1;
     ORDER.forEach(id=>{ if(typeCount[id] > bestCount){ bestCount = typeCount[id]; best = id; } });
     winnerId = best;
   }
 
-  const axisPct = {
-    ex: Math.round(axisCount.ex.Ex/total*100),   // 越高越「外顯」
-    in: Math.round(axisCount.in.Hi/total*100),   // 越高越「高頻緊繃」
-    fo: Math.round(axisCount.fo.Se/total*100)    // 越高越「聚焦自己」
-  };
-
-  // ---- 隱藏人格偵測：找出原始得分最高的兩個人格，
-  // 若兩者分數非常接近（差距 <=1）且都有一定次數，
-  // 且剛好是 COMBOS 裡定義的相鄰配對，就觸發隱藏人格 ----
+  // 隱藏人格偵測：原始得分最高的兩個人格分數非常接近，且剛好是已知相鄰配對，就觸發隱藏人格
   const sortedIds = ORDER.slice().sort((a,b)=>typeCount[b]-typeCount[a]);
   const top1 = sortedIds[0], top2 = sortedIds[1];
   const c1 = typeCount[top1], c2 = typeCount[top2];
@@ -902,95 +1067,188 @@ function resolveType(){
     comboId = COMBO_LOOKUP[pairKey] || null;
   }
 
-  return { winnerId, axisPct, comboId, top1, top2 };
+  return { winnerId, comboId, top1, top2 };
+}
+
+function computeStars(rawScore){
+  const pct = Math.round(rawScore / QUESTIONS.length * 100);
+  return Math.max(1, Math.min(5, Math.round(pct/20) + 1));
 }
 
 function showResult(){
-  const {winnerId, axisPct, comboId, top1, top2} = resolveType();
-
-  document.getElementById('axBarEx').style.width = axisPct.ex+'%';
-  document.getElementById('axBarIn').style.width = axisPct.in+'%';
-  document.getElementById('axBarFo').style.width = axisPct.fo+'%';
-  document.getElementById('axLabelEx').textContent = axisPct.ex>=50 ? `外顯 ${axisPct.ex}%` : `內藏 ${100-axisPct.ex}%`;
-  document.getElementById('axLabelIn').textContent = axisPct.in>=50 ? `高頻 ${axisPct.in}%` : `低頻 ${100-axisPct.in}%`;
-  document.getElementById('axLabelFo').textContent = axisPct.fo>=50 ? `自己 ${axisPct.fo}%` : `他人 ${100-axisPct.fo}%`;
-
+  const { winnerId, comboId, top1, top2 } = resolveType();
+  let id, rawScore;
   if(comboId){
-    renderComboResult(comboId, top1, top2);
+    id = comboId;
+    rawScore = typeCount[top1] + typeCount[top2];
   } else {
-    renderSingleResult(winnerId);
+    id = winnerId;
+    rawScore = typeCount[winnerId];
+  }
+  const stars = computeStars(rawScore);
+  myResultId = id; myStars = stars; myCounts = {...typeCount};
+  renderResult(id, stars, {...typeCount});
+  showScreen('screen-result');
+}
+
+/* ===================== RESULT RENDER ===================== */
+function renderResult(id, stars, dataCounts){
+  const r = RESULTS[id];
+
+  // 卡牌圖片（保留在最上方，維持原本 3D 傾斜卡牌效果）
+  document.getElementById('rCardImg').src = CARD_IMG[id];
+  document.getElementById('rCardImg').alt = r.title + ' 人格卡';
+  applyFxMask(id);
+  const isCombo = COMBO_IDS.includes(id);
+  document.getElementById('tcardId').textContent = isCombo
+    ? `NO. RB-H${COMBO_IDS.indexOf(id)+1}`
+    : `NO. RB-${String(ORDER.indexOf(id)+1).padStart(2,'0')}`;
+
+  document.getElementById('resultCard').style.setProperty('--accent', r.color);
+  document.getElementById('resultTitle').textContent = r.title;
+  document.getElementById('resultTitle').style.color = r.color;
+  document.getElementById('resultFormula').textContent = r.formula || '';
+  document.getElementById('resultFormula').style.display = r.formula ? 'block' : 'none';
+  document.getElementById('rarityBadge').textContent = '地表僅 ' + r.rarity + '% 的兔子是這型';
+  document.getElementById('resultTagline').textContent = r.tagline;
+
+  document.querySelectorAll('#statLabel, #stars, .pov-label').forEach(el=> el.style.background = r.color+'33');
+  document.getElementById('statLabel').textContent = r.statLabel;
+  document.getElementById('stars').innerHTML = '★'.repeat(stars) + '☆'.repeat(5-stars);
+  document.getElementById('povText').innerHTML = r.pov.map(l=>`<div>${l}</div>`).join('');
+
+  const comp = RESULTS[r.companion];
+  const conf = RESULTS[r.conflict];
+  document.getElementById('companionName').textContent = comp.title;
+  document.getElementById('companionDot').style.background = comp.color;
+  document.getElementById('conflictName').textContent = conf.title;
+  document.getElementById('conflictDot').style.background = conf.color;
+  document.getElementById('companionBtn').onclick = ()=> viewResult(r.companion);
+  document.getElementById('conflictBtn').onclick = ()=> viewResult(r.conflict);
+
+  document.getElementById('profilePersonality').textContent = r.personality;
+  document.getElementById('profileValues').textContent = r.values;
+  document.getElementById('profileLove').textContent = r.loveStyle;
+  document.getElementById('afterdarkText').textContent = r.afterDark;
+  document.getElementById('pullquoteText').textContent = r.pullQuote;
+  document.getElementById('pullquotePanel').style.setProperty('--accent', r.color);
+  document.querySelector('.pullquote-mark').style.color = r.color;
+
+  // 情緒分佈（只有「自己作答」的結果才有真實數據，瀏覽夥伴/衝突人格時顯示提示文字）
+  const distPanel = document.getElementById('distPanel');
+  const noDataNote = document.getElementById('noDataNote');
+  if(dataCounts){
+    distPanel.style.display = 'block';
+    noDataNote.style.display = 'none';
+    const rowsWrap = document.getElementById('distRows');
+    rowsWrap.innerHTML = '';
+    const total = QUESTIONS.length;
+    Object.entries(LETTERS).forEach(([letter, meta])=>{
+      const c = dataCounts[meta.id] || 0;
+      const pct = Math.round((c/total)*100);
+      const row = document.createElement('div');
+      row.className = 'dist-row';
+      row.innerHTML = `
+        <div class="dist-name">${meta.name}</div>
+        <div class="dist-track"><div class="dist-fill" style="width:${pct}%; background:${meta.color};"></div></div>
+        <div class="dist-count">${c}</div>
+      `;
+      rowsWrap.appendChild(row);
+    });
+  } else {
+    distPanel.style.display = 'none';
+    noDataNote.style.display = 'block';
+    document.getElementById('noDataName').textContent = r.title;
   }
 
-  document.getElementById('quiz').style.display='none';
-  document.getElementById('result').style.display='block';
+  // 瀏覽夥伴/衝突人格時顯示提示 banner，可以一鍵回到自己的結果
+  const banner = document.getElementById('viewBanner');
+  if(myResultId && id !== myResultId){
+    banner.style.display = 'flex';
+    document.getElementById('viewBannerText').textContent = '你正在看 ' + r.title + ' 的角色檔案';
+  } else {
+    banner.style.display = 'none';
+  }
+
+  // CTA
+  const cta = document.getElementById('ctaCard');
+  if(r.hasCTA){
+    cta.innerHTML = `
+      <div class="cta-eyebrow">🎧 SRM FEELS · NEW DROP</div>
+      <div class="cta-title display">Sorry Loop 也做成了<br>真實的小小夥伴</div>
+      <div class="cta-sub">專門收耳機線，牠終於不用再困在<br>抱歉的迴圈裡了。</div>
+      <div class="cta-tag display">No more sorry loop, just music loop.</div>
+      <div><button class="btn small display" onclick="window.open('https://sweetrabbitman.com','_blank')">看看 Sorry Loop 吊飾</button></div>
+    `;
+  } else {
+    cta.innerHTML = `
+      <div class="cta-eyebrow">🐇 SRM FEELS</div>
+      <div class="cta-title display">${r.title} 也可能出現在<br>你的耳機線上</div>
+      <div class="cta-sub">SRM Feels 正在把這些小情緒，<br>一隻一隻做成隨身帶著的小夥伴。</div>
+      <div><button class="btn small ghost display" onclick="window.open('https://sweetrabbitman.com','_blank')">搶先追蹤新品</button></div>
+    `;
+  }
+
+  window._lastResult = { id, stars };
 }
 
-function renderSingleResult(winnerId){
-  const rawScore = typeCount[winnerId];
-  const pct = Math.round(rawScore / QUESTIONS.length * 100);
-  const starCount = Math.max(1, Math.min(5, Math.round(pct/20) + 1));
-
-  const t = TYPES[winnerId];
-  document.getElementById('rKicker').textContent = '你的兔型人格是';
-  document.getElementById('rComboNote').style.display = 'none';
-  document.getElementById('rEmoji').textContent = t.emoji;
-  document.getElementById('rName').textContent = t.name;
-  document.getElementById('rTagline').textContent = t.tagline;
-  document.getElementById('rStatLabel').textContent = `${t.statLabel}（符合度 ${pct}%，${QUESTIONS.length} 題中選了 ${rawScore} 次）`;
-  document.getElementById('rStars').textContent = '★'.repeat(starCount) + '☆'.repeat(5-starCount);
-  document.getElementById('rLines').innerHTML = t.lines.map(l=>`<p>${l}</p>`).join('');
-  document.getElementById('rPov').textContent = t.pov;
-  document.getElementById('rCompanion').textContent = `${t.companion.emoji} ${t.companion.name}`;
-  const rivalT = TYPES[t.rival];
-  document.getElementById('rRival').textContent = `${rivalT.emoji} ${rivalT.name}`;
-
-  window._lastResult = {kind:'type', id:winnerId, pct, starCount};
+function viewResult(id){
+  renderResult(id, 5, null);
+  window.scrollTo({top:0, behavior:'smooth'});
 }
-
-function renderComboResult(comboId, top1, top2){
-  const c = COMBOS[comboId];
-  const rawScore = typeCount[top1] + typeCount[top2];
-  const pct = Math.round(rawScore / QUESTIONS.length * 100);
-  const starCount = Math.max(1, Math.min(5, Math.round(pct/20) + 1));
-
-  const p1 = TYPES[c.parents[0]], p2 = TYPES[c.parents[1]];
-
-  document.getElementById('rKicker').textContent = '✨ 你觸發了隱藏人格';
-  const note = document.getElementById('rComboNote');
-  note.textContent = `( ${p1.name} + ${p2.name} )`;
-  note.style.display = 'inline-block';
-  document.getElementById('rEmoji').textContent = c.emoji;
-  document.getElementById('rName').textContent = c.name;
-  document.getElementById('rTagline').textContent = c.tagline;
-  document.getElementById('rStatLabel').textContent = `${c.statLabel}（符合度 ${pct}%，${QUESTIONS.length} 題中共選了 ${rawScore} 次）`;
-  document.getElementById('rStars').textContent = '★'.repeat(starCount) + '☆'.repeat(5-starCount);
-  document.getElementById('rLines').innerHTML = c.lines.map(l=>`<p>${l}</p>`).join('');
-  document.getElementById('rPov').textContent = c.pov;
-  const companionT = TYPES[c.companion];
-  document.getElementById('rCompanion').textContent = `${companionT.emoji} ${companionT.name}`;
-  const rivalT = TYPES[c.rival];
-  document.getElementById('rRival').textContent = `${rivalT.emoji} ${rivalT.name}`;
-
-  window._lastResult = {kind:'combo', id:comboId, pct, starCount};
-}
-
-/* ===================== SHARE IMAGE (Canvas) ===================== */
-document.getElementById('downloadBtn').addEventListener('click', ()=>{
-  const r = window._lastResult;
-  if(!r) return;
-  drawShareCard(r.kind, r.id, r.pct, r.starCount);
+document.getElementById('backToMineBtn').addEventListener('click', ()=>{
+  if(myResultId) renderResult(myResultId, myStars, myCounts);
+  window.scrollTo({top:0, behavior:'smooth'});
 });
 
-function roundRect(ctx,x,y,w,h,r){
+/* ===================== 3D TILT CARD（滑鼠 / 觸控傾斜 + 光澤） ===================== */
+(function initTilt(){
+  const card = document.getElementById('tiltCard');
+  if(!card) return;
+  const maxTilt = 10;
+
+  function updateFromPoint(clientX, clientY){
+    const rect = card.getBoundingClientRect();
+    const px = (clientX - rect.left) / rect.width;
+    const py = (clientY - rect.top) / rect.height;
+    const rx = (0.5 - py) * maxTilt * 2;
+    const ry = (px - 0.5) * maxTilt * 2;
+    card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
+    card.style.setProperty('--px', (px*100)+'%');
+    card.style.setProperty('--py', (py*100)+'%');
+    const shadowX = (0.5 - px) * 18;
+    const shadowY = (0.5 - py) * 18 + 14;
+    card.style.boxShadow = `${shadowX}px ${shadowY}px 36px rgba(0,0,0,.3)`;
+  }
+  function reset(){
+    card.classList.remove('dragging');
+    card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+    card.style.boxShadow = '';
+  }
+  card.addEventListener('mousemove', (e)=>{ card.classList.add('dragging'); updateFromPoint(e.clientX, e.clientY); });
+  card.addEventListener('mouseleave', reset);
+  card.addEventListener('touchstart', (e)=>{ card.classList.add('dragging'); const t=e.touches[0]; updateFromPoint(t.clientX, t.clientY); }, {passive:true});
+  card.addEventListener('touchmove', (e)=>{ const t=e.touches[0]; updateFromPoint(t.clientX, t.clientY); }, {passive:true});
+  card.addEventListener('touchend', reset);
+  card.addEventListener('touchcancel', reset);
+})();
+
+/* ===================== SHARE ===================== */
+document.getElementById('shareBtn').addEventListener('click', ()=>{
+  const r = window._lastResult;
+  if(!r) return;
+  drawShareCard(r.id, r.stars);
+});
+
+function roundRect(ctx,x,y,w,h,rad){
   ctx.beginPath();
-  ctx.moveTo(x+r,y);
-  ctx.arcTo(x+w,y,x+w,y+h,r);
-  ctx.arcTo(x+w,y+h,x,y+h,r);
-  ctx.arcTo(x,y+h,x,y,r);
-  ctx.arcTo(x,y,x+w,y,r);
+  ctx.moveTo(x+rad,y);
+  ctx.arcTo(x+w,y,x+w,y+h,rad);
+  ctx.arcTo(x+w,y+h,x,y+h,rad);
+  ctx.arcTo(x,y+h,x,y,rad);
+  ctx.arcTo(x,y,x+w,y,rad);
   ctx.closePath();
 }
-
 function wrapText(ctx, text, x, y, maxWidth, lineHeight){
   const chars = text.split('');
   let line = '';
@@ -1009,111 +1267,87 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight){
   return curY + lineHeight;
 }
 
-function drawShareCard(kind, id, pct, starCount){
-  const isCombo = kind === 'combo';
-  const t = isCombo ? COMBOS[id] : TYPES[id];
-  const comboSubtitle = isCombo
-    ? `( ${TYPES[t.parents[0]].name} + ${TYPES[t.parents[1]].name} )`
-    : null;
-  const canvas = document.getElementById('shareCanvas');
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
+function drawShareCard(id, stars){
+  const r = RESULTS[id];
+  const isCombo = COMBO_IDS.includes(id);
+  const cardIdText = isCombo ? `NO. RB-H${COMBO_IDS.indexOf(id)+1}` : `NO. RB-${String(ORDER.indexOf(id)+1).padStart(2,'0')}`;
 
-  // background
-  const grad = ctx.createLinearGradient(0,0,W,H);
-  grad.addColorStop(0,'#fff3f6');
-  grad.addColorStop(1,'#eef7ff');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0,0,W,H);
+  const img = new Image();
+  img.onload = function(){
+    const canvas = document.getElementById('shareCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = 1000;
+    const padX = 60;
+    const contentW = W - padX*2;
+    const imgH = Math.round(img.naturalHeight * (W / img.naturalWidth));
+    const extraH = 560;
+    const H = imgH + extraH;
+    canvas.width = W; canvas.height = H;
 
-  // decorative circle
-  ctx.fillStyle = t.color + '22';
-  ctx.beginPath();
-  ctx.arc(W-80, 120, 220, 0, Math.PI*2);
-  ctx.fill();
+    ctx.fillStyle = '#EDEBE4';
+    ctx.fillRect(0,0,W,H);
 
-  // brand
-  ctx.fillStyle = '#ff6b97';
-  ctx.font = '700 34px "Baloo 2", sans-serif';
-  ctx.textAlign='left';
-  ctx.fillText('🐰 Sweet Rabbit Man', 70, 100);
-  ctx.fillStyle = '#7a6469';
-  ctx.font = '400 26px "Noto Sans TC", sans-serif';
-  ctx.fillText('[ Sweet R.A.B.B.I.T. Personality ]', 70, 140);
+    ctx.drawImage(img, 0, 0, W, imgH);
 
-  // card
-  ctx.fillStyle = '#ffffff';
-  roundRect(ctx, 60, 190, W-120, H-380, 40);
-  ctx.fill();
+    ctx.font = '400 20px monospace';
+    const idW = ctx.measureText(cardIdText).width + 28;
+    const idX = W - 24 - idW;
+    ctx.fillStyle = 'rgba(0,0,0,.45)';
+    roundRect(ctx, idX, 22, idW, 38, 999);
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(cardIdText, idX+14, 47);
 
-  // emoji big
-  ctx.font = '160px "Noto Sans TC", sans-serif';
-  ctx.textAlign='center';
-  ctx.fillText(t.emoji, W/2, 420);
+    let y = imgH + 46;
 
-  // combo badge (only for hidden combo results)
-  if(isCombo){
-    ctx.fillStyle = '#ff6b97';
+    ctx.fillStyle = '#151312';
+    ctx.font = '700 20px "Noto Sans TC", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('地表僅 ' + r.rarity + '% 的兔子是這型', W/2, y);
+    y += 44;
+
+    ctx.fillStyle = r.color;
+    ctx.font = '30px sans-serif';
+    ctx.fillText('★'.repeat(stars)+'☆'.repeat(5-stars), W/2, y);
+    y += 56;
+
+    ctx.fillStyle = '#151312';
     ctx.font = '700 26px "Noto Sans TC", sans-serif';
+    ctx.textAlign = 'left';
+    y = wrapText(ctx, r.tagline, padX, y, contentW, 36) + 20;
+
+    ctx.fillStyle = '#fff';
+    roundRect(ctx, padX, y, contentW, 130, 20);
+    ctx.fill();
+    ctx.strokeStyle = '#151312'; ctx.lineWidth = 3;
+    roundRect(ctx, padX, y, contentW, 130, 20);
+    ctx.stroke();
+    ctx.fillStyle = '#151312';
+    ctx.font = '700 46px "Baloo 2", sans-serif';
+    ctx.fillText('"', padX+24, y+50);
+    ctx.font = '700 26px "Baloo 2", sans-serif';
+    wrapText(ctx, r.pullQuote, padX+24, y+72, contentW-48, 34);
+
+    y += 130 + 40;
+    ctx.fillStyle = '#3a3835';
+    ctx.font = '400 22px "Noto Sans TC", sans-serif';
+    wrapText(ctx, r.personality, padX, y, contentW, 32);
+
+    ctx.fillStyle = '#6b6863';
+    ctx.font = '700 20px "Baloo 2", sans-serif';
     ctx.textAlign='center';
-    ctx.fillText('✨ 隱藏人格', W/2, 250);
-  }
+    ctx.fillText('SWEETRABBITMAN.COM', W/2, H-30);
+    ctx.textAlign='left';
 
-  // name
-  ctx.fillStyle = '#ff6b97';
-  ctx.font = '800 64px "Baloo 2", sans-serif';
-  ctx.textAlign='center';
-  ctx.fillText(t.name, W/2, 500);
-
-  // combo subtitle (parents)
-  const yOffset = isCombo ? 30 : 0;
-  if(isCombo){
-    ctx.fillStyle = '#7a6469';
-    ctx.font = '400 24px "Baloo 2", sans-serif';
-    ctx.fillText(comboSubtitle, W/2, 530);
-  }
-
-  // tagline
-  ctx.fillStyle = '#7a6469';
-  ctx.font = '400 28px "Noto Sans TC", sans-serif';
-  ctx.textAlign='left';
-  wrapText(ctx, t.tagline, 110, 560+yOffset, W-220, 40);
-
-  // stat block
-  ctx.fillStyle = '#fff6f8';
-  roundRect(ctx, 110, 610+yOffset, W-220, 90, 20);
-  ctx.fill();
-  ctx.fillStyle = '#7a6469';
-  ctx.font = '700 24px "Noto Sans TC", sans-serif';
-  ctx.fillText(`${t.statLabel}（符合度 ${pct}%）`, 140, 650+yOffset);
-  ctx.font = '34px sans-serif';
-  ctx.fillStyle = '#ffb84d';
-  ctx.fillText('★'.repeat(starCount)+'☆'.repeat(5-starCount), 140, 690+yOffset);
-
-  // lines
-  ctx.fillStyle = '#3c2a2f';
-  ctx.font = '400 28px "Noto Sans TC", sans-serif';
-  let y = 760+yOffset;
-  t.lines.forEach(line=>{
-    y = wrapText(ctx, '· '+line, 110, y, W-220, 40) + 6;
-  });
-
-  // pov
-  ctx.fillStyle = '#8a6a2c';
-  ctx.font = 'italic 400 26px "Noto Sans TC", sans-serif';
-  wrapText(ctx, t.pov, 110, y+30, W-220, 36);
-
-  // footer
-  ctx.fillStyle = '#b79aa0';
-  ctx.font = '400 22px "Noto Sans TC", sans-serif';
-  ctx.textAlign='center';
-  ctx.fillText('自架版｜sweetrabbitman.com（示意）', W/2, H-60);
-
-  // download
-  const link = document.createElement('a');
-  link.download = `我是${t.name}-兔型人格測驗.png`;
-  link.href = canvas.toDataURL('image/png');
-  link.click();
+    const link = document.createElement('a');
+    link.download = `我是${r.title}-兔型人格測驗.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
+  img.onerror = function(){
+    alert('分享圖片載入失敗，請確認 images 資料夾有跟 index.html 一起上傳。');
+  };
+  img.src = CARD_IMG[id];
 }
 </script>
 </body>
