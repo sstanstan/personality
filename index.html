@@ -7,513 +7,571 @@
 <meta name="description" content="30 題一對一比較法，測出你在社交場合裡最先跳出來的那個情緒——11 種社交人格：Insecurity、Tenderness、Bitterness、Blankness、Anxiety、Rage，還有 5 種隱藏人格。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#EDEBE4;
-    --ink:#151312;
-    --line:#151312;
-    --card:#F6F4EE;
-    --accent:#9B6BEA;
-    --accent-soft:#9B6BEA33;
+    /* 品牌色：藍灰色調 */
+    --blue:#A5BCDC;
+    --paper:#F4F9FC;
+    --gray:#C8C8C8;
+    --ink:#2D2D2D;
+    --muted:#6B7480;
+    --blue-soft:color-mix(in srgb, #A5BCDC 45%, #F4F9FC);
+    --blue-deep:color-mix(in srgb, #A5BCDC 70%, #2D2D2D);
+    --accent:#A5BCDC;                 /* 結果頁會被設成該人格主色（目前只保留給資料用） */
+    --card-sky:linear-gradient(180deg,#FFFFFF 0%, #F4F9FC 50%, var(--blue-soft) 100%);
+    --btn:linear-gradient(180deg,#FFFFFF 0%, #F4F9FC 40%, #A5BCDC 100%);
+    --f-display:'Baloo 2','Noto Sans TC',sans-serif;
+    --f-body:'Noto Sans TC',sans-serif;
+    --f-pixel:'Silkscreen','Noto Sans TC',monospace;
+    --hard:2px 2px 0 var(--ink);
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
   body{
-    background:var(--paper);
-    background-image:
-      radial-gradient(circle at 1px 1px, rgba(21,19,18,0.07) 1px, transparent 0);
-    background-size: 16px 16px;
     color:var(--ink);
-    font-family:'Noto Sans TC', sans-serif;
+    font-family:var(--f-body);
     min-height:100vh;
-    display:flex;
-    justify-content:center;
-    padding: 24px 14px 60px;
+    display:flex; justify-content:center;
+    padding:22px 16px 40px;
+    background:linear-gradient(180deg, var(--blue) 0%, var(--blue-soft) 38%, var(--paper) 100%) fixed;
+    position:relative; overflow-x:hidden;
   }
-  .app{
-    width:100%;
-    max-width:460px;
+  /* 網點 + 掃描線（遊戲機螢幕質感） */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.14) 0 1px, transparent 1px 3px),
+      radial-gradient(rgba(255,255,255,.6) 1.2px, transparent 1.7px) 0 0/12px 12px;
+    -webkit-mask-image:radial-gradient(70% 55% at 50% 40%, #000 0%, rgba(0,0,0,.35) 70%, #000 100%);
+    mask-image:radial-gradient(70% 55% at 50% 40%, #000 0%, rgba(0,0,0,.35) 70%, #000 100%);
   }
-  .display{
-    font-family:'Baloo 2', 'Noto Sans TC', sans-serif;
-  }
+  .app{ width:100%; max-width:460px; position:relative; z-index:1; }
+  .display{ font-family:var(--f-display); }
+  img.pixel-art{ image-rendering:pixelated; }
 
-  /* ---------- shared wobble card ---------- */
-  .wobble-card{
+  /* ---------- 共用元件 ---------- */
+  .glass{
     position:relative;
-    background:var(--card);
-    border:3px solid var(--line);
-    border-radius: 22px 26px 20px 28px / 26px 20px 28px 22px;
-    box-shadow: 5px 6px 0 var(--line);
+    background:var(--card-sky);
+    border:1.5px solid var(--ink);
+    border-radius:20px;
+    box-shadow: inset 0 2px 0 #fff, 0 8px 18px -12px rgba(45,45,45,.45);
   }
-
-  /* ---------- top eyebrow pill ---------- */
-  .eyebrow{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
+  .pill{
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
     background:#fff;
-    border:2.5px solid var(--line);
+    border:1.5px solid var(--ink);
     border-radius:999px;
-    padding:6px 16px;
-    font-size:12.5px;
-    font-weight:700;
-    letter-spacing:0.02em;
-    box-shadow: 3px 3px 0 var(--line);
+    padding:5px 14px;
+    font-weight:600; font-size:12.5px;
   }
-  .screen{ display:none; }
-  .screen.active{ display:block; animation: rise 0.35s ease; }
-  @keyframes rise{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+  .pill.blue{ background:var(--btn); box-shadow:inset 0 2px 0 rgba(255,255,255,.9), 1.5px 1.5px 0 var(--ink); }
+  /* 白字描邊小標（像 ID 卡上的 name / birth） */
+  .field-label{
+    font-family:var(--f-pixel);
+    font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:lowercase;
+    color:#fff;
+    text-shadow:1px 0 var(--ink),-1px 0 var(--ink),0 1px var(--ink),0 -1px var(--ink),1px 1px var(--ink),-1px -1px var(--ink),1px -1px var(--ink),-1px 1px var(--ink),2px 2px 0 var(--ink);
+    line-height:1.2;
+  }
 
-  /* ---------- INTRO ---------- */
-  .intro-wrap{ text-align:center; padding-top:10px; }
-  .logo-img{ width:min(78%, 300px); margin: 4px auto 14px; display:block; }
+  /* ---------- 白色描邊字 ---------- */
+  .chrome{
+    position:relative; display:inline-block;
+    color:transparent;
+    font-family:var(--f-display); font-weight:600;
+    white-space:pre-line;
+    --stroke:.16em;
+  }
+  .chrome::before,.chrome::after{
+    content:attr(data-text);
+    position:absolute; left:0; top:0; width:100%;
+    white-space:pre-line; text-align:inherit; pointer-events:none;
+  }
+  .chrome::before{
+    color:var(--ink);
+    -webkit-text-stroke:var(--stroke) var(--ink);
+    text-shadow:.05em .07em 0 var(--ink);
+  }
+  .chrome::after{
+    background:linear-gradient(180deg,#fff 0%,#fff 45%,#DDE7F3 62%,#fff 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  .screen{ display:none; }
+  .screen.active{ display:block; animation:rise .4s cubic-bezier(.22,1,.36,1); }
+  @keyframes rise{ from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:none;} }
+
+  /* ---------- 按鈕：藍灰果凍 ---------- */
+  .btn{
+    font-family:var(--f-display); font-weight:600;
+    font-size:18px; letter-spacing:.04em;
+    color:var(--ink);
+    background:var(--btn);
+    border:1.5px solid var(--ink);
+    border-radius:16px;
+    padding:13px 40px 11px;
+    cursor:pointer; position:relative;
+    box-shadow: inset 0 2px 0 rgba(255,255,255,.95), inset 0 -2px 0 rgba(45,45,45,.1), 2px 2px 0 var(--ink);
+    transition:transform .1s ease, box-shadow .1s ease, filter .15s ease;
+  }
+  .btn:hover{ filter:brightness(1.04); }
+  .btn:active{ transform:translate(1.5px,1.5px); box-shadow: inset 0 2px 0 rgba(255,255,255,.95), 1px 1px 0 var(--ink); }
+  .btn:focus-visible,.option:focus-visible,.rel-name-btn:focus-visible{ outline:3px solid var(--ink); outline-offset:3px; }
+  .btn.ghost{ background:#fff; }
+  .btn.small{ font-size:15px; padding:10px 22px 8px; border-radius:14px; }
+  a.btn{ display:inline-block; text-decoration:none; }
+  .btn-row{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+  /* ---------- 頂部 head（參考 App 導覽列） ---------- */
+  .app-head{
+    position:sticky; top:0; z-index:50;
+    margin:-22px calc(50% - 50vw) 18px;
+    padding:10px max(16px, calc(50vw - 230px));
+    display:grid; grid-template-columns:40px 1fr 40px; align-items:center;
+    background:linear-gradient(180deg, rgba(232,239,248,.94) 0%, rgba(206,220,238,.92) 100%);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(45,45,45,.14);
+    box-shadow:0 6px 16px -12px rgba(45,45,45,.5);
+  }
+  .head-btn{
+    width:40px; height:40px; border-radius:50%;
+    display:grid; place-items:center;
+    background:#fff; border:1.5px solid var(--ink);
+    font-size:24px; line-height:1; color:var(--ink); padding:0 0 3px; font-family:var(--f-body);
+  }
+  button.head-btn{ cursor:pointer; }
+  button.head-btn:active{ transform:scale(.94); }
+  .head-btn img{ width:26px; height:auto; }
+  .head-title{ margin:0; display:flex; justify-content:center; align-items:center; }
+  .head-logo{ height:18px; width:auto; display:block; }
+
+  /* ---------- 頁尾 ---------- */
+  .site-foot{
+    margin-top:28px; text-align:center;
+    font-size:11px; line-height:1.8; color:var(--muted);
+  }
+  .site-foot b{ display:block; font-family:var(--f-pixel); font-size:11px; letter-spacing:.1em; color:var(--ink); }
+
+  /* ---------- INTRO（遊戲開機畫面） ---------- */
+  .statusbar{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--f-pixel); font-size:11px; color:#fff;
+    text-shadow:1px 1px 0 rgba(45,45,45,.35);
+    margin-bottom:10px; padding:0 4px;
+  }
+  .statusbar .brand{ display:inline-flex; align-items:center; gap:6px; }
+  .statusbar .brand img{ width:18px; height:auto; filter:drop-shadow(1px 1px 0 rgba(45,45,45,.35)); }
+  .battery{ display:inline-flex; gap:2px; padding:2px; border:1.5px solid #fff; border-radius:3px; }
+  .battery i{ width:5px; height:9px; background:#fff; display:block; }
+  .intro-wrap{ text-align:center; }
+  .title-screen{
+    position:relative; overflow:hidden;
+    padding:22px 16px 20px;
+    border-radius:22px; border:1.5px solid var(--ink);
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.16) 0 1px, transparent 1px 3px),
+      radial-gradient(rgba(255,255,255,.75) 1.3px, transparent 1.8px) 0 0/11px 11px,
+      linear-gradient(180deg, var(--blue-soft) 0%, #E6EEF7 55%, var(--paper) 100%);
+    box-shadow: inset 0 2px 0 #fff, 0 14px 30px -18px rgba(45,45,45,.5);
+  }
+  /* 點陣 Y2K 星星（logo 背景） */
+  .dot-star{ position:absolute !important; pointer-events:none; z-index:0; display:block; }
+  .dot-star svg{ display:block; width:100%; height:100%; }
+  .dot-star rect{ fill:#7F98BF; }
+  .dot-star.ds1{ width:190px; height:190px; left:-14px; top:-6px; transform:rotate(-16deg); opacity:.55; }
+  .dot-star.ds2{ width:130px; height:130px; right:-10px; top:58px; transform:rotate(18deg); opacity:.45; }
+  .dot-star.ds3{ width:70px; height:70px; right:84px; top:-8px; transform:rotate(8deg); opacity:.35; }
+  .title-screen > *:not(.dot-star){ position:relative; z-index:1; }
+  .logo-img{ width:min(70%, 260px); height:auto; margin:14px auto 8px; display:block; }
   .intro-title{
-    font-size: 38px;
-    font-weight:800;
-    line-height:1.15;
-    margin: 18px 0 6px;
-    color:#9B6BEA;
-    -webkit-text-stroke: 2px var(--ink);
-    text-shadow: 3px 3px 0 var(--ink);
+    font-family:var(--f-body); font-weight:700;
+    font-size:25px; line-height:1.4; letter-spacing:.04em;
+    color:#000; white-space:pre-line;
+    margin:12px 0 4px;
+    text-align:center;
   }
   .intro-sub{
-    font-size:14.5px;
-    font-weight:500;
-    line-height:1.65;
-    margin: 10px auto 26px;
-    max-width: 360px;
+    font-size:14px; font-weight:400; line-height:1.8;
+    margin:14px auto 0; max-width:360px;
+    padding:12px 14px;
+    background:rgba(255,255,255,.8);
+    border:1.5px solid var(--ink); border-radius:14px;
+    text-align:left;
   }
-  .intro-meta{
-    display:flex;
-    justify-content:center;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-bottom:26px;
-  }
-  .chip{
-    font-size:11.5px;
-    font-weight:700;
-    background:#fff;
-    border:2px solid var(--line);
-    border-radius:999px;
-    padding:5px 12px;
-  }
-  .preview-strip{
-    display:flex;
-    justify-content:center;
-    gap:8px;
-    margin: 22px 0 26px;
-    flex-wrap:wrap;
-  }
-  .preview-strip img{
-    width:52px; height:52px;
-    object-fit:cover;
-    border-radius:50%;
-    border:2.5px solid var(--line);
-    box-shadow: 2px 2px 0 var(--line);
-  }
-  .btn{
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700;
-    font-size:17px;
-    letter-spacing:0.01em;
-    color:var(--ink);
-    background:#FFE14D;
-    border:3px solid var(--line);
-    border-radius: 999px;
-    padding: 15px 34px;
-    cursor:pointer;
-    box-shadow: 4px 5px 0 var(--line);
-    transition: transform .12s ease, box-shadow .12s ease;
-  }
-  .btn:active{ transform: translate(3px,4px); box-shadow: 1px 1px 0 var(--line); }
-  .btn.ghost{ background:#fff; }
-  .btn.small{ font-size:14px; padding:11px 22px; }
-  .btn-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 
-  .disclaimer{
-    margin-top:20px;
-    font-size:11.5px;
-    color:#6b6863;
-    line-height:1.6;
+  /* 角色輪播（跑馬燈） */
+  .parade{
+    position:relative; overflow:hidden;
+    margin:18px -16px 18px;
+    padding:6px 0 4px;
+    -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+    mask-image:linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%);
   }
+  .parade-track{
+    display:flex; width:max-content;
+    animation:parade 34s linear infinite;
+  }
+  .parade:hover .parade-track{ animation-play-state:paused; }
+  @keyframes parade{ to{ transform:translateX(-50%); } }
+  .parade-item{
+    margin:0 4px; width:96px; flex-shrink:0;
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+  }
+  .parade-item img{
+    width:92px; height:92px; object-fit:contain;
+    animation:hop 1.6s ease-in-out infinite;
+  }
+  .parade-item:nth-child(3n+1) img{ animation-delay:-.5s; }
+  .parade-item:nth-child(3n+2) img{ animation-delay:-1.05s; }
+  @keyframes hop{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-7px); } }
+  .parade-item figcaption{
+    font-family:var(--f-pixel); font-size:10px; letter-spacing:.04em; white-space:nowrap;
+    background:#fff; border:1.5px solid var(--ink); border-radius:999px; padding:1px 8px;
+  }
+  .parade-item{ margin-block:0; }
+
+  .menu{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .menu .btn{ width:min(100%, 300px); }
+  .disclaimer{ margin-top:18px; font-size:11.5px; color:var(--muted); line-height:1.7; }
 
   /* ---------- QUIZ ---------- */
-  .progress-row{ display:flex; align-items:center; gap:10px; margin-bottom:20px;}
+  .quiz-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin:8px 0 18px; }
+  .quiz-top .q-count{ font-family:var(--f-pixel); font-size:13px; padding:5px 12px 4px; }
+  .progress-wrap{ position:relative; flex:1; }
   .progress-track{
-    flex:1; height:10px; background:#fff; border:2px solid var(--line); border-radius:999px; overflow:hidden;
-  }
-  .progress-fill{ height:100%; background:#9B6BEA; width:0%; transition:width .3s ease; }
-  .progress-label{ font-size:12px; font-weight:700; white-space:nowrap; }
-
-  .q-card{ padding: 26px 22px 22px; margin-bottom:18px; }
-  .q-index{ font-size:12px; font-weight:700; color:#9B6BEA; margin-bottom:6px;}
-  .q-text{ font-size:19px; font-weight:700; line-height:1.5; }
-
-  .options{ display:flex; flex-direction:column; gap:10px; }
-  .option{
-    text-align:left;
-    font-family:'Noto Sans TC', sans-serif;
-    font-size:14.5px;
-    font-weight:500;
-    line-height:1.5;
+    height:18px; padding:2px;
     background:#fff;
-    border:2.5px solid var(--line);
-    border-radius:14px;
+    border:1.5px solid var(--ink); border-radius:6px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; width:0%; border-radius:2px;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 9px, #fff 9px 11px),
+      linear-gradient(180deg, var(--blue-soft), var(--blue));
+    transition:width .35s cubic-bezier(.22,1,.36,1);
+  }
+  /* 兔頭小圖跟著進度跑 */
+  .progress-bunny{
+    position:absolute; top:-15px; left:0; width:30px; height:auto;
+    transform:translateX(-50%);
+    transition:left .35s cubic-bezier(.22,1,.36,1);
+    filter:drop-shadow(1px 2px 0 rgba(45,45,45,.25));
+    animation:hop 1.2s ease-in-out infinite;
+  }
+  .progress-label{ display:none; }
+
+  .q-card{ padding:16px 18px 20px; margin-bottom:18px; }
+  .q-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .q-who{ display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--muted); }
+  .q-emoji{ width:32px; height:32px; flex-shrink:0; display:grid; place-items:center; font-size:26px; line-height:1; }
+  .q-emoji img{ width:32px; height:32px; display:block; }
+  .q-index{ font-family:var(--f-pixel); font-size:12px; }
+  .q-text{ font-size:19px; font-weight:700; line-height:1.55; }
+
+  .options{ display:flex; flex-direction:column; gap:11px; }
+  .option{
+    display:flex; align-items:center; gap:12px;
+    text-align:left;
+    font-family:var(--f-body); font-size:15px; font-weight:600; line-height:1.5;
+    color:var(--ink);
+    background:linear-gradient(180deg,#fff 0%, var(--paper) 100%);
+    border:1.5px solid var(--ink);
+    border-radius:16px;
     padding:13px 16px;
     cursor:pointer;
-    box-shadow: 3px 3px 0 var(--line);
-    transition: transform .1s ease, box-shadow .1s ease, background .15s ease;
+    box-shadow: inset 0 2px 0 #fff, 2px 2px 0 var(--ink);
+    transition: transform .1s ease, box-shadow .1s ease;
   }
-  .option:hover{ background:#FFF6D6; }
-  .option:active{ transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--line); }
-  .option.none{ background:transparent; border-style:dashed; font-size:.92em; opacity:.85; }
-  .option.none:hover{ background:#FFF6D6; opacity:1; }
-  .option.chosen{ background:#FFF6D6; pointer-events:none; }
+
+  .option:hover{ background:linear-gradient(180deg,#fff 0%, var(--blue-soft) 100%); }
+  .option:active{ transform:translate(1px,1px); box-shadow: inset 0 2px 0 #fff, 1px 1px 0 var(--ink); }
+  .option.none{
+    background:rgba(255,255,255,.55); border-style:dashed; border-color:var(--muted); box-shadow:none;
+    font-size:13.5px; font-weight:400; color:var(--muted); justify-content:center;
+  }
+  .option.none:hover{ background:#fff; color:var(--ink); }
+  .option.chosen{ background:var(--btn); pointer-events:none; }
 
   .back-link{
-    display:inline-block;
-    margin-top:6px;
-    font-size:12.5px;
-    font-weight:700;
-    color:#6b6863;
-    cursor:pointer;
-    text-decoration:underline;
+    display:inline-block; margin-top:16px;
+    font-size:12.5px; font-weight:600; color:var(--muted);
+    cursor:pointer; text-decoration:underline; text-underline-offset:3px;
   }
 
   /* ---------- RESULT ---------- */
   #screen-result{ text-align:left; }
 
-  /* ---- 3D tilt trading card (uses real illustrated card artwork) ---- */
-  .tilt-outer{
-    perspective:1200px;
-    margin-bottom:8px;
+  .tilt-outer{ perspective:1400px; position:relative; padding:8px 6px 0; margin-bottom:10px; }
+  .tilt-outer::before{
+    content:""; position:absolute; left:50%; top:46%; width:115%; aspect-ratio:1;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(closest-side, rgba(255,255,255,.9), rgba(255,255,255,.35) 50%, transparent 72%);
+    pointer-events:none; z-index:-1;
   }
-  .tilt-card{
-    position:relative;
-    border-radius:22px;
-    overflow:hidden;
-    box-shadow:0 20px 40px rgba(0,0,0,.25);
-    transform-style:preserve-3d;
-    transform:rotateX(0deg) rotateY(0deg) scale(1);
-    transition:transform .5s cubic-bezier(.22,1,.36,1), box-shadow .3s ease;
-    will-change:transform;
-    cursor:grab;
-    touch-action:pan-y;
-    border:3px solid var(--line);
-  }
-  .tilt-card.dragging{
-    transition:none;
-    cursor:grabbing;
-    box-shadow:0 28px 54px rgba(0,0,0,.3);
-  }
-  .tilt-img{
-    display:block;
-    width:100%;
-    height:auto;
-    -webkit-user-drag:none;
-    user-select:none;
-    pointer-events:none;
-  }
-  .tilt-rainbow{
-    position:absolute;
-    inset:-20%;
-    background:repeating-linear-gradient(115deg,#ff6b97 0%,#ffd166 12%,#8ff0c0 24%,#7fc8f8 36%,#c98fef 48%,#ff6b97 60%);
-    background-size:220% 220%;
-    background-position:var(--px,50%) var(--py,50%);
-    mix-blend-mode:color-dodge;
-    opacity:0;
-    transition:opacity .35s ease;
-    pointer-events:none;
-    filter:saturate(1.1);
-    -webkit-mask-image:var(--fx-mask, none);
-    mask-image:var(--fx-mask, none);
-    -webkit-mask-size:cover;
-    mask-size:cover;
-  }
-  .tilt-card.dragging .tilt-rainbow{ opacity:.28; }
-
-  .tilt-rainbow-edge{
-    position:absolute;
-    inset:0;
-    padding:10px;
-    background:repeating-linear-gradient(115deg,#ff6b97 0%,#ffd166 12%,#8ff0c0 24%,#7fc8f8 36%,#c98fef 48%,#ff6b97 60%);
-    background-size:220% 220%;
-    background-position:var(--px,50%) var(--py,50%);
-    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor;
-    mask-composite:exclude;
-    mix-blend-mode:color-dodge;
-    opacity:0;
-    transition:opacity .35s ease;
-    pointer-events:none;
-    filter:saturate(1.3);
-  }
-  .tilt-card.dragging .tilt-rainbow-edge{ opacity:.85; }
-
-  .tilt-sparkle{
-    position:absolute;
-    inset:0;
-    background-image:
-      radial-gradient(circle at 18% 26%, rgba(255,255,255,.95) 0%, transparent 1.6%),
-      radial-gradient(circle at 68% 58%, rgba(255,255,255,.9) 0%, transparent 1.3%),
-      radial-gradient(circle at 38% 78%, rgba(255,255,255,.95) 0%, transparent 1.1%),
-      radial-gradient(circle at 84% 22%, rgba(255,255,255,.85) 0%, transparent 1.4%),
-      radial-gradient(circle at 55% 42%, rgba(255,255,255,.9) 0%, transparent 1%),
-      radial-gradient(circle at 12% 62%, rgba(255,255,255,.8) 0%, transparent 1.2%),
-      radial-gradient(circle at 92% 82%, rgba(255,255,255,.85) 0%, transparent 1.3%);
-    background-size:200% 200%;
-    background-position:var(--px,50%) var(--py,50%);
-    mix-blend-mode:overlay;
-    opacity:0;
-    transition:opacity .35s ease;
-    pointer-events:none;
-    clip-path:inset(29% 44% 27% 3%);
-  }
-  .tilt-card.dragging .tilt-sparkle{ opacity:.6; }
-
-  .tilt-shine{
-    position:absolute;
-    inset:0;
-    background:linear-gradient(115deg, transparent 35%, rgba(255,225,245,.35) 45%, rgba(255,255,255,.5) 50%, rgba(210,240,255,.35) 55%, transparent 65%);
-    mix-blend-mode:overlay;
-    opacity:0;
-    transition:opacity .3s ease;
-    pointer-events:none;
-  }
-  .tilt-card:hover .tilt-shine,
-  .tilt-card.dragging .tilt-shine{ opacity:.7; }
-
-  /* ---- 閃卡（SRM 閃卡工作室 的卡片樣式）---- */
-  .tilt-outer{ perspective:1400px; }
   .tilt-card{
     position:relative; width:100%; aspect-ratio:1081/1509; overflow:visible; border:0;
     border-radius:var(--rad,4.6%/3.3%);
-    transform-style:preserve-3d; will-change:transform; transition:none; cursor:grab; touch-action:pan-y;
-    box-shadow:0 30px 60px -20px rgba(0,0,0,.65),0 10px 20px -10px rgba(0,0,0,.5);
+    transform-style:preserve-3d; will-change:transform; cursor:grab; touch-action:pan-y;
+    box-shadow:0 30px 60px -20px rgba(45,45,45,.6),0 10px 20px -10px rgba(45,45,45,.45);
   }
   .tilt-card canvas{ position:absolute; inset:0; width:100%; height:100%; border-radius:inherit; display:block; }
   .tilt-card .holo-fallback{ position:absolute; inset:0; width:100%; height:100%; border-radius:inherit; display:block; pointer-events:none; }
   .tilt-card .glare{ position:absolute; inset:0; border-radius:inherit; pointer-events:none; mix-blend-mode:overlay; }
   .tilt-card .edge{ position:absolute; inset:0; border-radius:inherit; pointer-events:none; box-shadow:inset 0 0 0 1px rgba(255,255,255,.18); }
   .tilt-id{ display:none; }
-  .tilt-hint{
-    text-align:center;
-    font-size:11.5px;
-    color:#6b6863;
-    margin:0 0 16px;
-  }
+  .tilt-hint{ text-align:center; margin:6px 0 18px; }
+  .tilt-hint .pill{ font-size:11.5px; font-weight:400; padding:4px 12px; color:var(--muted); }
 
   .view-banner{
-    background:#151312; color:#F6F4EE;
     display:flex; align-items:center; justify-content:space-between; gap:10px;
-    padding: 11px 16px;
-    border-radius: 16px;
-    margin-bottom:12px;
-    font-size:12.5px;
-    font-weight:700;
+    padding:8px 8px 8px 16px; margin-bottom:12px;
+    border-radius:14px; border:1.5px solid var(--ink);
+    background:#fff;
+    font-size:12.5px; font-weight:600;
+    box-shadow:var(--hard);
   }
   .view-banner button{
-    font-family:'Baloo 2',sans-serif;
-    font-size:12px; font-weight:700;
-    background:#F6F4EE; color:#151312;
-    border:none; border-radius:999px; padding:7px 13px; cursor:pointer;
-    flex-shrink:0;
+    font-family:var(--f-display); font-size:12.5px; font-weight:600;
+    background:var(--btn); color:var(--ink);
+    border:1.5px solid var(--ink); border-radius:10px; padding:5px 12px 4px; cursor:pointer; flex-shrink:0;
   }
 
-  .result-card{ overflow:hidden; }
+  /* 結果檔案 = 灰色底座 + 一張張 ID 卡 */
+  .result-card{
+    border-radius:26px; padding:14px;
+    display:flex; flex-direction:column; gap:14px;
+    /* 銀色金屬底座 */
+    background:linear-gradient(135deg, #F6F7F9 0%, #DADEE4 22%, #F9FAFB 42%, #CFD4DB 62%, #EEF0F3 80%, #DDE1E6 100%);
+    border:1.5px solid var(--ink);
+    box-shadow:2px 3px 0 var(--ink);
+  }
+
+  /* ID 卡（人格名片） */
   .result-head{
-    padding: 20px 22px 14px;
-    text-align:center;
+    padding:14px 16px 16px;
+    overflow:hidden;
+    background:
+      radial-gradient(rgba(255,255,255,.8) 1.2px, transparent 1.7px) 0 0/10px 10px,
+      radial-gradient(60% 40% at 80% 18%, rgba(255,255,255,.9), transparent 70%),
+      linear-gradient(180deg, var(--blue) 0%, var(--blue-soft) 55%, var(--paper) 100%);
   }
-  .result-title{
-    font-size:42px;
-    font-weight:800;
-    line-height:1;
-    margin: 4px 0 2px;
+  /* ID 卡：證件排版（參考 Team NewJeans ID card） */
+  .result-head{ background:#fff !important; padding:16px 16px 14px !important; }
+  .id-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+  .result-title{ margin:0; flex:1; min-width:0; }
+  .result-title img{ display:block; max-width:100%; max-height:44px; width:auto; height:auto; }
+  .id-meta{ text-align:right; font-size:10.5px; line-height:1.45; color:#000; white-space:nowrap; padding-top:2px; }
+  .id-meta b{ display:block; font-weight:700; letter-spacing:.06em; font-size:11px; }
+  .result-formula{ font-family:var(--f-pixel); font-size:10.5px; color:var(--muted); margin:6px 0 0; }
+  .result-formula:empty{ display:none; }
+  .id-grid{ display:grid; grid-template-columns:118px 1fr; gap:14px; align-items:stretch; margin-top:14px; }
+  .id-photo{
+    min-height:150px;
+    border:1.5px solid #000;
+    background-color:#5F9ED0;
+    background-image:linear-gradient(180deg,#3E86C2 0%, #79B1DC 48%, #C9DDEC 82%, #EEF2F5 100%);
+    background-position:center top, center; background-size:cover, 100% 100%; background-repeat:no-repeat;
+    image-rendering:pixelated;
   }
-  .result-formula{ font-size:12.5px; font-weight:700; opacity:0.75; margin-bottom:8px;}
+  .id-rows{ margin:0; display:flex; flex-direction:column; justify-content:space-between; }
+  .id-row{
+    display:flex; align-items:baseline; justify-content:space-between; gap:8px;
+    padding:6px 0 5px;
+    border-bottom:1px dotted #8A8A8A;
+  }
+  .id-row:first-child{ padding-top:0; }
+  .id-row dt{ font-size:11.5px; font-weight:600; color:#000; white-space:nowrap; }
+  .id-row dd{ margin:0; color:#000; text-align:right; white-space:nowrap; }
+  .id-row.pov dd{ white-space:normal; }
+  .id-row dd.stars{ font-size:15px; letter-spacing:1px; line-height:1; }
+  .id-row dd.rarity{ font-family:var(--f-display); font-weight:600; font-size:19px; line-height:1; }
+  .id-row dd.date{ font-family:var(--f-body); font-size:14px; font-weight:400; letter-spacing:.02em; }
+  .id-row.pov{ flex-direction:column; align-items:stretch; gap:3px; }
+  .id-row.pov dd{ text-align:left; font-size:12.5px; line-height:1.6; font-weight:600; }
   .result-tagline{
-    font-size:14.5px;
-    font-weight:700;
-    text-decoration: underline;
-    text-underline-offset:4px;
-    max-width:320px;
-    margin:0 auto 4px;
+    margin-top:12px; padding:0 0 8px;
+    border-bottom:1px dotted #8A8A8A;
+    font-size:15px; font-weight:700; line-height:1.5; color:#000;
   }
+  .result-tagline::before{ content:"It's me："; font-weight:600; font-size:12px; color:var(--muted); margin-right:4px; }
+  .id-foot{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:10px; }
+  .id-cert{ font-size:10.5px; line-height:1.6; color:#000; }
+  .id-cert b{ font-weight:600; font-size:10px; }
+  .id-logo{ height:34px; width:auto; display:block; flex-shrink:0; }
+  .rarity-note{ display:none; }
 
-  .rarity-badge{
-    display:inline-block;
-    font-size:12px;
-    font-weight:700;
-    background:#151312;
-    color:#F6F4EE;
-    padding:5px 13px;
-    border-radius:999px;
-    margin: 4px 0 10px;
-  }
-
-  .stat-panel{ border-top:3px solid var(--line); }
-  .stat-label{
-    font-size:12.5px;
-    font-weight:800;
-    text-align:center;
-    padding:9px 4px;
-    border-bottom:3px solid var(--line);
-    letter-spacing:0.04em;
-  }
-  .stars{ text-align:center; padding:10px 4px; font-size:18px; border-bottom:3px solid var(--line); letter-spacing:2px;}
-  .pov-label{ font-size:12.5px; font-weight:800; text-align:center; padding:8px 4px; letter-spacing:0.04em; }
-  .pov-text{ font-size:13px; line-height:1.7; font-weight:500; padding: 2px 18px 16px; text-align:center; }
-
-  .rel-row{
-    display:grid; grid-template-columns:1fr 1fr;
-    border-top:3px solid var(--line);
-  }
-  .rel-cell{ padding:12px 10px; text-align:center; }
-  .rel-cell:first-child{ border-right:3px solid var(--line); }
-  .rel-h{ font-size:11.5px; font-weight:800; margin-bottom:8px; letter-spacing:0.03em; }
+  /* 夥伴 / 衝突 */
+  .rel-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .rel-cell{ padding:12px 8px 12px; text-align:center; }
+  .rel-h{ font-size:12.5px; font-weight:700; margin-bottom:2px; }
   .rel-name-btn{
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-    width:100%;
-    background:none; border:none; padding:4px; cursor:pointer;
-    font-family:inherit;
+    display:flex; flex-direction:column; align-items:center; gap:6px; width:100%;
+    background:none; border:none; padding:2px; cursor:pointer; font-family:inherit; color:var(--ink);
   }
-  .rel-name{
-    display:flex; align-items:center; justify-content:center; gap:6px;
-    font-family:'Baloo 2',sans-serif;
-    font-weight:700; font-size:14.5px;
-  }
-  .rel-hint{
-    font-size:10px; font-weight:600; color:#8a877f;
-    text-decoration:underline; text-underline-offset:2px;
-  }
-  .dot{ width:28px;height:28px;border-radius:50%; border:2px solid var(--line); flex-shrink:0; background-size:cover; background-position:center;}
-
-  .dist-panel{ border-top:3px solid var(--line); padding: 16px 20px 18px; }
-  .dist-title{ font-size:12px; font-weight:800; letter-spacing:0.04em; margin-bottom:12px; }
-  .dist-sub{ font-weight:500; font-size:10.5px; color:#8a877f; letter-spacing:0; margin-left:2px; }
-  .dist-row{ display:flex; align-items:center; gap:8px; margin-bottom:7px; }
-  .dist-name{ width:64px; font-size:11px; font-weight:700; flex-shrink:0; }
-  .dist-track{ flex:1; height:12px; background:#fff; border:2px solid var(--line); border-radius:999px; overflow:hidden; }
-  .dist-fill{ height:100%; border-radius:999px; transition: width .5s ease; }
-  .dist-count{ width:30px; font-size:11px; font-weight:700; text-align:right; flex-shrink:0; }
-
-  .no-data-note{
-    border-top:3px solid var(--line);
-    padding: 16px 20px;
-    text-align:center;
-    font-size:12.5px;
-    color:#6b6863;
-    line-height:1.7;
+  .rel-name{ display:flex; flex-direction:column; align-items:center; gap:8px; font-family:var(--f-display); font-weight:600; font-size:16px; line-height:1; }
+  .rel-hint{ font-size:11px; font-weight:600; padding:3px 10px 2px; border-radius:8px; border:1.5px solid var(--ink); background:var(--btn); }
+  .rel-name-btn:hover .dot{ transform:translateY(-3px); }
+  .dot{
+    width:88px; height:88px; display:block;
+    background-size:contain; background-position:center; background-repeat:no-repeat;
+    image-rendering:pixelated;
+    margin:4px 0 0;
+    transition:transform .2s ease;
   }
 
-  .profile-panel{ border-top:3px solid var(--line); padding: 6px 20px 4px; }
-  .profile-item{ padding: 14px 0; border-bottom:1.5px dashed #cfccc3; }
+  /* 情緒分佈：電量條 */
+  .dist-panel{ padding:14px 16px 14px; }
+  .sec-title{ display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:13.5px; font-weight:700; margin-bottom:4px; }
+  .dist-sub{ display:block; font-weight:400; font-size:11px; color:var(--muted); margin:0 0 12px; }
+  .dist-row{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .dist-row.top .dist-name{ font-weight:700; }
+  .dist-row.top .dist-name::after{ content:" ★"; color:var(--ink); }
+  .dist-name{ width:76px; font-size:11.5px; font-weight:600; flex-shrink:0; }
+  .dist-track{ flex:1; height:16px; padding:2px; background:#fff; border:1.5px solid var(--ink); border-radius:5px; overflow:hidden; }
+  .dist-fill{ height:100%; border-radius:2px; transition:width .6s cubic-bezier(.22,1,.36,1); background-image:repeating-linear-gradient(90deg, transparent 0 8px, rgba(255,255,255,.9) 8px 10px) !important; }
+  .dist-count{ width:36px; font-family:var(--f-pixel); font-size:11px; text-align:right; flex-shrink:0; }
+
+  .no-data-note{ padding:16px 18px; text-align:center; font-size:12.5px; color:var(--muted); line-height:1.7; }
+
+  /* 檔案內容 */
+  .profile-panel{ padding:4px 16px; background:linear-gradient(180deg,#fff 0%, var(--paper) 100%); }
+  .profile-item{ padding:14px 0; border-bottom:1px dotted #8A8A8A; }
   .profile-item:last-child{ border-bottom:none; }
-  .profile-h{ display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:800; margin-bottom:6px; }
-  .profile-text{ font-size:13px; line-height:1.75; font-weight:500; margin:0; color:#2c2a28; }
+  .profile-h{ display:inline-flex; font-size:12.5px; font-weight:700; margin-bottom:9px; }
+  .profile-text{ font-size:13.5px; line-height:1.85; font-weight:400; margin:0; color:var(--ink); }
 
+  /* 深夜限定 */
   .afterdark{
-    border-top:3px solid var(--line);
-    background: #1c1a19;
-    color:#F0EEE7;
-    padding: 18px 20px 20px;
+    position:relative; overflow:hidden;
+    border-radius:20px; border:1.5px solid var(--ink);
+    padding:18px 18px 20px;
+    color:var(--paper);
+    background:linear-gradient(180deg, var(--ink) 0%, #3B4554 60%, #55657C 100%);
   }
-  .afterdark-label{ font-size:11.5px; font-weight:700; letter-spacing:0.04em; opacity:0.7; margin-bottom:8px; }
-  .afterdark-text{ font-size:13.5px; line-height:1.85; font-weight:500; margin:0; }
+  .afterdark-label{ font-size:12px; font-weight:600; letter-spacing:.04em; margin-bottom:10px; color:var(--blue); }
+  .afterdark-text{ font-size:13.5px; line-height:1.9; font-weight:400; margin:0; }
 
-  .pullquote-panel{ border-top:3px solid var(--line); padding: 22px 24px 20px; text-align:center; position:relative; }
-  .pullquote-mark{ font-family:'Baloo 2', sans-serif; font-size:44px; line-height:0.4; color: var(--accent, #9B6BEA); margin-bottom:6px; }
-  .pullquote-text{ font-family:'Baloo 2', sans-serif; font-weight:700; font-size:19px; line-height:1.45; margin: 4px 0 8px; }
-  .pullquote-sign{ font-size:11px; font-weight:500; color:#6b6863; }
+  /* 金句 */
+  .pullquote-panel{ padding:18px 20px 16px; text-align:center; }
+  .pullquote-mark{ font-family:var(--f-display); font-size:56px; line-height:.5; height:24px; color:var(--blue); -webkit-text-stroke:2px var(--ink); }
+  .pullquote-text{ font-family:var(--f-display); font-weight:600; font-size:20px; line-height:1.5; margin:6px 0 10px; }
+  .pullquote-sign{ font-size:11px; font-weight:400; color:var(--muted); }
 
-  .footer-brand{
-    text-align:center; padding: 14px 10px 16px;
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700; font-size:13px; letter-spacing:0.03em;
-  }
-  .footer-brand span{ display:block; font-family:'Noto Sans TC',sans-serif; font-weight:500; font-size:10px; opacity:0.6; margin-top:2px;}
+  .footer-brand{ text-align:center; padding:2px 10px 4px; font-family:var(--f-display); font-weight:600; font-size:15px; letter-spacing:.06em; }
 
-  .cta-card{ margin-top:16px; padding:20px; text-align:center; }
-  .cta-eyebrow{ font-size:11px; font-weight:800; color:#6b6863; letter-spacing:0.05em; margin-bottom:8px;}
-  .cta-title{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:19px; line-height:1.4; margin-bottom:6px;}
-  .cta-sub{ font-size:13px; line-height:1.7; margin-bottom:16px; color:#3a3835;}
-  .cta-tag{
-    font-family:'Baloo 2', sans-serif;
-    font-size:13.5px; font-weight:700;
-    background:#151312; color:#F6F4EE;
-    display:inline-block; padding:8px 16px; border-radius:999px; margin-bottom:16px;
-  }
+  .cta-card{ margin-top:18px; padding:22px 20px; text-align:center; }
+  .cta-card:empty{ display:none; }
+  .cta-eyebrow{ margin-bottom:8px; font-size:12px; text-transform:none; }
+  .cta-title{ font-family:var(--f-display); font-weight:600; font-size:20px; line-height:1.45; margin-bottom:6px; }
+  .cta-sub{ font-size:13px; line-height:1.7; margin-bottom:16px; color:var(--muted); }
+  .cta-tag{ font-family:var(--f-display); font-size:13px; font-weight:600; margin-bottom:16px; background:var(--paper); }
 
-  .actions{ margin-top:18px; }
+  .actions{ margin-top:20px; }
   #shareCanvas{ display:none; }
 
   /* ---------- 分享圖彈窗 ---------- */
   .share-modal{
     position:fixed; inset:0;
-    background:rgba(21,19,18,.82);
+    background:rgba(45,45,45,.82);
+    backdrop-filter:blur(6px);
     z-index:1000;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:flex; align-items:center; justify-content:center;
     padding:24px 16px;
   }
-  .share-modal-inner{ width:100%; max-width:400px; text-align:center; }
+  .share-modal-inner{ width:100%; max-width:400px; text-align:center; max-height:100%; overflow:auto; }
   .share-modal-inner img{
     display:block; width:100%; height:auto;
-    border-radius:16px; border:3px solid var(--line);
-    box-shadow: 5px 6px 0 rgba(0,0,0,.5);
+    border-radius:18px; border:1.5px solid var(--ink);
+    box-shadow:3px 3px 0 #000;
     -webkit-touch-callout:default;
   }
-  .share-modal-hint{ color:#F6F4EE; font-size:12.5px; font-weight:700; margin:14px 0 16px; }
-  .share-modal-inner .btn-row{ margin-top:0; }
+  .share-modal-hint{ color:#fff; font-size:12.5px; font-weight:600; margin:14px 0 16px; }
+
+  @media (max-width:380px){
+    .intro-title{ font-size:23px; }
+    .result-title{ font-size:42px; }
+    .id-body{ grid-template-columns:80px 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .screen.active, .parade-item img, .progress-bunny{ animation:none; }
+    .parade-track{ animation:none; }
+    .parade{ overflow-x:auto; }
+  }
+  /* SOCIAL PERSONALITY FILE 框與副標同寬 */
+  .title-screen .eyebrow{ display:flex; width:100%; max-width:360px; margin:0 auto; box-sizing:border-box; }
+  b, strong{ font-weight:600; }
+  /* 副標打字效果：隱形全文撐住高度，打字層疊在上面 */
+  .typer{ display:grid; }
+  .typer > span{ grid-area:1/1; }
+  .typer-ghost{ visibility:hidden; }
+  .typer-caret{ display:inline-block; width:2px; height:1.05em; margin-left:2px; vertical-align:-.15em; background:var(--ink); animation:caret 1s steps(1) infinite; }
+  @keyframes caret{ 50%{ opacity:0; } }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- ================= INTRO ================= -->
+  <!-- ================= INTRO（遊戲開機畫面） ================= -->
   <section class="screen active" id="screen-intro">
     <div class="intro-wrap">
-      <img class="logo-img" src="images/logo.png" alt="Sweet R.A.B.B.I.T. Personality">
-      <div class="eyebrow">🐇 SOCIAL PERSONALITY FILE</div>
-      <h1 class="intro-title display">你的社交人格<br>是哪一隻兔子？</h1>
-      <p class="intro-sub">不是你「應該」怎麼跟人相處，而是聊天冷場、被臨時邀約、朋友忽然變少聯絡時，最先跳出來的那個你。每種情緒都會被拿來跟其他情緒一對一比較十次，不是靠一題定生死。</p>
+      <header class="app-head">
+        <span class="head-side"></span>
+        <h1 class="head-title"><img class="head-logo" src="images/brand/wordmark.png" alt="Sweet Rabbit Man"></h1>
+        <span class="head-side"></span>
+      </header>
 
-      <div class="preview-strip" id="previewStrip"></div>
-
-      <div class="intro-meta">
-        <div class="chip">30 題・約 2 分鐘</div>
-        <div class="chip">11 種社交人格</div>
-        <div class="chip">一對一比較法</div>
+      <div class="title-screen">
+        <span class="dot-star ds1" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><pattern id="dotpat1" width="5" height="5" patternUnits="userSpaceOnUse"><rect x=".8" y="1.2" width="3" height="2.4" rx=".4"/></pattern></defs><polygon points="50.0,4.0 62.3,35.0 95.7,37.2 70.0,58.5 78.2,90.8 50.0,73.0 21.8,90.8 30.0,58.5 4.3,37.2 37.7,35.0" fill="url(#dotpat1)" stroke-linejoin="round"/></svg></span>
+        <span class="dot-star ds2" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><pattern id="dotpat2" width="5" height="5" patternUnits="userSpaceOnUse"><rect x=".8" y="1.2" width="3" height="2.4" rx=".4"/></pattern></defs><polygon points="50.0,4.0 62.3,35.0 95.7,37.2 70.0,58.5 78.2,90.8 50.0,73.0 21.8,90.8 30.0,58.5 4.3,37.2 37.7,35.0" fill="url(#dotpat2)" stroke-linejoin="round"/></svg></span>
+        <span class="dot-star ds3" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><pattern id="dotpat3" width="5" height="5" patternUnits="userSpaceOnUse"><rect x=".8" y="1.2" width="3" height="2.4" rx=".4"/></pattern></defs><polygon points="50.0,4.0 62.3,35.0 95.7,37.2 70.0,58.5 78.2,90.8 50.0,73.0 21.8,90.8 30.0,58.5 4.3,37.2 37.7,35.0" fill="url(#dotpat3)" stroke-linejoin="round"/></svg></span>
+        <img class="logo-img" src="images/brand/logo.png" alt="Sweet R.A.B.B.I.T. Personality">
+        <h1 class="intro-title">你的社交人格
+是哪一隻兔子？</h1>
+        <p class="intro-sub typer" id="introSub" aria-label="聊天冷場、被臨時邀約、朋友忽然變少聯絡時，最先跳出來的那個才是真正的你..."><span class="typer-ghost" aria-hidden="true">聊天冷場、被臨時邀約、朋友忽然變少聯絡時，最先跳出來的那個才是真正的你...</span><span class="typer-live" aria-hidden="true"><span id="typerText"></span><i class="typer-caret"></i></span></p>
       </div>
 
-      <button class="btn display" id="startBtn">開始測驗</button>
+      <!-- 角色輪播 -->
+      <div class="parade" id="previewStrip" aria-label="11 種社交人格"></div>
+
+      <div class="menu">
+        <button class="btn display" id="startBtn">START ▸ 開始測驗</button>
+      </div>
       <p class="disclaimer">選平常的你，不是理想中的你。測驗結果純屬娛樂與自我觀察，不是心理診斷。</p>
+      <footer class="site-foot"><b>SRM TOY Present</b>© 2026 Sweet Rabbit Man</footer>
     </div>
   </section>
 
   <!-- ================= QUIZ ================= -->
   <section class="screen" id="screen-quiz">
-    <div class="progress-row">
-      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-      <div class="progress-label" id="progressLabel">1 / 30</div>
+    <div class="quiz-top">
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <img class="progress-bunny" id="progressBunny" src="images/brand/icon.png" alt="">
+      </div>
+      <div class="pill q-count" id="progressLabel">01/30</div>
     </div>
-    <div class="wobble-card q-card">
-      <div class="q-index" id="qIndex">Q1</div>
+    <div class="glass q-card">
+      <div class="q-head">
+        <div class="q-who"><span class="q-emoji"><img id="qEmoji" src="" alt=""></span>情境題</div>
+        <div class="q-index" id="qIndex">Q.01</div>
+      </div>
       <div class="q-text" id="qText"></div>
     </div>
     <div class="options" id="optionsWrap"></div>
     <div style="text-align:center;">
-      <span class="back-link" id="backLink">上一題</span>
+      <span class="back-link" id="backLink">‹ 上一題</span>
     </div>
   </section>
 
   <!-- ================= RESULT ================= -->
   <section class="screen" id="screen-result">
+    <header class="app-head">
+      <button class="head-btn" id="homeBtn" aria-label="回到首頁">‹</button>
+      <div class="head-title"><img class="head-logo" src="images/brand/wordmark.png" alt="Sweet Rabbit Man"></div>
+      <span class="head-side"></span>
+    </header>
 
     <div class="tilt-outer" id="tiltOuter">
       <div class="tilt-card" id="tiltCard">
@@ -524,65 +582,81 @@
         <div class="edge"></div>
       </div>
     </div>
-    <div class="tilt-hint">🖐 滑動 / 傾斜手機看看卡片閃光</div>
+    <div class="tilt-hint"><span class="pill">🖐 滑動 / 傾斜手機看看卡片閃光</span></div>
 
     <div class="view-banner" id="viewBanner" style="display:none;">
       <span id="viewBannerText"></span>
-      <button id="backToMineBtn">← 回到我的結果</button>
+      <button id="backToMineBtn">‹ 回到我的結果</button>
     </div>
 
-    <div class="wobble-card result-card" id="resultCard">
-      <div class="result-head">
-        <div class="eyebrow" style="margin-bottom:6px;">Sweet R.A.B.B.I.T. Personality</div>
-        <div class="result-title display" id="resultTitle"></div>
-        <div class="result-formula" id="resultFormula"></div>
-        <div class="rarity-badge display" id="rarityBadge"></div>
-        <div class="result-tagline" id="resultTagline"></div>
-      </div>
+    <div class="result-card" id="resultCard">
 
-      <div class="stat-panel">
-        <div class="stat-label" id="statLabel"></div>
-        <div class="stars" id="stars"></div>
-        <div class="pov-label">POV</div>
-        <div class="pov-text" id="povText"></div>
+      <!-- 人格 ID 卡 -->
+      <div class="glass result-head">
+        <div class="id-top">
+          <h2 class="result-title" id="resultTitle"><img id="resultTitleImg" alt=""></h2>
+          <div class="id-meta">
+            <b>SOCIAL ID CARD</b>
+            <span>NO.<span id="idNo"></span></span>
+          </div>
+        </div>
+        <div class="result-formula" id="resultFormula"></div>
+        <div class="id-grid">
+          <div class="id-photo" id="idPhoto"></div>
+          <dl class="id-rows">
+            <div class="id-row"><dt id="statLabel"></dt><dd class="stars" id="stars"></dd></div>
+            <div class="id-row"><dt>稀有度/Rarity</dt><dd class="rarity"><span id="rarityBadge"></span>%</dd></div>
+            <div class="id-row"><dt>發證日/Issued</dt><dd class="date" id="idDate"></dd></div>
+            <div class="id-row pov"><dt>內心話/POV</dt><dd class="pov-text" id="povText"></dd></div>
+          </dl>
+        </div>
+        <div class="result-tagline" id="resultTagline"></div>
+        <div class="id-foot">
+          <div class="id-cert">持有此卡者，證明是 Sweet Rabbit 的一員。<br><b>This card certifies the bearer as a Sweet Rabbit.</b></div>
+          <img class="id-logo" src="images/brand/logo.png" alt="Sweet R.A.B.B.I.T. Personality">
+        </div>
+        <span class="rarity-note" id="rarityNote"></span>
       </div>
 
       <div class="rel-row">
-        <div class="rel-cell">
+        <div class="glass rel-cell">
+          <div class="field-label">buddy</div>
           <div class="rel-h">夥伴人格</div>
           <button class="rel-name-btn" id="companionBtn">
             <span class="rel-name"><span class="dot" id="companionDot"></span><span id="companionName"></span></span>
-            <span class="rel-hint">看看這隻兔子 →</span>
+            <span class="rel-hint">看看這隻兔子 ▸</span>
           </button>
         </div>
-        <div class="rel-cell">
+        <div class="glass rel-cell">
+          <div class="field-label">rival</div>
           <div class="rel-h">衝突人格</div>
           <button class="rel-name-btn" id="conflictBtn">
             <span class="rel-name"><span class="dot" id="conflictDot"></span><span id="conflictName"></span></span>
-            <span class="rel-hint">看看這隻兔子 →</span>
+            <span class="rel-hint">看看這隻兔子 ▸</span>
           </button>
         </div>
       </div>
 
-      <div class="dist-panel" id="distPanel">
-        <div class="dist-title">🐇 你的情緒分佈<span class="dist-sub">（每種情緒都經過 10 次一對一比較）</span></div>
+      <div class="glass dist-panel" id="distPanel">
+        <div class="sec-title"><span>🔋 你的情緒分佈</span><span class="field-label">status</span></div>
+        <span class="dist-sub">每種情緒都經過 10 次一對一比較</span>
         <div id="distRows"></div>
       </div>
-      <div class="no-data-note" id="noDataNote" style="display:none;">
+      <div class="glass no-data-note" id="noDataNote" style="display:none;">
         這是 <b id="noDataName"></b> 的角色檔案，沒有專屬於你的分佈數據 —— 想看自己的分佈，去做一次測驗吧。
       </div>
 
-      <div class="profile-panel">
+      <div class="glass profile-panel">
         <div class="profile-item">
-          <div class="profile-h">🧠 性格傾向</div>
+          <div class="pill profile-h">🧠 性格傾向</div>
           <p class="profile-text" id="profilePersonality"></p>
         </div>
         <div class="profile-item">
-          <div class="profile-h">🧭 價值觀</div>
+          <div class="pill profile-h">🧭 價值觀</div>
           <p class="profile-text" id="profileValues"></p>
         </div>
         <div class="profile-item">
-          <div class="profile-h">👥 社交模式</div>
+          <div class="pill profile-h">👥 社交模式</div>
           <p class="profile-text" id="profileLove"></p>
         </div>
       </div>
@@ -592,25 +666,24 @@
         <p class="afterdark-text" id="afterdarkText"></p>
       </div>
 
-      <div class="pullquote-panel" id="pullquotePanel">
-        <div class="pullquote-mark">"</div>
+      <div class="glass pullquote-panel" id="pullquotePanel">
         <p class="pullquote-text" id="pullquoteText"></p>
         <div class="pullquote-sign">— 截圖這句，證明你也是這型</div>
       </div>
 
       <div class="footer-brand">
         SWEETRABBITMAN.COM
-        <span>SRM.TOY PRESENT</span>
       </div>
     </div>
 
     <!-- CTA -->
-    <div class="wobble-card cta-card" id="ctaCard"></div>
+    <div class="glass cta-card" id="ctaCard"></div>
 
     <div class="actions btn-row">
-      <button class="btn small display" id="shareBtn">分享結果</button>
-      <button class="btn small ghost display" id="retakeBtn">重新測驗</button>
+      <button class="btn small display" id="shareBtn">下載卡片分享結果 ⬇</button>
+      <button class="btn small ghost display" id="retakeBtn">↻ 重新測驗</button>
     </div>
+    <footer class="site-foot"><b>SRM TOY Present</b>© 2026 Sweet Rabbit Man</footer>
   </section>
 
 </div>
@@ -619,9 +692,10 @@
 <div class="share-modal" id="shareModal" style="display:none;">
   <div class="share-modal-inner">
     <img id="shareModalImg" src="" alt="分享圖">
-    <p class="share-modal-hint">📱 長按圖片就能存到相簿，或點下面按鈕下載</p>
+    <p class="share-modal-hint">📱 手機可長按圖片存到相簿，或點下面按鈕下載卡片</p>
     <div class="btn-row">
-      <button class="btn small display" id="shareModalDownload">下載圖片 ⬇</button>
+      <button class="btn small display" id="shareModalDownload">下載卡片 ⬇</button>
+      <button class="btn small display" id="shareModalShare" style="display:none;">分享 ↗</button>
       <button class="btn small ghost display" id="shareModalClose">關閉</button>
     </div>
   </div>
@@ -705,6 +779,9 @@ const MASK_IMG = {
    每張卡的設定（整體參數 + 4 層圖/遮罩/特效數值）完全來自編輯器匯出的 .json，沒有任何改動。
    圖檔在 images/cards/<id>/（art1~4 = 圖層、mask1~4 = 遮罩、flat.jpg = 合成預覽）。 */
 const CARD_DATA = {"anxiety":{"size":[1081,1510],"global":{"tilt":20,"glare":0.7,"radius":4.6,"parallax":1.5,"light":0.9,"border":{"on":true,"width":1.2,"style":"holo","color":"#f6b3ff","holo":0.45,"glitter":0.42,"line":false,"inset":false,"innerR":2}},"layers":[{"name":"底卡","invert":false,"depth":-0.05,"holo":0.03,"holoScale":0.95,"holoPattern":"bands","gloss":0.52,"foil":0.22,"foilType":"silver","glitter":0.72,"glitterSize":0.75,"art":"images/cards/anxiety/art1.png","mask":"images/cards/anxiety/mask1.png"},{"name":"角色名稱","invert":true,"depth":0.13,"holo":0.75,"holoScale":2.7,"holoPattern":"stars","gloss":0.17,"foil":0.45,"foilType":"tint","glitter":0.59,"glitterSize":0.65,"art":"images/cards/anxiety/art2.png","mask":"images/cards/anxiety/mask2.png"},{"name":"主角","invert":true,"depth":0.27,"holo":0.09,"holoScale":0.5,"holoPattern":"bands","gloss":0.46,"foil":0,"foilType":"silver","glitter":0.86,"glitterSize":0.6,"art":"images/cards/anxiety/art3.png","mask":"images/cards/anxiety/mask3.png"},{"name":"上層字","invert":true,"depth":0.42,"holo":0.12,"holoScale":1.7,"holoPattern":"stars","gloss":0.49,"foil":0.34,"foilType":"tint","glitter":0.73,"glitterSize":1,"art":"images/cards/anxiety/art4.png","mask":"images/cards/anxiety/mask4.png"}]},"blankness":{"size":[1081,1510],"global":{"tilt":20,"glare":0.7,"radius":4.6,"parallax":1.5,"light":0.9,"border":{"on":true,"width":1.2,"style":"gold","color":"#f4d35e","holo":0.45,"glitter":0.65,"line":false,"inset":false,"innerR":2}},"layers":[{"name":"底卡","invert":false,"depth":-0.05,"holo":0.03,"holoScale":0.95,"holoPattern":"bands","gloss":0.52,"foil":0.22,"foilType":"silver","glitter":0.72,"glitterSize":0.75,"art":"images/cards/blankness/art1.png","mask":"images/cards/blankness/mask1.png"},{"name":"角色名稱","invert":true,"depth":0.13,"holo":0.75,"holoScale":2.7,"holoPattern":"stars","gloss":0.17,"foil":0.45,"foilType":"tint","glitter":0.59,"glitterSize":0.65,"art":"images/cards/blankness/art2.png","mask":"images/cards/blankness/mask2.png"},{"name":"主角","invert":true,"depth":0.27,"holo":0.09,"holoScale":0.5,"holoPattern":"bands","gloss":0.46,"foil":0,"foilType":"silver","glitter":0.86,"glitterSize":0.6,"art":"images/cards/blankness/art3.png","mask":"images/cards/blankness/mask3.png"},{"name":"上層字","invert":true,"depth":0.42,"holo":0.12,"holoScale":1.7,"holoPattern":"stars","gloss":0.49,"foil":0.34,"foilType":"tint","glitter":0.73,"glitterSize":1,"art":"images/cards/blankness/art4.png","mask":"images/cards/blankness/mask4.png"}]},"bitterness":{"size":[1081,1509],"global":{"tilt":20,"glare":0.7,"radius":4.6,"parallax":1.5,"light":0.9,"border":{"on":true,"width":1.2,"style":"rose","color":"#f4d35e","holo":0.45,"glitter":0.65,"line":false,"inset":false,"innerR":2}},"layers":[{"name":"底卡","invert":true,"depth":-0.05,"holo":0.47,"holoScale":0.95,"holoPattern":"bands","gloss":0.21,"foil":0.16,"foilType":"tint","glitter":0.32,"glitterSize":1.15,"art":"images/cards/bitterness/art1.png","mask":"images/cards/bitterness/mask1.png"},{"name":"角色名稱","invert":true,"depth":0.13,"holo":0.75,"holoScale":2.7,"holoPattern":"stars","gloss":0.17,"foil":0.45,"foilType":"tint","glitter":0.59,"glitterSize":0.65,"art":"images/cards/bitterness/art2.png","mask":"images/cards/bitterness/mask2.png"},{"name":"主角","invert":true,"depth":0.27,"holo":0.09,"holoScale":0.5,"holoPattern":"bands","gloss":0.46,"foil":0,"foilType":"silver","glitter":0.86,"glitterSize":0.6,"art":"images/cards/bitterness/art3.png","mask":"images/cards/bitterness/mask3.png"},{"name":"上層字","invert":true,"depth":0.42,"holo":0.12,"holoScale":1.7,"holoPattern":"stars","gloss":0.49,"foil":0.34,"foilType":"tint","glitter":0.73,"glitterSize":1,"art":"images/cards/bitterness/art4.png","mask":"images/cards/bitterness/mask4.png"}]},"dualburnout":{"size":[1081,1509],"global":{"tilt":20,"glare":0.7,"radius":4.6,"parallax":1.5,"light":0.9,"border":{"on":true,"width":1.2,"style":"silver","color":"#f4d35e","holo":0.45,"glitter":0.65,"line":false,"inset":false,"innerR":2}},"layers":[{"name":"底卡","invert":false,"depth":-0.05,"holo":0.62,"holoScale":0.95,"holoPattern":"bands","gloss":0.52,"foil":0.22,"foilType":"silver","glitter":0.72,"glitterSize":0.75,"art":"images/cards/dualburnout/art1.png","mask":"images/cards/dualburnout/mask1.png"},{"name":"角色名稱","invert":true,"depth":0.13,"holo":0.75,"holoScale":2.7,"holoPattern":"stars","gloss":0.17,"foil":0.45,"foilType":"tint","glitter":0.59,"glitterSize":0.65,"art":"images/cards/dualburnout/art2.png","mask":"images/cards/dualburnout/mask2.png"},{"name":"主角","invert":true,"depth":0.27,"holo":0.09,"holoScale":0.5,"holoPattern":"bands","gloss":0.46,"foil":0,"foilType":"silver","glitter":0.86,"glitterSize":0.6,"art":"images/cards/dualburnout/art3.png","mask":"images/cards/dualburnout/mask3.png"},{"name":"上層字","invert":true,"depth":0.42,"holo":0.39,"holoScale":1.7,"holoPattern":"stars","gloss":0.49,"foil":0.34,"foilType":"tint","glitter":0.73,"glitterSize":1,"art":"images/cards/dualburnout/art4.png","mask":"images/cards/dualburnout/mask4.png"}]},"glitchcore":{"size":[1081,1509],"global":{"tilt":20,"glare":0.7,"radius":4.6,"parallax":1.5,"light":0.9,"border":{"on":true,"width":1.2,"style":"holo","color":"#80bdff","holo":0.45,"glitter":0.65,"line":false,"inset":false,"innerR":2}},"layers":[{"name":"底卡","invert":false,"depth":-0.05,"holo":0.03,"holoScale":0.95,"holoPattern":"bands","gloss":0.52,"foil":0.22,"foilType":"silver","glitter":0.72,"glitterSize":0.75,"art":"images/cards/glitchcore/art1.png","mask":"images/cards/glitchcore/mask1.png"},{"name":"角色名稱","invert":true,"depth":0.13,"holo":0.75,"holoScale":2.7,"holoPattern":"stars","gloss":0.17,"foil":0.45,"foilType":"tint","glitter":0.59,"glitterSize":0.65,"art":"images/cards/glitchcore/art2.png","mask":"images/cards/glitchcore/mask2.png"},{"name":"主角","invert":true,"depth":0.27,"holo":0.09,"holoScale":0.5,"holoPattern":"bands","gloss":0.46,"foil":0,"foilType":"silver","glitter":0.86,"glitterSize":0.6,"art":"images/cards/glitchcore/art3.png","mask":"images/cards/glitchcore/mask3.png"},{"name":"上層字","invert":true,"depth":0.42,"holo":0.12,"holoScale":1.7,"holoPattern":"stars","gloss":0.49,"foil":0.34,"foilType":"tint","glitter":0.73,"glitterSize":1,"art":"images/cards/glitchcore/art4.png","mask":"images/cards/glitchcore/mask4.png"}]},"rage":{"size":[1081,1509],"global":{"tilt":20,"glare":0.7,"radius":4.6,"parallax":1.5,"light":0.9,"border":{"on":true,"width":1.2,"style":"rose","color":"#f4d35e","holo":0.45,"glitter":0.65,"line":false,"inset":false,"innerR":2}},"layers":[{"name":"底卡","invert":false,"depth":-0.05,"holo":0.03,"holoScale":0.95,"holoPattern":"bands","gloss":0.52,"foil":0.22,"foilType":"silver","glitter":0.72,"glitterSize":0.75,"art":"images/cards/rage/art1.png","mask":"images/cards/rage/mask1.png"},{"name":"角色名稱","invert":true,"depth":0.13,"holo":0.75,"holoScale":2.7,"holoPattern":"stars","gloss":0.17,"foil":0.45,"foilType":"tint","glitter":0.59,"glitterSize":0.65,"art":"images/cards/rage/art2.png","mask":"images/cards/rage/mask2.png"},{"name":"主角","invert":true,"depth":0.27,"holo":0.09,"holoScale":0.5,"holoPattern":"bands","gloss":0.46,"foil":0,"foilType":"silver","glitter":0.86,"glitterSize":0.6,"art":"images/cards/rage/art3.png","mask":"images/cards/rage/mask3.png"},{"name":"上層字","invert":true,"depth":0.42,"holo":0.12,"holoScale":1.7,"holoPattern":"stars","gloss":0.49,"foil":0.34,"foilType":"tint","glitter":0.73,"glitterSize":1,"art":"images/cards/rage/art4.png","mask":"images/cards/rage/mask4.png"}]},"tenderness":{"size":[1081,1510],"global":{"tilt":20,"glare":0.7,"radius":4.6,"parallax":1.5,"light":0.9,"border":{"on":true,"width":1.2,"style":"silver","color":"#f4d35e","holo":0.45,"glitter":0.65,"line":false,"inset":false,"innerR":2}},"layers":[{"name":"底卡","invert":false,"depth":-0.05,"holo":0.03,"holoScale":0.95,"holoPattern":"bands","gloss":0.52,"foil":0.22,"foilType":"silver","glitter":0.72,"glitterSize":0.75,"art":"images/cards/tenderness/art1.png","mask":"images/cards/tenderness/mask1.png"},{"name":"角色名稱","invert":true,"depth":0.13,"holo":0.75,"holoScale":2.7,"holoPattern":"stars","gloss":0.17,"foil":0.45,"foilType":"tint","glitter":0.59,"glitterSize":0.65,"art":"images/cards/tenderness/art2.png","mask":"images/cards/tenderness/mask2.png"},{"name":"主角","invert":true,"depth":0.27,"holo":0.09,"holoScale":0.5,"holoPattern":"bands","gloss":0.46,"foil":0,"foilType":"silver","glitter":0.86,"glitterSize":0.6,"art":"images/cards/tenderness/art3.png","mask":"images/cards/tenderness/mask3.png"},{"name":"上層字","invert":true,"depth":0.42,"holo":0.12,"holoScale":1.7,"holoPattern":"stars","gloss":0.49,"foil":0.34,"foilType":"tint","glitter":0.73,"glitterSize":1,"art":"images/cards/tenderness/art4.png","mask":"images/cards/tenderness/mask4.png"}]},"insecurity":{"size":[1081,1510],"global":{"tilt":20,"glare":0.7,"radius":4.6,"parallax":1.5,"light":0.9,"border":{"on":true,"width":1.2,"style":"holo","color":"#e7adff","holo":0.45,"glitter":0.5,"line":false,"inset":false,"innerR":2}},"layers":[{"name":"底卡","invert":false,"depth":-0.05,"holo":0.03,"holoScale":0.95,"holoPattern":"bands","gloss":0.52,"foil":0.22,"foilType":"silver","glitter":0.72,"glitterSize":0.75,"art":"images/cards/insecurity/art1.png","mask":"images/cards/insecurity/mask1.png"},{"name":"角色名稱","invert":true,"depth":0.13,"holo":0.75,"holoScale":2.7,"holoPattern":"stars","gloss":0.17,"foil":0.45,"foilType":"tint","glitter":0.59,"glitterSize":0.65,"art":"images/cards/insecurity/art2.png","mask":"images/cards/insecurity/mask2.png"},{"name":"主角","invert":true,"depth":0.27,"holo":0.09,"holoScale":0.5,"holoPattern":"bands","gloss":0.46,"foil":0,"foilType":"silver","glitter":0.86,"glitterSize":0.6,"art":"images/cards/insecurity/art3.png","mask":"images/cards/insecurity/mask3.png"},{"name":"上層字","invert":true,"depth":0.42,"holo":0.12,"holoScale":1.7,"holoPattern":"stars","gloss":0.49,"foil":0.34,"foilType":"tint","glitter":0.73,"glitterSize":1,"art":"images/cards/insecurity/art4.png","mask":"images/cards/insecurity/mask4.png"}]},"sorryloop":{"size":[1081,1509],"global":{"tilt":20,"glare":0.7,"radius":4.6,"parallax":1.5,"light":0.9,"border":{"on":true,"width":1.2,"style":"silver","color":"#f4d35e","holo":0.45,"glitter":0.65,"line":false,"inset":false,"innerR":2}},"layers":[{"name":"底卡","invert":false,"depth":-0.05,"holo":0.03,"holoScale":0.95,"holoPattern":"bands","gloss":0.52,"foil":0.22,"foilType":"silver","glitter":0.72,"glitterSize":0.75,"art":"images/cards/sorryloop/art1.png","mask":"images/cards/sorryloop/mask1.png"},{"name":"角色名稱","invert":true,"depth":0.13,"holo":0.75,"holoScale":2.7,"holoPattern":"stars","gloss":0.17,"foil":0.45,"foilType":"tint","glitter":0.59,"glitterSize":0.65,"art":"images/cards/sorryloop/art2.png","mask":"images/cards/sorryloop/mask2.png"},{"name":"主角","invert":true,"depth":0.27,"holo":0.09,"holoScale":0.5,"holoPattern":"bands","gloss":0.46,"foil":0,"foilType":"silver","glitter":0.86,"glitterSize":0.6,"art":"images/cards/sorryloop/art3.png","mask":"images/cards/sorryloop/mask3.png"},{"name":"上層字","invert":true,"depth":0.42,"holo":0.12,"holoScale":1.7,"holoPattern":"stars","gloss":0.49,"foil":0.34,"foilType":"tint","glitter":0.73,"glitterSize":1,"art":"images/cards/sorryloop/art4.png","mask":"images/cards/sorryloop/mask4.png"}]},"staticsmile":{"size":[1081,1509],"global":{"tilt":20,"glare":0.7,"radius":4.6,"parallax":1.5,"light":0.9,"border":{"on":true,"width":1.2,"style":"holo","color":"#fcbdff","holo":0.45,"glitter":0.54,"line":false,"inset":false,"innerR":2}},"layers":[{"name":"底卡","invert":false,"depth":-0.05,"holo":0.03,"holoScale":0.95,"holoPattern":"bands","gloss":0.52,"foil":0.22,"foilType":"silver","glitter":0.72,"glitterSize":0.75,"art":"images/cards/staticsmile/art1.png","mask":"images/cards/staticsmile/mask1.png"},{"name":"角色名稱","invert":true,"depth":0.13,"holo":0.75,"holoScale":2.7,"holoPattern":"stars","gloss":0.17,"foil":0.45,"foilType":"tint","glitter":0.59,"glitterSize":0.65,"art":"images/cards/staticsmile/art2.png","mask":"images/cards/staticsmile/mask2.png"},{"name":"主角","invert":true,"depth":0.27,"holo":0.09,"holoScale":0.5,"holoPattern":"bands","gloss":0.46,"foil":0,"foilType":"silver","glitter":0.86,"glitterSize":0.6,"art":"images/cards/staticsmile/art3.png","mask":"images/cards/staticsmile/mask3.png"},{"name":"上層字","invert":true,"depth":0.42,"holo":0.12,"holoScale":1.7,"holoPattern":"stars","gloss":0.49,"foil":0.34,"foilType":"tint","glitter":0.73,"glitterSize":1,"art":"images/cards/staticsmile/art4.png","mask":"images/cards/staticsmile/mask4.png"}]},"tenderbomb":{"size":[1081,1509],"global":{"tilt":20,"glare":0.7,"radius":4.6,"parallax":1.5,"light":0.9,"border":{"on":true,"width":1.2,"style":"gold","color":"#f4d35e","holo":0.45,"glitter":0.65,"line":false,"inset":false,"innerR":2}},"layers":[{"name":"底卡","invert":false,"depth":-0.05,"holo":0.03,"holoScale":0.95,"holoPattern":"bands","gloss":0.52,"foil":0.22,"foilType":"silver","glitter":0.72,"glitterSize":0.75,"art":"images/cards/tenderbomb/art1.png","mask":"images/cards/tenderbomb/mask1.png"},{"name":"角色名稱","invert":true,"depth":0.13,"holo":0.75,"holoScale":2.7,"holoPattern":"stars","gloss":0.17,"foil":0.45,"foilType":"tint","glitter":0.59,"glitterSize":0.65,"art":"images/cards/tenderbomb/art2.png","mask":"images/cards/tenderbomb/mask2.png"},{"name":"主角","invert":true,"depth":0.27,"holo":0.09,"holoScale":0.5,"holoPattern":"bands","gloss":0.46,"foil":0,"foilType":"silver","glitter":0.86,"glitterSize":0.6,"art":"images/cards/tenderbomb/art3.png","mask":"images/cards/tenderbomb/mask3.png"},{"name":"上層字","invert":true,"depth":0.42,"holo":0.12,"holoScale":1.7,"holoPattern":"stars","gloss":0.49,"foil":0.34,"foilType":"tint","glitter":0.73,"glitterSize":1,"art":"images/cards/tenderbomb/art4.png","mask":"images/cards/tenderbomb/mask4.png"}]}};
+// 卡面上印的編號（No.xxx / 011）
+const CARD_NO = { insecurity:1, glitchcore:2, tenderbomb:3, sorryloop:4, bitterness:5, dualburnout:6, anxiety:7, tenderness:8, blankness:9, staticsmile:10, rage:11 };
+const cardNoText = id => 'NO.' + String(CARD_NO[id]).padStart(3,'0') + ' / 011';
 const CARD_SET = {}; Object.keys(CARD_DATA).forEach(k=>{ CARD_SET[k] = k; });
 
 const HC = {};
@@ -979,6 +1056,18 @@ window.addEventListener('deviceorientation',e=>{
 window.addEventListener('resize',HC.requestDraw);
 document.addEventListener('visibilitychange',HC.requestDraw);
 
+function loadLayerBundle(id){
+  window.SRM_LAYERS = window.SRM_LAYERS || {};
+  if(window.SRM_LAYERS[id]) return Promise.resolve(window.SRM_LAYERS[id]);
+  return new Promise((res, rej)=>{
+    const s = document.createElement('script');
+    s.src = 'images/cards/' + id + '/layers.js';
+    s.onload = ()=> window.SRM_LAYERS[id] ? res(window.SRM_LAYERS[id]) : rej(new Error('bundle'));
+    s.onerror = ()=> rej(new Error('bundle'));
+    document.head.appendChild(s);
+  });
+}
+
 // 顯示某個人格的卡；WebGL 讀不到圖（例如直接用 file:// 開啟）時，退回顯示合成預覽圖 flat.jpg
 HC.show = async function(id, alt){
   const d = CARD_DATA[id]; if(!d) return;
@@ -990,10 +1079,33 @@ HC.show = async function(id, alt){
   fbImg.style.display = '';
   HC.applyRadius();
   if(R.ok){
+    // 圖層用 images/cards/<id>/layers.js（內嵌 data URI）載入：直接雙擊開 index.html（file://）時 WebGL 也讀得到
+    const mine = cur;
+    try{
+      const bundle = await loadLayerBundle(id);
+      if(cur !== mine) return;
+      cur.layers = cur.layers.map((l,i)=>({ ...l, art:bundle.art[i] || l.art, mask:bundle.mask[i] || l.mask }));
+    }catch(e){}
     await R.loadCard(cur);
     if(R.ready){ document.getElementById('holoGl').style.visibility = ''; fbImg.style.display = 'none'; }
   }
   HC.requestDraw();
+};
+
+// 以原尺寸把「有邊框＋全息/燙金/閃粉特效」的閃卡畫成 PNG（取一個好看的光線角度）
+HC.snapshot = function(){
+  if(!R.ok || !R.ready || !cur) return null;
+  const w = 1081, h = Math.round(1081 / R.aspect);
+  R.draw({x:.34, y:-.22}, (performance.now()-M.t0)/1000, cur, [w,h]);
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const x = c.getContext('2d');
+  roundRect(x, 0, 0, w, h, Math.round(w * (cur.global.radius || 4.6) / 100));
+  x.clip();
+  x.drawImage(R.canvas, 0, 0);
+  let url = null;
+  try{ url = c.toDataURL('image/png'); }catch(e){}
+  HC.requestDraw();
+  return url;
 };
 })();
 
@@ -1152,15 +1264,39 @@ COMBO_IDS.forEach(cid=>{
 });
 
 /* =========================================================
-   INTRO 頭像預覽排
+   像素兔圖（首頁輪播、ID 卡照片、夥伴/衝突頭像）
    ========================================================= */
-const previewStrip = document.getElementById('previewStrip');
-['insecurity','sorryloop','bitterness','blankness','anxiety','tenderness','rage'].forEach(id=>{
-  const img = document.createElement('img');
-  img.src = THUMB_IMG[id];
-  img.alt = RESULTS[id].title;
-  previewStrip.appendChild(img);
-});
+const PIXEL_IMG = id => 'images/pixel/' + id + '.png';
+
+/* 首頁副標打字效果（每次回到首頁都重打一次） */
+const Typer = (function(){
+  const el = document.getElementById('typerText');
+  const full = document.getElementById('introSub').getAttribute('aria-label');
+  let timer = 0;
+  function play(){
+    clearTimeout(timer);
+    if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ el.textContent = full; return; }
+    let i = 0; el.textContent = '';
+    (function step(){
+      el.textContent = full.slice(0, ++i);
+      if(i < full.length){
+        const ch = full[i-1];
+        timer = setTimeout(step, '，、。.'.includes(ch) ? 260 : 70);
+      }
+    })();
+  }
+  return { play };
+})();
+setTimeout(Typer.play, 450);
+
+/* 首頁角色輪播：同一組排兩次，往左無限捲動 */
+(function buildParade(){
+  const wrap = document.getElementById('previewStrip');
+  const order = ['insecurity','glitchcore','tenderbomb','sorryloop','bitterness','dualburnout','anxiety','tenderness','blankness','staticsmile','rage'];
+  const item = (id, dup) => `<figure class="parade-item"${dup ? ' aria-hidden="true"' : ''}>
+      <img class="pixel-art" src="${PIXEL_IMG(id)}" alt="${dup ? '' : RESULTS[id].title}" width="84" height="84"></figure>`;
+  wrap.innerHTML = '<div class="parade-track">' + order.map(id => item(id,false)).join('') + order.map(id => item(id,true)).join('') + '</div>';
+})();
 
 /* =========================================================
    題目文案（一對一比較法：6 個人格兩兩配對，共 15 組配對，
@@ -1289,6 +1425,16 @@ const QUESTIONS = [
   ]},
 ];
 
+/* 每題情境對應的 Apple emoji（images/emoji/，取自 emoji-datasource-apple） */
+const Q_EMOJI = [
+  ['1f636','😶'],['1f4ac','💬'],['1f3a4','🎤'],['1f381','🎁'],['23f0','⏰'],
+  ['1f61e','😞'],['1f4a2','💢'],['1f633','😳'],['1f605','😅'],['1f3b3','🎳'],
+  ['1f4f1','📱'],['1f54a-fe0f','🕊️'],['1f645','🙅'],['1f971','🥱'],['1f4f8','📸'],
+  ['1f5fa-fe0f','🗺️'],['1f91d','🤝'],['1f6d7','🛗'],['1f44b','👋'],['1f624','😤'],
+  ['1f5e3-fe0f','🗣️'],['1f68c','🚌'],['1f60a','😊'],['1f620','😠'],['1f3a8','🎨'],
+  ['1f4c5','📅'],['1f4e6','📦'],['1f4e9','📩'],['2753','❓'],['1f440','👀'],
+];
+
 /* ===================== STATE ===================== */
 let current = 0;
 let counts = { A:0,B:0,C:0,D:0,E:0,F:0 };
@@ -1302,6 +1448,7 @@ let myCounts = null;
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  if(id === 'screen-intro' && typeof Typer !== 'undefined') setTimeout(Typer.play, 350);
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -1327,13 +1474,20 @@ document.getElementById('backLink').addEventListener('click', ()=>{
 function renderQuestion(){
   const total = QUESTIONS.length;
   const item = QUESTIONS[current];
-  document.getElementById('qIndex').textContent = 'Q'+(current+1);
+  document.getElementById('qIndex').textContent = 'Q.'+String(current+1).padStart(2,'0');
   document.getElementById('qText').textContent = item.q;
-  document.getElementById('progressLabel').textContent = (current+1)+' / '+total;
+  document.getElementById('progressLabel').textContent = String(current+1).padStart(2,'0')+'/'+total;
   document.getElementById('progressFill').style.width = ((current)/total*100)+'%';
+  document.getElementById('progressBunny').style.left = ((current)/total*100)+'%';
 
   const wrap = document.getElementById('optionsWrap');
   wrap.innerHTML = '';
+  const [eCode, eChar] = Q_EMOJI[current] || ['1f430','🐰'];
+  const eImg = document.getElementById('qEmoji');
+  eImg.alt = eChar;
+  eImg.onerror = ()=>{ eImg.replaceWith(Object.assign(document.createElement('span'),{id:'qEmoji',textContent:eChar})); };
+  eImg.src = 'images/emoji/' + eCode + '.png';
+
   item.options.forEach(([letter, text])=>{
     const btn = document.createElement('button');
     btn.className = 'option';
@@ -1367,6 +1521,7 @@ function selectOption(letter, btn){
   current++;
   if(current >= QUESTIONS.length){
     document.getElementById('progressFill').style.width='100%';
+    document.getElementById('progressBunny').style.left='100%';
     setTimeout(computeResult, 200);
   } else {
     renderQuestion();
@@ -1434,29 +1589,31 @@ function renderResult(id, stars, dataCounts){
   // 卡牌圖片（保留在最上方，維持原本 3D 傾斜卡牌效果）
   HC.show(CARD_SET[id], r.title + ' 人格卡');
   const isCombo = COMBO_IDS.includes(id);
-  document.getElementById('tcardId').textContent = isCombo
-    ? `NO. RB-H${COMBO_IDS.indexOf(id)+1}`
-    : `NO. RB-${String(ORDER.indexOf(id)+1).padStart(2,'0')}`;
+  document.getElementById('tcardId').textContent = cardNoText(id);
 
-  document.getElementById('resultCard').style.setProperty('--accent', r.color);
-  document.getElementById('resultTitle').textContent = r.title;
-  document.getElementById('resultTitle').style.color = r.color;
+  document.documentElement.style.setProperty('--accent', r.color);
+  const titleImg = document.getElementById('resultTitleImg');
+  titleImg.src = 'images/titles/' + id + '.png'; titleImg.alt = r.title;
+  document.getElementById('idNo').textContent = String(CARD_NO[id]).padStart(3,'0') + ' / 011';
+  document.getElementById('idPhoto').style.backgroundImage = `url(images/photo/${id}.png), linear-gradient(180deg,#3E86C2 0%, #79B1DC 48%, #C9DDEC 82%, #EEF2F5 100%)`;
+  const _d = new Date();
+  document.getElementById('idDate').textContent = String(_d.getFullYear()) + '-' + String(_d.getMonth()+1).padStart(2,'0') + '-' + String(_d.getDate()).padStart(2,'0');
   document.getElementById('resultFormula').textContent = r.formula || '';
   document.getElementById('resultFormula').style.display = r.formula ? 'block' : 'none';
-  document.getElementById('rarityBadge').textContent = '地表僅 ' + r.rarity + '% 的兔子是這型';
+  document.getElementById('rarityBadge').textContent = r.rarity;
+  document.getElementById('rarityNote').textContent = '地表僅 ' + r.rarity + '% 的兔子是這型';
   document.getElementById('resultTagline').textContent = r.tagline;
 
-  document.querySelectorAll('#statLabel, #stars, .pov-label').forEach(el=> el.style.background = r.color+'33');
   document.getElementById('statLabel').textContent = r.statLabel;
-  document.getElementById('stars').innerHTML = '★'.repeat(stars) + '☆'.repeat(5-stars);
+  document.getElementById('stars').innerHTML = '★★★★★';
   document.getElementById('povText').innerHTML = r.pov.map(l=>`<div>${l}</div>`).join('');
 
   const comp = RESULTS[r.companion];
   const conf = RESULTS[r.conflict];
   document.getElementById('companionName').textContent = comp.title;
-  document.getElementById('companionDot').style.backgroundImage = `url(${THUMB_IMG[r.companion]})`;
+  document.getElementById('companionDot').style.backgroundImage = `url(${PIXEL_IMG(r.companion)})`;
   document.getElementById('conflictName').textContent = conf.title;
-  document.getElementById('conflictDot').style.backgroundImage = `url(${THUMB_IMG[r.conflict]})`;
+  document.getElementById('conflictDot').style.backgroundImage = `url(${PIXEL_IMG(r.conflict)})`;
   document.getElementById('companionBtn').onclick = ()=> viewResult(r.companion);
   document.getElementById('conflictBtn').onclick = ()=> viewResult(r.conflict);
 
@@ -1464,9 +1621,8 @@ function renderResult(id, stars, dataCounts){
   document.getElementById('profileValues').textContent = r.values;
   document.getElementById('profileLove').textContent = r.loveStyle;
   document.getElementById('afterdarkText').textContent = r.afterDark;
-  document.getElementById('pullquoteText').textContent = r.pullQuote;
+  document.getElementById('pullquoteText').textContent = '“' + r.pullQuote + '”';
   document.getElementById('pullquotePanel').style.setProperty('--accent', r.color);
-  document.querySelector('.pullquote-mark').style.color = r.color;
 
   // 情緒分佈（只有「自己作答」的結果才有真實數據，瀏覽夥伴/衝突人格時顯示提示文字）
   const distPanel = document.getElementById('distPanel');
@@ -1476,11 +1632,12 @@ function renderResult(id, stars, dataCounts){
     noDataNote.style.display = 'none';
     const rowsWrap = document.getElementById('distRows');
     rowsWrap.innerHTML = '';
+    const topVal = Math.max(...Object.values(dataCounts));
     Object.entries(LETTERS).forEach(([letter, meta])=>{
       const c = dataCounts[letter] || 0;
       const pct = Math.round((c/MAX_PER_TRAIT)*100);
       const row = document.createElement('div');
-      row.className = 'dist-row';
+      row.className = 'dist-row' + (c === topVal && c > 0 ? ' top' : '');
       row.innerHTML = `
         <div class="dist-name">${meta.name}</div>
         <div class="dist-track"><div class="dist-fill" style="width:${pct}%; background:${meta.color};"></div></div>
@@ -1507,18 +1664,18 @@ function renderResult(id, stars, dataCounts){
   const cta = document.getElementById('ctaCard');
   if(r.hasCTA){
     cta.innerHTML = `
-      <div class="cta-eyebrow">🎧 SRM FEELS · NEW DROP</div>
+      <div class="cta-eyebrow field-label">SRM GOODS · new drop</div>
       <div class="cta-title display">Sorry Loop 也做成了<br>真實的小小夥伴</div>
       <div class="cta-sub">專門收耳機線，牠終於不用再困在<br>抱歉的迴圈裡了。</div>
-      <div class="cta-tag display">No more sorry loop, just music loop.</div>
+      <div class="pill cta-tag display">No more sorry loop, just music loop.</div>
       <div><button class="btn small display" onclick="window.open('https://sweetrabbitman.com','_blank')">看看 Sorry Loop 吊飾</button></div>
     `;
   } else {
     cta.innerHTML = `
-      <div class="cta-eyebrow">🐇 SRM FEELS</div>
-      <div class="cta-title display">${r.title} 也可能出現在<br>你的耳機線上</div>
-      <div class="cta-sub">SRM Feels 正在把這些小情緒，<br>一隻一隻做成隨身帶著的小夥伴。</div>
-      <div><button class="btn small ghost display" onclick="window.open('https://sweetrabbitman.com','_blank')">搶先追蹤新品</button></div>
+      <div class="cta-eyebrow field-label">SRM GOODS</div>
+      <div class="cta-title display">「${r.title}」也可能出現在<br>你的生活週邊</div>
+      <div class="cta-sub">SRM Goods 正在把這些小情緒，<br>一隻一隻做成隨身帶著的小夥伴。</div>
+      <div><a class="btn small ghost display" href="https://www.instagram.com/sweetrabbitman/" target="_blank" rel="noopener">搶先追蹤新品 ↗</a></div>
     `;
   }
 
@@ -1547,6 +1704,8 @@ function renderResult(id, stars, dataCounts){
   renderResult(previewId, stars, {...counts});
   showScreen('screen-result');
 })();
+
+document.getElementById('homeBtn').addEventListener('click', ()=> showScreen('screen-intro'));
 
 function viewResult(id){
   renderResult(id, 5, null);
@@ -1594,98 +1753,40 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight){
   return curY + lineHeight;
 }
 
-function drawShareCard(id, stars){
-  const r = RESULTS[id];
-  const isCombo = COMBO_IDS.includes(id);
-  const cardIdText = isCombo ? `NO. RB-H${COMBO_IDS.indexOf(id)+1}` : `NO. RB-${String(ORDER.indexOf(id)+1).padStart(2,'0')}`;
-
-  const img = new Image();
-  img.onload = function(){
-    const canvas = document.getElementById('shareCanvas');
-    const ctx = canvas.getContext('2d');
-    const W = 1000;
-    const padX = 60;
-    const contentW = W - padX*2;
-    const imgH = Math.round(img.naturalHeight * (W / img.naturalWidth));
-    const extraH = 560;
-    const H = imgH + extraH;
-    canvas.width = W; canvas.height = H;
-
-    ctx.fillStyle = '#EDEBE4';
-    ctx.fillRect(0,0,W,H);
-
-    ctx.drawImage(img, 0, 0, W, imgH);
-
-    ctx.font = '400 20px monospace';
-    const idW = ctx.measureText(cardIdText).width + 28;
-    const idX = W - 24 - idW;
-    ctx.fillStyle = 'rgba(0,0,0,.45)';
-    roundRect(ctx, idX, 22, idW, 38, 999);
-    ctx.fill();
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(cardIdText, idX+14, 47);
-
-    let y = imgH + 46;
-
-    ctx.fillStyle = '#151312';
-    ctx.font = '700 20px "Noto Sans TC", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('地表僅 ' + r.rarity + '% 的兔子是這型', W/2, y);
-    y += 44;
-
-    ctx.fillStyle = r.color;
-    ctx.font = '30px sans-serif';
-    ctx.fillText('★'.repeat(stars)+'☆'.repeat(5-stars), W/2, y);
-    y += 56;
-
-    ctx.fillStyle = '#151312';
-    ctx.font = '700 26px "Noto Sans TC", sans-serif';
-    ctx.textAlign = 'left';
-    y = wrapText(ctx, r.tagline, padX, y, contentW, 36) + 20;
-
-    ctx.fillStyle = '#fff';
-    roundRect(ctx, padX, y, contentW, 130, 20);
-    ctx.fill();
-    ctx.strokeStyle = '#151312'; ctx.lineWidth = 3;
-    roundRect(ctx, padX, y, contentW, 130, 20);
-    ctx.stroke();
-    ctx.fillStyle = '#151312';
-    ctx.font = '700 46px "Baloo 2", sans-serif';
-    ctx.fillText('"', padX+24, y+50);
-    ctx.font = '700 26px "Baloo 2", sans-serif';
-    wrapText(ctx, r.pullQuote, padX+24, y+72, contentW-48, 34);
-
-    y += 130 + 40;
-    ctx.fillStyle = '#3a3835';
-    ctx.font = '400 22px "Noto Sans TC", sans-serif';
-    wrapText(ctx, r.personality, padX, y, contentW, 32);
-
-    ctx.fillStyle = '#6b6863';
-    ctx.font = '700 20px "Baloo 2", sans-serif';
-    ctx.textAlign='center';
-    ctx.fillText('SWEETRABBITMAN.COM', W/2, H-30);
-    ctx.textAlign='left';
-
-    const dataUrl = canvas.toDataURL('image/png');
-    openShareModal(dataUrl, `我是${r.title}-兔型人格測驗.png`);
-  };
-  img.onerror = function(){
-    alert('分享圖片載入失敗，請確認 images 資料夾有跟 index.html 一起上傳。');
-  };
-  img.src = CARD_IMG[id];
+// 下載卡片：直接用該人格的卡牌圖（images/cards/<id>/flat.jpg）
+function drawShareCard(id){
+  const base = 'SweetRabbit-' + RESULTS[id].title.replace(/\s+/g,'');
+  const holo = HC.snapshot && HC.snapshot();
+  if(holo){ openShareModal(holo, base + '.png'); return; }
+  // 特效還沒載入完成時，退回平面卡圖
+  const url = CARD_IMG[id];
+  const filename = base + '.jpg';
+  const probe = new Image();
+  probe.onload = ()=> openShareModal(url, filename);
+  probe.onerror = ()=> alert('卡片圖片載入失敗，請確認 images 資料夾有跟 index.html 一起上傳。');
+  probe.src = url;
 }
 
-/* ===================== 分享圖彈窗（手機長按圖片存檔，桌機可點下載） ===================== */
-function openShareModal(dataUrl, filename){
+/* ===================== 下載卡片彈窗（手機長按存圖，桌機點按鈕下載，支援的手機可直接分享） ===================== */
+function openShareModal(url, filename){
   const modal = document.getElementById('shareModal');
-  const img = document.getElementById('shareModalImg');
-  img.src = dataUrl;
+  document.getElementById('shareModalImg').src = url;
   document.getElementById('shareModalDownload').onclick = ()=>{
     const link = document.createElement('a');
-    link.download = filename;
-    link.href = dataUrl;
-    link.click();
+    link.download = filename; link.href = url;
+    document.body.appendChild(link); link.click(); link.remove();
   };
+  const shareBtn = document.getElementById('shareModalShare');
+  shareBtn.style.display = 'none';
+  if(navigator.canShare){
+    fetch(url).then(r=>r.blob()).then(blob=>{
+      const file = new File([blob], filename, {type: blob.type || 'image/jpeg'});
+      if(navigator.canShare({files:[file]})){
+        shareBtn.style.display = '';
+        shareBtn.onclick = ()=> navigator.share({files:[file], title:'Sweet R.A.B.B.I.T. Personality'}).catch(()=>{});
+      }
+    }).catch(()=>{});
+  }
   modal.style.display = 'flex';
 }
 function closeShareModal(){
