@@ -509,6 +509,13 @@
   .typer-caret{ display:inline-block; width:2px; height:1.05em; margin-left:2px; vertical-align:-.15em; background:var(--ink); animation:caret 1s steps(1) infinite; }
   @keyframes caret{ 50%{ opacity:0; } }
 </style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TDB0HXL79M"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());
+gtag('config','G-TDB0HXL79M',{storage:'none',allow_google_signals:false,allow_ad_personalization_signals:false});
+const track=(n,p)=>{ try{ if(!new URLSearchParams(location.search).get('preview')) gtag('event',n,p||{}); }catch(e){} };
+</script>
 </head>
 <body>
 <div class="app">
@@ -1467,11 +1474,13 @@ function showScreen(id){
 }
 
 document.getElementById('startBtn').addEventListener('click', ()=>{
+  track('quiz_start');
   current = 0; counts = { A:0,B:0,C:0,D:0,E:0,F:0 }; pairWins = {}; history = [];
   renderQuestion();
   showScreen('screen-quiz');
 });
 document.getElementById('retakeBtn').addEventListener('click', ()=>{
+  track('quiz_retake');
   current = 0; counts = { A:0,B:0,C:0,D:0,E:0,F:0 }; pairWins = {}; history = [];
   renderQuestion();
   showScreen('screen-quiz');
@@ -1598,6 +1607,7 @@ function computeResult(){
 
 /* ===================== RESULT RENDER ===================== */
 function renderResult(id, stars, dataCounts){
+  track('quiz_complete',{persona:id,stars:stars});
   const r = RESULTS[id];
 
   // 卡牌圖片（保留在最上方，維持原本 3D 傾斜卡牌效果）
