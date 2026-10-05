@@ -1012,7 +1012,7 @@ const outerEl = document.getElementById('tiltOuter');
 const glareEl = document.getElementById('holoGlare');
 const fbImg = document.getElementById('holoFallback');
 let cur = null;
-const M = { tx:0, ty:0, x:0, y:0, vx:0, vy:0, lastInput:-1e9, auto:true, flat:false, raf:0, t0:performance.now(), src:null };
+const M = { tx:0, ty:0, x:0, y:0, vx:0, vy:0, lastInput:-1e9, auto:false, flat:false, raf:0, t0:performance.now(), src:null };
 HC.setAspect = (w,h)=>{ cardEl.style.aspectRatio = w+'/'+h; };
 HC.applyRadius = ()=>{ const r=cur?cur.global.radius:4.6; cardEl.style.setProperty('--rad',`${r}% / ${(r*R.aspect).toFixed(2)}%`); };
 const active = ()=> !document.hidden && document.getElementById('screen-result').classList.contains('active');
@@ -1024,7 +1024,6 @@ function tick(now){
   let tx=M.tx, ty=M.ty;
   if(M.flat){ tx=0; ty=0; }
   else if(idle && M.auto){ tx=Math.sin(t*.7)*.75; ty=Math.sin(t*.53+1.3)*.55; }
-  else if(idle){ tx=0; ty=0; }
   const k=.12, d=.72;
   M.vx=(M.vx+(tx-M.x)*k)*d; M.vy=(M.vy+(ty-M.y)*k)*d; M.x+=M.vx; M.y+=M.vy;
   applyTilt(); R.draw({x:M.x,y:M.y}, t, cur);
@@ -1049,10 +1048,25 @@ function onMove(e){
 outerEl.addEventListener('pointermove', onMove);
 outerEl.addEventListener('pointerdown', onMove);
 outerEl.addEventListener('pointerleave',()=>{ M.tx=0; M.ty=0; HC.requestDraw(); });
-window.addEventListener('deviceorientation',e=>{
-  if(e.beta==null||performance.now()-M.lastInput<1500&&M.src!=='gyro') return;
-  M.src='gyro'; M.tx=clamp((e.gamma||0)/30,-1,1); M.ty=clamp(((e.beta||0)-45)/30,-1,1); M.lastInput=performance.now(); HC.requestDraw();
-});
+let gyroBase=null, gyroOn=false; HC.resetGyro=()=>{ gyroBase=null; };
+function onGyro(e){
+  if(e.beta==null&&e.gamma==null) return;
+  if(!gyroBase) gyroBase={b:e.beta||0};
+  if(performance.now()-M.lastInput<1200&&M.src!=='gyro') return;
+  M.src='gyro'; M.tx=clamp((e.gamma||0)/25,-1,1); M.ty=clamp(((e.beta||0)-gyroBase.b)/25,-1,1); M.lastInput=performance.now(); HC.requestDraw();
+}
+function startGyro(){
+  if(gyroOn) return; gyroOn=true;
+  const DO=window.DeviceOrientationEvent;
+  if(DO && typeof DO.requestPermission==='function'){
+    DO.requestPermission().then(r=>{ if(r==='granted') window.addEventListener('deviceorientation',onGyro); else gyroOn=false; }).catch(()=>{ gyroOn=false; });
+  } else window.addEventListener('deviceorientation',onGyro);
+}
+if(window.DeviceOrientationEvent){
+  if(typeof DeviceOrientationEvent.requestPermission!=='function') startGyro();
+  document.addEventListener('touchend',startGyro,{passive:true});
+  document.addEventListener('click',startGyro);
+}
 window.addEventListener('resize',HC.requestDraw);
 document.addEventListener('visibilitychange',HC.requestDraw);
 
